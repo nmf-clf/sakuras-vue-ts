@@ -11,6 +11,8 @@
     "forceConsistentCasingInFileNames": true,
     "useDefineForClassFields": true,
     "sourceMap": true,
+    // "noImplicitAny": false, //关闭any检查，不推荐
+    "suppressImplicitAnyIndexErrors": true, //解决下标相关
     "baseUrl": ".",
     "types": [
       "webpack-env"
@@ -33,7 +35,7 @@
     "src/**/*.vue",
     "tests/**/*.ts",
     "tests/**/*.tsx"
-  ],
+, "src/elementIcon.ts"  ],
   "exclude": [
     "node_modules"
   ]
