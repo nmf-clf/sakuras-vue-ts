@@ -2,10 +2,9 @@
  * @Author: niumengfei
  * @Date: 2022-11-07 15:18:04
  * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-06 19:13:22
+ * @LastEditTime: 2022-12-08 18:43:14
  */
 import { createApp } from 'vue'
-
 import App from './App.vue' //引入跟组件
 import router from './router' // 引入路由实例对象
 import store from './store' //引入vuex实例对象
@@ -16,7 +15,7 @@ import 'element-plus/es/components/message/style/css' //按需引入某个样式
 
 const app = createApp(App) //创建并挂载根实例 //createApp(App).mount('#app') //原脚手架写法
 
-plusIcons.map(component => app.component(component.name, component) )
+plusIcons.map(component => app.component(component.name, component) ) //注册element-plus图标
 
 app.use(router)
 app.use(store) // 将 store 实例作为插件安装

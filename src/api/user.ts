@@ -2,9 +2,9 @@
  * @Author: niumengfei
  * @Date: 2022-12-07 14:13:27
  * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-07 17:23:48
+ * @LastEditTime: 2022-12-08 09:24:14
  */
-import AxiosAjax from "@/utils/http/Axios/AxiosAjax";
+import AxiosAjax from "@/utils/http";
 import { LoginParams, User } from "./model/userModel";
 
 enum Api {
@@ -13,7 +13,8 @@ enum Api {
 }
 
 export const RegisterAjax = (data: LoginParams) => 
-    AxiosAjax<User>({ url: Api.register, method: 'POST', data })
+    AxiosAjax.post<User>({ url: Api.register, data })
 
 export const LoginAjax = (data: LoginParams) =>
-    AxiosAjax<User>({ url: Api.login, method: 'POST', data })
+    AxiosAjax.post<User>({ url: Api.login, data })
+

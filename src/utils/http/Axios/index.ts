@@ -1,26 +1,78 @@
 /*
  * @Author: niumengfei
- * @Date: 2022-10-29 16:32:33
+ * @Date: 2022-10-29 14:36:35
  * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-07 14:52:33
+ * @LastEditTime: 2022-12-08 19:15:34
  */
-// import AxiosAjax from "./AxiosAjax";
-// // axios 实例方法 request get  delete head post put patch
-// let BaiscAjax: any = AxiosAjax;
-// // 在这里可以根据环境改写原始axios上的方法
-// type MethodType = (url: string, config: any ) => unknown;
+import axios, { AxiosResponse, AxiosRequestConfig } from "axios";
+import requestLog from '../../Tnlog'
+import { ElMessage } from 'element-plus'
 
-// if(false){
-//     const MockAjax = {
-//         get: function(url, config) {
-//             return AxiosAjax.get(url, config)
-//         } as MethodType,
-//         post: function(url, config) {
-//             return AxiosAjax.get(url, config)
-//         } as MethodType,
-//     }
-//     BaiscAjax = MockAjax;
-// }
+const { env } = ProcessEnv;
+console.log('当前环境::', env);
 
+interface MyResponseType<T> {
+    status?: number | string, 
+    code: string,
+    message: string,
+    data: T,
+}
+interface ParmsType {
+    url: string,
+    data?: object, 
+}
+//创建axios应用实例
+const instance = axios.create({
+    /* 在这里重写参数默认值 */
+    baseURL: (function (e) {
+        return env == 'pro' ? 'https://www.sakuras.group' : 'http://localhost:9001';
+    })(),
+    withCredentials: false,
+    timeout: 50000, //请求超时时间
+    // headers: { 'X-Requested-With': 'XMLHttpRequest' },
+});
+const service = async<T = any> (config: AxiosRequestConfig): Promise<MyResponseType<T>> => {
+    requestLog(`发起['${config.url}]：参数=> ${JSON.stringify(config.data)}`);
+    let _config = {
+        ...config, //无法重新设置config的值
+        headers: {
+            Authorization: '',
+        }
+    }
+    try{
+        const res = await instance.request<MyResponseType<T>>(_config);
+        let { data } = res;
+        /* 1: 成功 0: 失败 */
+        if(data.code == '1'){
+            return { ...data };
+        }else{
+            let msg = (data.message || `request failed: code is ${data.code} , expect 1`);
+            ElMessage.error('出错啦=> ' + msg);
+            return Promise.reject(`响应异常=> ${msg}`);
+        }
+    }catch(err: Error | unknown){
+        let msg = '请求失败';
+        err instanceof Error ? (msg = err.message) : (msg = String(err));
+        ElMessage.error('响应异常=>' + msg);
+        requestLog('响应异常=>' + err, 2);
+        return Promise.reject(err);
+        // return {
+        //     code: '0',
+        //     message,
+        //     data: null as any,
+        //     status: err.response?.status,
+        // }
+    }
+    
+}
 
-// export default BaiscAjax;
+const AxiosAjax = {
+    get: function<T>({ url }: ParmsType){
+        return service<T>({ url, method: 'Get' })
+    },
+    post: function<T>({ url, data }: ParmsType){
+        return service<T>({ url, method: 'POST', data })
+    },
+}
+
+export default AxiosAjax;

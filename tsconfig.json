@@ -13,9 +13,11 @@
     "sourceMap": true,
     // "noImplicitAny": false, //关闭any检查，不推荐
     "suppressImplicitAnyIndexErrors": true, //解决下标相关
+    // "allowJs": true, //允许vue使用js
     "baseUrl": ".",
     "types": [
-      "webpack-env"
+      "webpack-env",
+      // "node"
     ],
     "paths": {
       "@/*": [
