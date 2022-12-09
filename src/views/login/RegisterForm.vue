@@ -1,54 +1,100 @@
+<!--
+ * @Author: niumengfei
+ * @Date: 2022-12-09 16:14:27
+ * @LastEditors: niumengfei
+ * @LastEditTime: 2022-12-09 18:14:11
+-->
 <template>
-    <div class="container" ref="container">
-      <!-- 默认登陆页 -->
-      <div class="panels-container">
-        <div class="panel left-panel">
-          <div class="panel-content">
-            <h3>没有账号 ?</h3>
-            <p>在每个人的心里，都有一个人记不住，却不能拥抱和珍惜。</p>
-            <button class="panel-btn" @click="toSignUp">前往注册</button>
-          </div>
-          <img class="panel-img" src="@/assets/images/log.png" alt="" />
-        </div>
-        <div class="panel right-panel">
-          <div class="panel-content">
-            <h3>已有账号 ?</h3>
-            <p>在每个人的心里，都有一个人记不住，却不能拥抱和珍惜。</p>
-            <button class="panel-btn" @click="toSignIn">前往登录</button>
-          </div>
-          <img class="panel-img" src="@/assets/images/register.png" alt="" />
-        </div>
-      </div>
-      
-      <div class="forms-container">
-        <div class="sign-in-up">
-            <!-- 登录 -->
-            <LoginForm :isLogin="true"/>
-            <!-- 注册 -->
-            <RegisterForm />
-        </div>
-      </div>
-    </div>
-  </template>
-  
-<script lang="ts" setup>
-import { ref } from 'vue'
-//坑点: Module LoginForm.vue has no default export 考虑到是Vetur插件的问题, 升级插件
-import LoginForm from './LoginForm.vue' 
-import RegisterForm from './RegisterForm.vue'
+    <el-form 
+        class="sign-up-form"
+        ref="ruleFormRef"
+        :model="ruleForm" 
+        status-icon
+        :rules="rules"
+        label-width="120px"
+    >
+        <h2 class="form-title">注册</h2>
+        <el-form-item class="form_item" prop="username" label-width="'auto'">
+            <el-input class="form_input" v-model="ruleForm.username" type="username" autocomplete="off" placeholder="用户名">
+                <template #prepend>
+                    <el-button :icon="User"></el-button>
+                </template>
+            </el-input>
+        </el-form-item>
+        <el-form-item class="form_item" prop="password" label-width="'auto'">
+            <el-input class="form_input" v-model="ruleForm.password" type="password" autocomplete="off" placeholder="密码">
+                <template #prepend>
+                    <el-button :icon="Lock"></el-button>
+                    </template>
+                </el-input>
+        </el-form-item>
+        <el-form-item class="form_item" label-width="'auto'">
+            <el-input class="form_input" v-model="ruleForm.email" type="email" autocomplete="off" placeholder="邮箱">
+                <template #prepend>
+                    <el-button :icon="Message"></el-button>
+                </template>
+            </el-input>
+        </el-form-item>
+        <el-form-item label-width="'auto'">
+        <el-button class="form-btn"  @click="submitForm(ruleFormRef)">注册</el-button>
+        </el-form-item>
+        <!-- 社交平台 -->
+        <SoftWareForm type="注册"/>
+    </el-form>
+</template>
 
-const container = ref(null) as any;
+<script setup lang="ts">
+import { ref, reactive } from 'vue'
+import type { FormInstance, FormRules } from 'element-plus';
+import { ElMessage } from 'element-plus'
+import { Lock, User, Message } from '@element-plus/icons-vue';
+import { RegisterAjax } from "@/api/user";
+import { Validator } from "@/utils";
+import SoftWareForm from "./SoftWareForm.vue";
 
-/* 前往注册 */
-const toSignUp = () =>{
-    container.value.classList.add('sign-up-mode');
+interface LoginParamsType {
+    username: string,
+    password: string,
+    email?: string,
 }
-/* 前往登录 */
-const toSignIn = () =>{
-    container.value.classList.remove('sign-up-mode')
+
+const ruleFormRef = ref<FormInstance>();
+
+const ruleForm = reactive<LoginParamsType>({ //表单内容
+    username: '',
+    password: '',
+    email: '',
+})
+//坑点: 封装rules会造成 当前组件的状态虽然传入到了函数内部 但是数据改变不会捕获到
+const rules: FormRules = reactive({ //表单校验规则
+    username: Validator.isNotEmpty({ msg: '请输入用户名' }),
+    password: Validator.isNotEmpty({ msg: '请输入密码' }),
+    email: Validator.isNotEmpty({ msg: '请输入邮箱地址' }),
+})
+/* 提交 */
+const submitForm = (formEl: FormInstance | undefined) => {
+    if(!formEl) return;
+    formEl.validate((valid) => {
+        if(valid) {
+            handleRegister();
+        }else{
+            return false;
+        }
+    })
+}
+/* 注册 */
+const handleRegister = () =>{
+    RegisterAjax(ruleForm)
+    .then(res =>{
+        console.log(res);
+        ElMessage({
+            message: res.message,
+            type: 'success',
+        })
+    })
 }
 </script>
-  
+
 <style lang="less" scoped>
 .container {
     position: relative;
@@ -226,7 +272,7 @@ const toSignIn = () =>{
 .form-input {
     width: 100%;
     max-width: 380px;
-    height: 55px;
+    height: 45px;
     line-height: 55px;
     border-radius: 55px;
     display: grid;
@@ -261,12 +307,15 @@ const toSignIn = () =>{
     width: 100%;
     max-width: 380px;
     .form_input{
-    width: 100%;
-    max-width: 380px;
-    height: 55px;
-    line-height: 55px;
-    margin: 10px 0;
-}
+        width: 100%;
+        max-width: 380px;
+        height: 45px;
+        line-height: 45px;
+        margin: 10px 0;
+    }
+    :deep(.el-form-item__content .el-form-item__error){
+        left: 50px !important;
+    }
 }
 
   
@@ -286,30 +335,6 @@ const toSignIn = () =>{
   
 .form-btn:hover {
     background-color: #6c48ff;
-}
-  
-.social-text {
-    padding: 10px 0;
-}
-  
-.social-media {
-    display: flex;
-    justify-content: center;
-}
-  
-.social-link {
-    margin: 0 4px;
-    color: #333;
-    text-decoration: none;
-    transition: 0.3s;
-}
-  
-.social-link:hover {
-    color: #6c48ff;
-}
-  
-.social-icon {
-    fill: currentColor;
 }
   
 @media screen and(max-width:870px) {
