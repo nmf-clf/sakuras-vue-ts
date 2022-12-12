@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-04-24 16:50:58
  * @LastEditors: niumengfei
- * @LastEditTime: 2022-11-10 16:01:22
+ * @LastEditTime: 2022-12-12 16:42:38
 -->
 <template>
   <div :class="'sideBar ' + activeClass">
@@ -11,33 +11,35 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, watch } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useStore } from 'vuex'
-// export default {
-//     name: 'SideBar',
-//     props: ['isOpen'],
-//     setup(props, context) {
-      const store = useStore();
-      /* 定义属性 */
-      let isInit = ref(false) //初始化为false，如果侧边栏点击过则置为true
-      /* 计算属性 */
-      let activeClass = '' || computed(()=>{ //计算属性回调不接收值
-        if(store.getters.deviceType == 'mobile'){
-          /* if(props.isOpen) isInit.value = true //若点击过/父组件传递为true 则置为true
-          if(isInit.value){ //如果点击过/默认为true 则自动展开侧边栏
-            return props.isOpen ? 'animate__animated animate__slideInLeft' : 'animate__animated animate__slideOutLeft'
-          }
-          return '' */
-          // return props.isOpen ? 'sideBar_active' : ''
+/* computed 函数会先于 onMounted 执行 */
+const props = defineProps({
+    isOpen: Boolean,
+});
+
+const store = useStore();
+
+let activeClass = computed(()=>{ //计算属性回调不接收值 
+    if(store.getters.deviceType == 'mobile'){
+        return props.isOpen ? 'sideBar_active' : ''
+    }
+    return ''
+})
+
+onMounted(() => {
+   /* 监视点击事件 */
+   document.addEventListener('mouseup', (e) => {
+        let sideBar = document.querySelector('.sideBar') //选择返回的第一个出现的元素
+        if (sideBar) {
+            if (!sideBar.contains((event as any).target)) { //判断某个元素不是目标元素的子元素 即目标元素以外的区域
+                console.log('outside sideBar...');
+                sideBar.className = 'sideBar'
+            }
         }
-        return ''
-      })
-      /* 返回对象 */
-//       return {
-//         activeClass
-// 			}
-//     }
-// }
+    })
+})
+
 </script>
 
 <style lang="less" scope>

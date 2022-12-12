@@ -2,14 +2,13 @@
  * @Author: niumengfei
  * @Date: 2022-10-29 14:36:35
  * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-08 19:15:34
+ * @LastEditTime: 2022-12-12 11:24:22
  */
 import axios, { AxiosResponse, AxiosRequestConfig } from "axios";
 import requestLog from '../../Tnlog'
 import { ElMessage } from 'element-plus'
-
-const { env } = ProcessEnv;
-console.log('当前环境::', env);
+const { env, runDependencies } = ProcessEnv;
+// console.log('当前环境::', env, runDependencies);
 
 interface MyResponseType<T> {
     status?: number | string, 
@@ -24,9 +23,7 @@ interface ParmsType {
 //创建axios应用实例
 const instance = axios.create({
     /* 在这里重写参数默认值 */
-    baseURL: (function (e) {
-        return env == 'pro' ? 'https://www.sakuras.group' : 'http://localhost:9001';
-    })(),
+    baseURL: ((e)=> env == 'pro' ? runDependencies.pro : runDependencies.dev)(),
     withCredentials: false,
     timeout: 50000, //请求超时时间
     // headers: { 'X-Requested-With': 'XMLHttpRequest' },
@@ -63,7 +60,6 @@ const service = async<T = any> (config: AxiosRequestConfig): Promise<MyResponseT
         //     status: err.response?.status,
         // }
     }
-    
 }
 
 const AxiosAjax = {

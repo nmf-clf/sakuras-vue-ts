@@ -1,45 +1,53 @@
 {
-  "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
-    "strict": true,
-    "jsx": "preserve",
-    "moduleResolution": "node",
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "forceConsistentCasingInFileNames": true,
-    "useDefineForClassFields": true,
-    "sourceMap": true,
-    // "noImplicitAny": false, //关闭any检查，不推荐
-    "suppressImplicitAnyIndexErrors": true, //解决下标相关
-    // "allowJs": true, //允许vue使用js
-    "baseUrl": ".",
-    "types": [
-      "webpack-env",
-      // "node"
-    ],
-    "paths": {
-      "@/*": [
-        "src/*"
-      ]
+    "compilerOptions": {
+        "target": "esnext",
+        "module": "esnext",
+        "strict": true,
+        "jsx": "preserve",
+        "moduleResolution": "node",
+        "skipLibCheck": true,
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true, //允许从没有设置默认导出的模块中默认导入。这并不影响代码的输出，仅为了类型检查
+        "forceConsistentCasingInFileNames": true,
+        "useDefineForClassFields": true,
+        "sourceMap": true,
+        // "noImplicitAny": false, //关闭any检查，不推荐
+        "suppressImplicitAnyIndexErrors": true, //解决下标提示相关 Tnlog.ts
+        // "allowJs": true, //允许vue使用js
+
+
+        // "noLib": false,
+        // "strictFunctionTypes": false,
+        // "resolveJsonModule": true,
+        // "noUnusedLocals": true,
+        // "noUnusedParameters": true,
+        // "experimentalDecorators": true,
+        // "removeComments": true,
+        // "isolatedModules": true,
+        
+        "baseUrl": ".",
+        "types": [
+            "webpack-env",
+            // "node"
+        ],
+        "paths": {
+        "@/*": [
+            "src/*"
+        ]
+        },
+        "lib": [
+            "esnext",
+            "dom",
+            "dom.iterable",
+            "scripthost"
+        ]
     },
-    "lib": [
-      "esnext",
-      "dom",
-      "dom.iterable",
-      "scripthost"
-    ]
-  },
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.tsx",
-    "src/**/*.vue",
-    // "src/views/login/LoginForm.vue",
-    "tests/**/*.ts",
-    "tests/**/*.tsx"
-, "src/elementIcon.ts"  ],
-  "exclude": [
-    "node_modules"
-  ]
+    "include": [
+        "src/**/*.ts",
+        "src/**/*.tsx",
+        "src/**/*.vue",
+        "tests/**/*.ts",
+        "tests/**/*.tsx", 
+    ],
+    "exclude": ["node_modules"]
 }

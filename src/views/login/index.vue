@@ -273,7 +273,7 @@ const toSignIn = () =>{
 .form-btn {
     width: 150px;
     height: 49px;
-    margin: 10px 0;
+    margin: 20px 0;
     outline: none;
     border: none;
     border-radius: 49px;

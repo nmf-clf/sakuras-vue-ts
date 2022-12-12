@@ -2,13 +2,13 @@
  * @Author: niumengfei
  * @Date: 2022-04-27 17:25:41
  * @LastEditors: niumengfei
- * @LastEditTime: 2022-11-11 23:43:03
+ * @LastEditTime: 2022-12-12 18:54:17
 -->
 <template>
   <div :class="'rg-options' + (' rg-options-' + deviceType())">
     <!-- 首页 -->
     <div class="hidden-dropdown">
-      <span class="el-dropdown-link" @click="turnPage('/', '')">首页</span>
+      <span class="el-dropdown-link" @click="turnPage('/')">首页</span>
     </div>
     <!-- 学习笔记 -->
     <el-dropdown class="hidden-dropdown">
@@ -21,9 +21,9 @@
       </span>
       <template #dropdown>
         <el-dropdown-menu>
-          <el-dropdown-item v-if="userInfo().username"><el-icon><user /></el-icon>{{userInfo().username}}</el-dropdown-item>
-          <el-dropdown-item :divided="userInfo().username == true" @click="loginOrOut('/login')">{{userInfo().username ? '注销' : '登录'}}</el-dropdown-item>
-          <el-dropdown-item divided>后台管理</el-dropdown-item>
+          <el-dropdown-item v-if="userInfo.username"><el-icon><user /></el-icon>{{userInfo.username}}</el-dropdown-item>
+          <el-dropdown-item :divided="userInfo.username ? true : false" @click="loginOrOut('/login')">{{userInfo.username ? '注销' : '登录'}}</el-dropdown-item>
+          <el-dropdown-item divided @click="toAdmin('/admin')">进入后台</el-dropdown-item>
         </el-dropdown-menu>
       </template>
     </el-dropdown>
@@ -36,71 +36,43 @@ import { useRouter } from 'vue-router'
 import { useStore } from "vuex";
 import { Search } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus';
-// import MySideBar from '../../SideBar/index.vue'
+import UserStore from "@/store/modules/user";
 
-// export default {
-//   name: 'MyHeader',
-//   components: { MySideBar, Search },
-//   props:{
-//     showSearch:{
-//       type: Boolean,
-//       default: true //默认值
-//     },
-// 	},
-//   setup(props, context) {
-    const router = useRouter();
-    const store = useStore();
-    /* 定义数据 */
-    const searchVal = ref('')
-    /* 定义方法 */
-    let turnPage = (path:string, pdfUrl: any) =>{
-      // context.emit('changeColor', '666')
-      let datas = { 
+const router = useRouter();
+const store = useStore();
+const deviceType = () => store.getters.deviceType;
+const userInfo = store.getters.userInfo;
+
+const openPage = (url: string) => window.open(url);
+
+const turnPage = (path: string, pdfUrl?: string) =>{
+    // context.emit('changeColor', '666')
+    const datas = { 
         path,
         name: path.charAt(0) == '/' ? '' : path,  //(使用params传参时，必须使用name属性进行路由跳转，不能使用path配置项跳转)
         params: {
-         pdfUrl
+            pdfUrl
         }
-      }
-      router.push(datas)
     }
-    let loginOrOut = (e:any) =>{
-      const { userInfo } = store.state;
-      if(userInfo.username){ //退出登录
-        store.dispatch('saveUserInfo', {})
+    router.push(datas)
+}
+
+const loginOrOut = (e: string) =>{
+    if(userInfo.username){ //退出登录
+        store.dispatch('user/saveUserInfo', {})
         ElMessage({
-          message: '注销成功',
-          type: 'success',
-          center: true,
+            message: '注销成功',
+            type: 'success',
+            center: true,
         })
-      }else{
-        turnPage(e, '')
-      }
+    }else{
+        turnPage(e)
     }
-    let openPage = (url:any) =>{
-      // window.location.href = url
-      window.open(url)
-    }
-    const deviceType = () =>{
-      return store.getters.deviceType
-    }
-    function userInfo(){
-      return store.state.userInfo
-    }
-//     return {
-//       turnPage,
-//       searchVal,
-//       Search,
-//       loginOrOut,
-//       openPage,
-//     }
-//   },
-//   computed: {
-//     userInfo(){
-//       return (this as any).$store.state.userInfo
-//     }
-//   }
-// }
+}
+
+const toAdmin = (path: string) =>{
+    router.push({ path })
+}
 </script>
 
 <style lang="less" scope>

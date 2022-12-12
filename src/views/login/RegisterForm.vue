@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-12-09 16:14:27
  * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-09 18:14:11
+ * @LastEditTime: 2022-12-12 12:43:40
 -->
 <template>
     <el-form 
@@ -314,7 +314,14 @@ const handleRegister = () =>{
         margin: 10px 0;
     }
     :deep(.el-form-item__content .el-form-item__error){
-        left: 50px !important;
+        left: 50px;
+    }
+    :deep(.el-input-group__prepend){
+      background: #8a6eff;
+    }
+    :deep(.el-input-group__prepend .el-icon){
+      color: #fff;
+      transform: scale(1.5);
     }
 }
 
@@ -322,7 +329,7 @@ const handleRegister = () =>{
 .form-btn {
     width: 150px;
     height: 49px;
-    margin: 10px 0;
+    margin: 20px 0;
     outline: none;
     border: none;
     border-radius: 49px;

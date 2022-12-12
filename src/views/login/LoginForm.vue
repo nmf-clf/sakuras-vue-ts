@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-12-09 16:14:27
  * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-09 17:43:38
+ * @LastEditTime: 2022-12-12 16:49:17
 -->
 <template>
     <el-form
@@ -45,8 +45,7 @@ import { ElMessage } from 'element-plus'
 import { Lock, User } from '@element-plus/icons-vue';
 import { LoginAjax } from "@/api/user";
 import { Validator } from "@/utils";
-import SoftWareForm from "./SoftWareForm.vue";
-
+import SoftWareForm from "./SoftWareForm.vue"; //坑点：如果使用vscode插件vetur这里会提示 "导入的模块没有默认导出" 但不报错，因此在vetur和volar中，我选择使用volar来避免此提示
 
 interface LoginParamsType {
     username: string,
@@ -59,14 +58,14 @@ const store = useStore();
 const ruleFormRef = ref<FormInstance>();
 
 const ruleForm = reactive<LoginParamsType>({ //表单内容
-    username: '',
-    password: '',
+    username: 'admin',
+    password: '111',
     email: '',
 })
 
 const rules: FormRules = reactive({ //表单校验规则
-    username: Validator.isNotEmpty({ msg: '请输入用户名' }),
-    password: Validator.isNotEmpty({ msg: '请输入密码' }),
+    username: Validator.VerifyUserName(),
+    password: Validator.VerifyPassWord(),
 })
 
 const submitForm = (formEl: FormInstance | undefined) => {
@@ -79,17 +78,12 @@ const submitForm = (formEl: FormInstance | undefined) => {
         }
     })
 }
-/* 重置表单校验 */
-const resetForm = (formEl: FormInstance | undefined) => {
-  if (!formEl) return
-  formEl.resetFields()
-}
 /* 登录 */
 const handleLogin = () => {
     LoginAjax(ruleForm)
     .then(res =>{
         console.log('login-post::',res);
-        store.dispatch('saveUserInfo', { //暂时这样存 需要整体加密
+        store.dispatch('user/saveUserInfo', { //暂时这样存 需要整体加密
             ...ruleForm
         })
         router.push({ path: '/' })
@@ -184,7 +178,14 @@ const handleLogin = () => {
         margin: 10px 0;
     }
     :deep(.el-form-item__content .el-form-item__error){
-        left: 50px !important;
+        left: 50px;
+    }
+    :deep(.el-input-group__prepend){
+      background: #8a6eff;
+    }
+    :deep(.el-input-group__prepend .el-icon){
+      color: #fff;
+      transform: scale(1.5);
     }
 }
 
@@ -192,7 +193,7 @@ const handleLogin = () => {
 .form-btn {
     width: 150px;
     height: 49px;
-    margin: 10px 0;
+    margin: 20px 0;
     outline: none;
     border: none;
     border-radius: 49px;

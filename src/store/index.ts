@@ -1,56 +1,37 @@
-import { createStore } from 'vuex'
+/*
+ * @Author: niumengfei
+ * @Date: 2022-11-07 15:18:04
+ * @LastEditors: niumengfei
+ * @LastEditTime: 2022-12-12 18:35:12
+ */
+import { createStore } from 'vuex';
+import createPersistedState from "vuex-persistedstate"; //vuex状态持久化
+import getters from './getters';
 
-// export default createStore({
-//   state: {
-//   },
-//   getters: {
-//   },
-//   mutations: {
-//   },
-//   actions: {
-//   },
-//   modules: {
-//   }
-// })
+const files = require.context('./modules', false, /\.ts$/);
+const modules = {};
+
+files.keys().forEach((key) =>  modules[key.replace(/(\.\/|\.ts)/g, '')] = files(key).default ); 
+
+Object.keys(modules).forEach((key) => modules[key]['namespaced'] = true ); //开启命名空间
 
 // 创建一个新的 store 实例
-const store = createStore({
-  state () {
-    return {
-      screenWidth: document.documentElement.clientWidth,
-      screenHeight: document.documentElement.clientHeight,
-      userInfo: {
-      }, //用户信息
-    }
-  },
-  actions: {
-    setWidthAndHeight({ commit }, value){
-      commit('SET_WIDTH_AND_Height', value)
-    },
-    saveUserInfo({ commit }, value){
-      commit('SAVE_USER_INFO', value)
-    }
-  },
-  mutations: {
-    SET_WIDTH_AND_Height(state: any, value){
-      state.screenWidth = value[0]
-      state.screenHeight = value[1]
-    },
-    SAVE_USER_INFO(state: any, value){
-      state.userInfo = value
-    }
-  },
-  getters: {
-    deviceType(state: any){
-      /*  (()=>{
-        let power = this.$store.state.screenWidth / 375; //以iphoneX(宽度375px)为基准
-        let bigSize = 10 * power;  //设置rem基准单位, 在iphoneX上 bigSize = 10px = 1rem
-        let realSize = bigSize > 40 ? '40px' : bigSize + 'px'; //浏览器最大字体为40px
-        document.documentElement.style.fontSize = realSize;
-      })() */
-      return state.screenWidth > 700 ? 'pc' : 'mobile'
-    }
-  }
+export default createStore({
+    // state() { return {} },
+    // mutations: {},
+    // actions: {},
+    modules,
+    getters,
+    /* vuex数据持久化配置 */
+    plugins: [
+        createPersistedState({
+            storage: window.localStorage, //存储方: localStorage | sessionStorage | cookies
+            // 存储的 key 的key值
+            key: "userInfo",
+            reducer(state) { //render错误修改
+                // 要存储的数据：本项目采用es6扩展运算符的方式存储了state中所有的数据
+                return { ...state.user }
+            }
+        })
+    ]
 })
-
-export default store;

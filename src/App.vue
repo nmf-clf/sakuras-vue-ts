@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-11-07 15:18:04
  * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-06 17:47:39
+ * @LastEditTime: 2022-12-12 16:07:58
 -->
 <template>
     <div id="app" :class="'app-' + deviceType()">
@@ -19,22 +19,19 @@
 <script lang="ts" setup>
 import { onMounted } from 'vue';
 import { useStore } from "vuex";
+
 const store = useStore();
-// import './assets/common.less';
-// export default {
-//   name: 'App',
-    onMounted(()=>{
-        document.documentElement.style.fontSize = '16px';
-        /* 监听视图宽度和高度的变化 */
-        window.addEventListener('resize', ()=>{
-            let wh = [document.documentElement.clientWidth, document.documentElement.clientHeight] as any
-            store.dispatch('setWidthAndHeight', wh as any)
-        })
-    }) 
-    const deviceType = () =>{
-      return store.getters.deviceType
-    }
-// }
+onMounted(()=>{
+    document.documentElement.style.fontSize = '16px';
+    /* 监听视图宽度和高度的变化 */
+    window.addEventListener('resize', ()=>{
+        let wh = [document.documentElement.clientWidth, document.documentElement.clientHeight]
+        store.dispatch('user/setWidthAndHeight', wh)
+    })
+}) 
+console.log('设备类型::', store.getters.deviceType);
+
+const deviceType = () => store.getters.deviceType;
 
 /* 按需加载时-全局配置size和zIndex */
 /* import { defineComponent } from 'vue'

@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-04-12 15:56:02
  * @LastEditors: niumengfei
- * @LastEditTime: 2022-11-10 21:08:52
+ * @LastEditTime: 2022-12-12 16:44:40
 -->
 <template>
   <el-header :class="'myHeader' + (' myHeader-' + deviceType())">
@@ -12,36 +12,24 @@
     </div>
     <SelectOption />
   </el-header>
-  <!-- <MySideBar :isOpen="isOpen">
+  <MySideBar :isOpen="isOpen">
     <SelectOption v-if="isOpen" :showSearch="false" />
-  </MySideBar> -->
+  </MySideBar>
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue'
 import { useStore } from "vuex";
 import { Expand } from '@element-plus/icons-vue'
-// import MySideBar from '../SideBar/index.vue'
-// import SelectOption from './component/SelectOption'
+import MySideBar from '../SideBar/index.vue'
+import SelectOption from './component/SelectOption.vue'
 
-// export default {
-//   name: 'MyHeader',
-//   components: { Expand, MySideBar, SelectOption },
-//   setup(props, context) {
-    const store = useStore();
-    /* 定义数据 */
-    const isOpen = ref(false)
-    /* 定义方法 */
-    let openLeftSideBar = () =>{ isOpen.value = !isOpen.value }
-    const deviceType = () =>{
-      return store.getters.deviceType
-    }
-//     return {
-//       isOpen,
-//       openLeftSideBar,
-//     }
-//   },
-// }
+const store = useStore();
+/* 定义数据 */
+const isOpen = ref(false)
+/* 定义方法 */
+let openLeftSideBar = () =>{ isOpen.value = !isOpen.value }
+const deviceType = () => store.getters.deviceType;
 </script>
 
 <style lang="less" scope>
