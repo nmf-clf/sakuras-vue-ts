@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-11-07 15:18:04
  * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-12 18:48:38
+ * @LastEditTime: 2022-12-12 19:46:18
  */
 /* 引入路由模块，和vue2.0方式不同 */
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'; //导入
@@ -55,7 +55,15 @@ const router = createRouter({
 /* 路由前置守卫 */
 router.beforeEach((to, from, next) => {
     // NProgress.start()
-    next()
+    // document.title = `${to.meta.title} | sakuras`;
+    const userInfo = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo') || '') : {};
+    if(['/home'].includes(to.path)) { //排除不需要登录的页面
+        next();
+    }else if (!userInfo.username && to.path !== '/login') { //未登录的需要登录
+        next('/login');
+    }else{
+        next();
+    }
 });
 
 /* 路由后置守卫 */

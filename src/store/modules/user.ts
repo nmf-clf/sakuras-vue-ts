@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-12-12 12:55:25
  * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-12 18:39:17
+ * @LastEditTime: 2022-12-12 19:12:38
  */
 interface StateType {
     screenWidth: number;
@@ -11,7 +11,7 @@ interface StateType {
 }
 
 const _u = localStorage.getItem('userInfo') || '';
-const userInfo = JSON.parse(_u)
+const userInfo = _u ? JSON.parse(_u) : {};
 
 export default {
     state: (): StateType => {

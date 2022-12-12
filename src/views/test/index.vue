@@ -1,102 +1,128 @@
-<!--
- * @Author: niumengfei
- * @Date: 2022-12-09 11:16:07
- * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-09 15:44:05
--->
 <template>
-  <el-form
-    ref="ruleFormRef"
-    :model="ruleForm"
-    status-icon
-    :rules="rules"
-    label-width="120px"
-    class="demo-ruleForm"
-  >
-    <el-form-item label-width="'auto'" prop="pass">
-      <el-input v-model="ruleForm.pass" type="password" autocomplete="off" />
-    </el-form-item>
-    <el-form-item label="Confirm" prop="checkPass">
-      <el-input
-        v-model="ruleForm.checkPass"
-        type="password"
-        autocomplete="off"
-      />
-    </el-form-item>
-    <el-form-item label="Age" prop="age">
-      <el-input v-model.number="ruleForm.age" />
-    </el-form-item>
-    <el-form-item>
-      <el-button type="primary" @click="submitForm(ruleFormRef)"
-        >Submit</el-button
-      >
-      <el-button @click="resetForm(ruleFormRef)">Reset</el-button>
-    </el-form-item>
-  </el-form>
+  <el-container class="layout-container-demo" style="height: 500px">
+    <el-aside width="200px">
+      <el-scrollbar>
+        <el-menu :default-openeds="['1', '3']">
+          <el-sub-menu index="1">
+            <template #title>
+              <el-icon><message /></el-icon>Navigator One
+            </template>
+            <el-menu-item-group>
+              <template #title>Group 1</template>
+              <el-menu-item index="1-1">Option 1</el-menu-item>
+              <el-menu-item index="1-2">Option 2</el-menu-item>
+            </el-menu-item-group>
+            <el-menu-item-group title="Group 2">
+              <el-menu-item index="1-3">Option 3</el-menu-item>
+            </el-menu-item-group>
+            <el-sub-menu index="1-4">
+              <template #title>Option4</template>
+              <el-menu-item index="1-4-1">Option 4-1</el-menu-item>
+            </el-sub-menu>
+          </el-sub-menu>
+          <el-sub-menu index="2">
+            <template #title>
+              <el-icon><icon-menu /></el-icon>Navigator Two
+            </template>
+            <el-menu-item-group>
+              <template #title>Group 1</template>
+              <el-menu-item index="2-1">Option 1</el-menu-item>
+              <el-menu-item index="2-2">Option 2</el-menu-item>
+            </el-menu-item-group>
+            <el-menu-item-group title="Group 2">
+              <el-menu-item index="2-3">Option 3</el-menu-item>
+            </el-menu-item-group>
+            <el-sub-menu index="2-4">
+              <template #title>Option 4</template>
+              <el-menu-item index="2-4-1">Option 4-1</el-menu-item>
+            </el-sub-menu>
+          </el-sub-menu>
+          <el-sub-menu index="3">
+            <template #title>
+              <el-icon><setting /></el-icon>Navigator Three
+            </template>
+            <el-menu-item-group>
+              <template #title>Group 1</template>
+              <el-menu-item index="3-1">Option 1</el-menu-item>
+              <el-menu-item index="3-2">Option 2</el-menu-item>
+            </el-menu-item-group>
+            <el-menu-item-group title="Group 2">
+              <el-menu-item index="3-3">Option 3</el-menu-item>
+            </el-menu-item-group>
+            <el-sub-menu index="3-4">
+              <template #title>Option 4</template>
+              <el-menu-item index="3-4-1">Option 4-1</el-menu-item>
+            </el-sub-menu>
+          </el-sub-menu>
+        </el-menu>
+      </el-scrollbar>
+    </el-aside>
+
+    <el-container>
+      <el-header style="text-align: right; font-size: 12px">
+        <div class="toolbar">
+          <el-dropdown>
+            <el-icon style="margin-right: 8px; margin-top: 1px"
+              ><setting
+            /></el-icon>
+            <template #dropdown>
+              <el-dropdown-menu>
+                <el-dropdown-item>View</el-dropdown-item>
+                <el-dropdown-item>Add</el-dropdown-item>
+                <el-dropdown-item>Delete</el-dropdown-item>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
+          <span>Tom</span>
+        </div>
+      </el-header>
+
+      <el-main>
+        <el-scrollbar>
+          <el-table :data="tableData">
+            <el-table-column prop="date" label="Date" width="140" />
+            <el-table-column prop="name" label="Name" width="120" />
+            <el-table-column prop="address" label="Address" />
+          </el-table>
+        </el-scrollbar>
+      </el-main>
+    </el-container>
+  </el-container>
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from 'vue'
-import type { FormInstance } from 'element-plus'
+import { ref } from 'vue'
+import { Menu as IconMenu, Message, Setting } from '@element-plus/icons-vue'
 
-const ruleFormRef = ref<FormInstance>()
-
-const validatePass = (rule: any, value: any, callback: any) => {
-  console.log('as1', rule, value);
-  if (value === '') {
-    callback(new Error('Please input the password'))
-  } else {
-    if (ruleForm.checkPass !== '') {
-      if (!ruleFormRef.value) return
-      ruleFormRef.value.validateField('checkPass', () => null)
-    }
-    callback()
-  }
+const item = {
+  date: '2016-05-02',
+  name: 'Tom',
+  address: 'No. 189, Grove St, Los Angeles',
 }
-const validatePass2 = (rule: any, value: any, callback: any) => {
-  console.log('as2', rule, value);
-
-  if (value === '') {
-    callback(new Error('Please input the password again'))
-  } else if (value !== ruleForm.pass) {
-    callback(new Error("Two inputs don't match!"))
-  } else {
-    callback()
-  }
-}
-
-const ruleForm = reactive({
-  pass: '',
-  checkPass: '',
-  age: '',
-})
-
-const rules = reactive({
-  pass: [{ validator: validatePass, trigger: 'blur' }],
-  checkPass: [{ validator: validatePass2, trigger: 'blur' }],
-})
-
-const submitForm = (formEl: FormInstance | undefined) => {
-  if (!formEl) return
-  console.log(formEl);
-  
-  formEl.validate((valid) => {
-    console.log(valid);
-    
-    if (valid) {
-      console.log('submit!')
-    } else {
-      console.log('error submit!')
-      return false
-    }
-  })
-}
-
-const resetForm = (formEl: FormInstance | undefined) => {
-  if (!formEl) return
-  formEl.resetFields()
-}
+const tableData = ref(Array.from({ length: 20 }).fill(item))
 </script>
-  
-<style lang="less" scoped>
+
+<style scoped>
+.layout-container-demo .el-header {
+  position: relative;
+  background-color: var(--el-color-primary-light-7);
+  color: var(--el-text-color-primary);
+}
+.layout-container-demo .el-aside {
+  color: var(--el-text-color-primary);
+  background: var(--el-color-primary-light-8);
+}
+.layout-container-demo .el-menu {
+  border-right: none;
+}
+.layout-container-demo .el-main {
+  padding: 0;
+}
+.layout-container-demo .toolbar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  right: 20px;
+}
 </style>

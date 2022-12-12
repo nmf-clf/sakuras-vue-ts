@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-04-27 17:25:41
  * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-12 18:54:17
+ * @LastEditTime: 2022-12-12 19:36:12
 -->
 <template>
   <div :class="'rg-options' + (' rg-options-' + deviceType())">
@@ -34,7 +34,7 @@
 import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from "vuex";
-import { Search } from '@element-plus/icons-vue'
+import { Message, Search } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus';
 import UserStore from "@/store/modules/user";
 
@@ -54,23 +54,20 @@ const turnPage = (path: string, pdfUrl?: string) =>{
             pdfUrl
         }
     }
-    router.push(datas)
+    router.push(datas);
 }
 
 const loginOrOut = (e: string) =>{
     if(userInfo.username){ //退出登录
-        store.dispatch('user/saveUserInfo', {})
-        ElMessage({
-            message: '注销成功',
-            type: 'success',
-            center: true,
-        })
+        store.dispatch('user/saveUserInfo', {});
+        ElMessage.success('注销成功');
     }else{
-        turnPage(e)
+        turnPage(e);
     }
 }
 
 const toAdmin = (path: string) =>{
+    if(!userInfo.username) return ElMessage.warning('请先登录！');
     router.push({ path })
 }
 </script>

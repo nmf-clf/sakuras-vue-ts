@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-12-09 16:14:27
  * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-12 16:49:17
+ * @LastEditTime: 2022-12-12 19:38:49
 -->
 <template>
     <el-form
@@ -85,12 +85,9 @@ const handleLogin = () => {
         console.log('login-post::',res);
         store.dispatch('user/saveUserInfo', { //暂时这样存 需要整体加密
             ...ruleForm
-        })
-        router.push({ path: '/' })
-        ElMessage({
-            message: res.message,
-            type: 'success',
-        })
+        });
+        router.push({ path: '/' });
+        ElMessage.success(res.message);
     })
 }
 </script>
