@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-04-27 17:25:41
  * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-12 19:36:12
+ * @LastEditTime: 2022-12-13 19:21:21
 -->
 <template>
   <div :class="'rg-options' + (' rg-options-' + deviceType())">
@@ -12,7 +12,7 @@
     </div>
     <!-- 学习笔记 -->
     <el-dropdown class="hidden-dropdown">
-      <span class="el-dropdown-link" @click="openPage('https://sakuras.group/sakuras-docs/')">学习笔记</span>
+      <span class="el-dropdown-link" @click="openPage('https://sakuras.group/sakuras-docs/')">{{'学习笔记'}}</span>
     </el-dropdown>
     <!-- 个人中心 trigger="click"-->
     <el-dropdown class="hidden-dropdown">
@@ -40,6 +40,7 @@ import UserStore from "@/store/modules/user";
 
 const router = useRouter();
 const store = useStore();
+const isCollapse = store.state.admin.isCollapse;
 const deviceType = () => store.getters.deviceType;
 const userInfo = store.getters.userInfo;
 

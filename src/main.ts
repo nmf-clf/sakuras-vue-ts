@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-11-07 15:18:04
  * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-12 13:29:33
+ * @LastEditTime: 2022-12-13 14:35:46
  */
 import { createApp } from 'vue'
 import App from './App.vue' //引入跟组件
@@ -10,8 +10,8 @@ import router from './router' // 引入路由实例对象
 import store from './store' //引入vuex实例对象
 import plusIcons from './elementIcon' //按需引入icon组件
 import 'animate.css';
-import './assets/common.less';
 import 'element-plus/es/components/message/style/css' //按需引入某个样式
+// import '@/styles/index.less'; //引入自定义样式
 // import ElementPlus from 'element-plus' //完整引入组件库
 // import 'element-plus/dist/index.css' //完整引入组件库样式
 

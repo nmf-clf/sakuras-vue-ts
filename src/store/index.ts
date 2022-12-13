@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-11-07 15:18:04
  * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-12 18:35:12
+ * @LastEditTime: 2022-12-13 18:43:50
  */
 import { createStore } from 'vuex';
 import createPersistedState from "vuex-persistedstate"; //vuex状态持久化
@@ -14,6 +14,7 @@ const modules = {};
 files.keys().forEach((key) =>  modules[key.replace(/(\.\/|\.ts)/g, '')] = files(key).default ); 
 
 Object.keys(modules).forEach((key) => modules[key]['namespaced'] = true ); //开启命名空间
+console.log(modules);
 
 // 创建一个新的 store 实例
 export default createStore({

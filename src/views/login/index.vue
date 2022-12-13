@@ -8,7 +8,7 @@
             <p>在每个人的心里，都有一个人记不住，却不能拥抱和珍惜。</p>
             <button class="panel-btn" @click="toSignUp">前往注册</button>
           </div>
-          <img class="panel-img" src="@/assets/images/log.png" alt="" />
+          <img class="panel-img" src="@/assets/imgs/log.png" alt="" />
         </div>
         <div class="panel right-panel">
           <div class="panel-content">
@@ -16,7 +16,7 @@
             <p>在每个人的心里，都有一个人记不住，却不能拥抱和珍惜。</p>
             <button class="panel-btn" @click="toSignIn">前往登录</button>
           </div>
-          <img class="panel-img" src="@/assets/images/register.png" alt="" />
+          <img class="panel-img" src="@/assets/imgs/register.png" alt="" />
         </div>
       </div>
       

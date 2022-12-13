@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-04-06 23:49:03
  * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-12 16:50:08
+ * @LastEditTime: 2022-12-13 10:51:22
 -->
 <template>
   <el-container :class="'frontHome-' + deviceType()" class="frontHome">
@@ -27,6 +27,8 @@ import { useStore } from "vuex";
 import { MyHeader } from '../../components/index'
 
 const store = useStore();
+const deviceType = () => store.getters.deviceType;
+
 /* 定义数据 */
 let txtList = [
   '读很多的书，走很远的路，见很多的人。',
@@ -35,11 +37,11 @@ let txtList = [
   '悟已往之不谏，知来者之可追。',
   '醉后不知天在水，满船清梦压星河。',
 ]
+
 let mainTxt = ref(txtList[Math.floor( (Math.random() * txtList.length) )])
-// /* 定义方法 */
+
 let changeText = () => mainTxt.value = txtList[Math.floor( (Math.random() * txtList.length) )] 
 
-const deviceType = () => store.getters.deviceType
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

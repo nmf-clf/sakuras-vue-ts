@@ -2,12 +2,13 @@
  * @Author: niumengfei
  * @Date: 2022-11-07 15:18:04
  * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-12 16:07:58
+ * @LastEditTime: 2022-12-13 11:33:09
 -->
 <template>
-    <div id="app" :class="'app-' + deviceType()">
+	  <router-view />
+    <!-- <div id="app" :class="'app-' + deviceType()">
         <router-view></router-view>
-    </div>
+    </div> -->
     <!-- 按需加载时-使用全局配置size和zIndex的组件包裹跟组件 -->
     <!--  <el-config-provider :size="size" :z-index="zIndex">
     <div id="app">

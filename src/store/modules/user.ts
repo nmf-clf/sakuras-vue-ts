@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-12-12 12:55:25
  * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-12 19:12:38
+ * @LastEditTime: 2022-12-13 18:40:25
  */
 interface StateType {
     screenWidth: number;
