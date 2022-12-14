@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-04-27 17:25:41
  * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-13 19:21:21
+ * @LastEditTime: 2022-12-14 13:27:45
 -->
 <template>
   <div :class="'rg-options' + (' rg-options-' + deviceType())">
@@ -23,7 +23,7 @@
         <el-dropdown-menu>
           <el-dropdown-item v-if="userInfo.username"><el-icon><user /></el-icon>{{userInfo.username}}</el-dropdown-item>
           <el-dropdown-item :divided="userInfo.username ? true : false" @click="loginOrOut('/login')">{{userInfo.username ? '注销' : '登录'}}</el-dropdown-item>
-          <el-dropdown-item divided @click="toAdmin('/admin')">进入后台</el-dropdown-item>
+          <el-dropdown-item divided @click="toAdmin('/admin/index')">进入后台</el-dropdown-item>
         </el-dropdown-menu>
       </template>
     </el-dropdown>

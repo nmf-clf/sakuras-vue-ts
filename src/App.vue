@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-11-07 15:18:04
  * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-13 11:33:09
+ * @LastEditTime: 2022-12-14 19:01:41
 -->
 <template>
 	  <router-view />
@@ -51,10 +51,7 @@ export default defineComponent({
 </script>
 
 <style lang="less">
-*{
-  margin: 0;
-  padding: 0;
-}
+
 #nprogress .spinner {
     display: block;
     position: fixed;

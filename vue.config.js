@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-11-07 15:18:04
  * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-13 14:00:17
+ * @LastEditTime: 2022-12-14 13:28:45
  */
 const { defineConfig } = require('@vue/cli-service')
 const webpack = require('webpack')
@@ -26,8 +26,6 @@ module.exports = defineConfig({
         resolve: {
         alias: {
             '@': path.join(__dirname, 'src'), //resolve('src')
-            '@U': path.join(__dirname, 'src/user'), //resolve('src/user')
-            '@A': path.join(__dirname, 'src/admin'), //resolve('src/admin')
         },
         // fallback: {
         //   http: require.resolve("stream-http"),

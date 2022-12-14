@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-11-07 15:18:04
  * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-13 14:54:52
+ * @LastEditTime: 2022-12-14 19:54:15
  */
 /* 引入路由模块，和vue2.0方式不同 */
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'; //导入
@@ -44,6 +44,34 @@ const routes: Array<RouteRecordRaw> = [
     {
         path: '/admin',
         component: AdminHome,
+        children: [
+            {
+              path: 'index',
+              component: () => import('@/vdmin/home/Home.vue'),
+              name: 'AdminHome',
+              meta: { title: '首页', permiss: '1' },
+            },{
+                path: 'article',
+                component: () => import('@/vdmin/article/index.vue'),
+                name: 'AdminArticle',
+                meta: { title: '文章模块', permiss: '2' },
+            },{
+                path: 'repassword',
+                component: () => import('@/vdmin/setting/Repassword.vue'),
+                name: 'AdminRepassword',
+                meta: { title: '修改密码', permiss: '3' },
+            },{
+                path: 'logout',
+                component: () => import('@/vdmin/setting/Logout.vue'),
+                name: 'AdminLogout',
+                meta: { title: '退出登录', permiss: '3' },
+            },{
+                path: 'statistics',
+                component: () => import('@/vdmin/statistics/index.vue'),
+                name: 'AdminStatistics',
+                meta: { title: '统计模块', permiss: '1' },
+            }
+        ]
     },
 ];
 // 3. 创建路由实例并传递 `routes` 配置

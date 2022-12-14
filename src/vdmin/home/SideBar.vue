@@ -2,66 +2,109 @@
  * @Author: niumengfei
  * @Date: 2022-12-13 15:54:42
  * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-13 19:56:52
+ * @LastEditTime: 2022-12-14 20:17:29
 -->
 <template>
      <div class="admin-aside" >
-            <el-scrollbar>
-                <el-menu
-    default-active="2"
-    class="el-menu-vertical-demo"
-    :collapse="(isCollapse())"
-    @open="handleOpen"
-    @close="handleClose"
-  >
-    <el-sub-menu index="1">
-      <template #title>
-        <el-icon><location /></el-icon>
-        <span>首页</span>
-      </template>
-      <!-- <el-menu-item-group>
-        <template #title><span>Group One</span></template>
-        <el-menu-item index="1-1">item one</el-menu-item>
-        <el-menu-item index="1-2">item two</el-menu-item>
-      </el-menu-item-group> -->
-      <el-menu-item-group title="Group Two">
-        <el-menu-item index="1-3">item three</el-menu-item>
-      </el-menu-item-group>
-      <el-sub-menu index="1-4">
-        <template #title><span>item four</span></template>
-        <el-menu-item index="1-4-1">item one</el-menu-item>
-      </el-sub-menu>
-    </el-sub-menu>
-    <el-menu-item index="2">
-      <el-icon><icon-menu /></el-icon>
-      <template #title>Navigator Two</template>
-    </el-menu-item>
-    <el-menu-item index="3" disabled>
-      <el-icon><document /></el-icon>
-      <template #title>Navigator Three</template>
-    </el-menu-item>
-    <el-menu-item index="4">
-      <el-icon><setting /></el-icon>
-      <template #title>Navigator Four</template>
-    </el-menu-item>
-  </el-menu>
-            </el-scrollbar>
-        </div>
+        <el-scrollbar>
+            <el-menu
+                :default-active="currentBarkey()"
+                class="el-menu-vertical-demo"
+                :collapse="isCollapse()"
+                @open="handleOpen"
+                @close="handleClose"
+            >
+                <!-- 一级菜单 -->
+                <template v-for="v1 in sideBarList">
+                    <template v-if="v1.subs">
+                        <!-- 开始递归渲染 -->
+                        <sideBarItem :subItems="v1" />
+                    </template>
+                    
+                    <template v-else>
+                        <el-menu-item :index="v1.path" @click="handleClick(v1)"> <!-- 一级菜单标题 -->
+                            <el-icon><component :is="v1.icon"></component></el-icon>
+                        <template #title>{{v1.title}}</template>
+                        </el-menu-item>
+                    </template>
+                </template>
+                
+            </el-menu>
+        </el-scrollbar>
+    </div>
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { ref, PropType, DefineComponent } from 'vue';
+import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
-import { Document, Menu as IconMenu, Location, Setting, Message } from '@element-plus/icons-vue';
+import { Document, Menu as IconMenu, Location, Setting, Message, HomeFilled } from '@element-plus/icons-vue';
+import sideBarItem from "./SideBarItem.vue";
+
+interface PathsType {
+    path: string,
+    title: string,
+    icon: DefineComponent,
+    disabled?: boolean,
+    subs?: PathsType[],
+}
+
 const store = useStore();
+const route = useRoute();
+const router = useRouter();
+
 //坑点：vue3中使用store里的state数据，如果涉及到当前页面DOM更新的值，则需要通过函数形式使用
 const isCollapse = () => store.state.admin.isCollapse;
+const currentBarkey = () => {
+    return route.path
+};
+
+const sideBarList = [{
+    title: '首页',
+    path: '/admin/index',
+    icon: HomeFilled,
+},{
+    title: '文章模块',
+    path: '/admin/article',
+    icon: IconMenu,
+},{
+    title: '统计模块',
+    path: '/admin/statistics',
+    disabled: true,
+    icon: Document,
+},{
+    title: '设置',
+    icon: Setting,
+    path: '4',
+    subs: [{
+        title: '密码相关',
+        icon: Message,
+        path: '4-1',
+        subs: [{
+            title: '修改密码',
+            path: '/admin/repassword',
+            icon: Location,
+        }]
+    },{
+        title: '退出登录',
+        path: '/admin/logout',
+        icon: Message,
+    }]
+}]
 
 const handleOpen = (key: string, keyPath: string[]) => {
   console.log(key, keyPath)
 }
 const handleClose = (key: string, keyPath: string[]) => {
   console.log(key, keyPath)
+}
+const handleClick = (params: any) => {
+    router.push(params.path)
+    console.log('xx', params);
+    store.dispatch('admin/setTags', {
+        title: params.title,
+        path: params.path
+    })
 }
 </script>
 
@@ -74,11 +117,41 @@ const handleClose = (key: string, keyPath: string[]) => {
     bottom: 0;
     overflow-y: scroll;
     // .el-menu{
-    //     width: 250px;
+    //     width: 200px;
     // }
     .el-menu-vertical-demo:not(.el-menu--collapse) {
-        width: 250px;
+        width: 200px;
         min-height: 400px;
     }
 }
 </style>
+
+<!-- <el-sub-menu v-if="false" :index="v1.path">
+    <template #title> 
+        <el-icon><component :is="v1.icon"></component></el-icon>
+        <span>{{v1.title}}</span>
+    </template>
+    <template v-for="v2 in v1.subs">
+        <template v-if="v2.subs">
+            <el-sub-menu :index="v2.path">
+                <template #title>
+                    <el-icon><component :is="v2.icon"></component></el-icon>
+                    <span>{{v2.title}}</span>
+                </template>
+                <template v-for="v3 in v2.subs">
+                    <el-menu-item :index="v3.path" @click="handleClick(v3.path)">
+                        <el-icon><component :is="v3.icon"></component></el-icon>
+                        <template #title>{{v3.title}}</template>
+                    </el-menu-item>
+                </template>
+            </el-sub-menu>
+        </template>
+
+        <template v-else>
+            <el-menu-item :index="v2.path" @click="handleClick(v2.path)"> 
+                <el-icon><component :is="v2.icon"></component></el-icon>
+                <template #title>{{v2.title}}</template>
+            </el-menu-item>
+        </template>
+    </template>
+</el-sub-menu> -->

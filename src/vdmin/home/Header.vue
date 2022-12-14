@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-12-13 15:54:42
  * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-13 18:11:55
+ * @LastEditTime: 2022-12-13 23:47:06
 -->
 <template>
     <div class="admin-header">
@@ -56,7 +56,7 @@ const turnTo = (type: string) => {
             console.log('1');
             break;
         case 'back':
-            router.push('home');
+            router.push('/home');
             break;
         default:
             break;
