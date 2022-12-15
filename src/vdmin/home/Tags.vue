@@ -40,50 +40,77 @@ const router = useRouter();
 const store = useStore();
 const tags = store.state.admin.tags;
 
-const isActive = (path: string) => {
-	console.log('asdasd', path, route );
-	return path === route.fullPath
-};
+const isActive = (path: string) => path === route.fullPath;
 
 // 关闭单个标签
 const closeTags = (index: number) => {
-	//切换路由：先获取当前关闭的标签在数组中的下标，然后获取上一个对象下标
-	if(index > 0){ //如果下标值大于0，说明前面还有
-		
+	if(tags.list.length === 1){ //如果tags标签只有一个
+		// console.log('tabs标签页只有一个...');
+		if(tags.list[index].path !== '/admin/index'){ //且不是首页，则需要转回到首页
+			// console.log('当前标签页不是首页，需要跳转到首页...');
+			router.push({
+				path: '/admin/index'
+			})
+			store.dispatch('admin/resetTags', {
+				path: '/admin/index',
+				title: '首页',
+			});
+		}else{ //如果是首页，则直接删除即可，且不展示show
+			// console.log('当前标签页是首页，直接删除即可...');
+			store.dispatch('admin/deleteTags', index);
+		}
+	}else{ //如果tags标签有多个
+		// console.log('tags标签页有多个...');
+		if(tags.list[index].path === route.path){ //如果删除是当前页
+			let toRoute;
+			if(index === tags.list.length - 1){ //如果删除的当前标签页是最后一个，则需要跳转到上一个标签页对应的路由，同时删除当前对应的tag
+				// console.log('当前标签页是最后一个，路由需要跳转到上一个标签页');
+				toRoute = tags.list[index-1]; //获取上一个路由对象
+			}else{ //如果删除的当前标签页不是最后一个，则需要跳转到下一个标签页对应的路由，同时删除当前对应的tag
+				// console.log('当前标签页不是最后一个，路由需要跳转到下一个标签页');
+				toRoute = tags.list[index+1]; //获取下一级路由对象
+			}
+			// console.log('跳转路由...');
+			router.push(toRoute.path);
+		}
+		// console.log('删除当前tag对应的标签页...');
+		store.dispatch('admin/deleteTags', index);
 	}
-	// console.log('sss', tags.list[index-1]);
-	// let backRoute = tags.list[tags.list.length - 1];
-	// router.replace(tags.list[tags.list.length - 1]);
-	store.dispatch('admin/deleteTags', index);
 };
 // 设置标签
-const setTags = (route: any) => {
-	store.dispatch('admin/setTags', {
+const addTags = (route: any) => {
+	// console.log('设置标签...');
+	store.dispatch('admin/addTags', {
 		title: route.meta.title || '未知模块',
         path: route.fullPath
 	})
 };
-setTags(route);
+addTags(route);
 onBeforeRouteUpdate(to => {
-	console.log('onBeforeRouteUpdateLL', to);
-	// setTags(to);
+	// console.log('onBeforeRouteUpdateLL', to);
+	addTags(to); //关键：用于 关闭上一个标签后，回退路由时，重新设置上一个标签
 });
 
 // 关闭全部标签
 const closeAll = () => {
+	router.push({
+		path: '/admin/index'
+	})
+	store.dispatch('admin/resetTags', {
+		path: '/admin/index',
+		title: '首页',
+	});
 };
 // 关闭其他标签
 const closeOther = () => {
+	store.dispatch('admin/resetTags', {
+		path: route.path,
+		title: route.meta.title,
+	});
 };
 const handleTags = (command: string) => {
 	command === 'other' ? closeOther() : closeAll();
 };
-
-// 关闭当前页面的标签页
-// tags.closeCurrentTag({
-//     $router: router,
-//     $route: route
-// });
 </script>
 
 <style>

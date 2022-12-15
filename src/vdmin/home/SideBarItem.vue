@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-12-13 15:54:42
  * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-14 19:38:20
+ * @LastEditTime: 2022-12-15 14:29:45
 -->
 <template>
     <el-sub-menu :index="subItems?.path">
@@ -44,7 +44,7 @@ const store = useStore();
 
 const handleClick = (params: any) => {
     router.push(params.path)
-    store.dispatch('admin/setTags', {
+    store.dispatch('admin/addTags', {
         title: params.title,
         path: params.path
     })
@@ -53,6 +53,6 @@ const handleClick = (params: any) => {
 const props = defineProps({ //子组件接收父组件传递过来的值
     subItems: Object,
 });
-// const subItems: any = props.subItems;
+// const subItems: any = props.subItems; 坑点：不太懂这里的ts类型如何标注
 const { subItems }: { subItems?: any } = toRefs(props); //使用父组件传递过来的值
 </script>

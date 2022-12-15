@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-12-13 14:51:55
  * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-14 19:09:31
+ * @LastEditTime: 2022-12-15 17:25:01
 -->
 <template>
     <div class="admin-layout">
@@ -11,56 +11,32 @@
         <!-- 侧边栏 -->
         <SideBar />
         <!-- 内容 -->
-        <!-- <div :class="'admin-main' + (isCollapse() ? ' to-lf' : '')"> -->
-        <div :class="{ 'admin-main': true, 'to-lf': isCollapse() }">
+        <div class="admin-main" :class="{ 'to-lf': isCollapse() }">
             <Tags />
            
             <div class="content">
                 <router-view v-slot="{ Component }">
                     <!-- <transition name="move" mode="out-in"> -->
-                        <!-- <keep-alive :include="tags.nameList"> -->
+                        <keep-alive :include="[]">
                             <component :is="Component"></component>
-                        <!-- </keep-alive> -->
+                        </keep-alive>
                     <!-- </transition> -->
                 </router-view>
             </div>
-            <!-- <el-scrollbar>
-                <el-table :data="tableData">
-                    <el-table-column prop="date" label="Date" width="140" />
-                    <el-table-column prop="name" label="Name" width="120" />
-                    <el-table-column prop="address" label="Address" />
-                </el-table>
-            </el-scrollbar> -->
         </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
 import Header from "./Header.vue";
 import SideBar from "./SideBar.vue";
 import Tags from "./Tags.vue";
-
-
 import { useStore } from "vuex";
 
 const store = useStore();
 const isCollapse = () => store.state.admin.isCollapse;
 
-const tags = {
-    show: true,
-    nameList: [
-        'basetable',
-        'dashboard'
-    ]
-}
-
-const item = {
-  date: '2016-05-02',
-  name: 'Tom',
-  address: 'No. 189, Grove St, Los Angeles',
-}
-const tableData = ref(Array.from({ length: 20 }).fill(item))
+const tags = store.state.admin.tags;
 </script>
 
 <style lang="less" scoped>
@@ -92,7 +68,7 @@ const tableData = ref(Array.from({ length: 20 }).fill(item))
             padding: 10px;
             overflow-y: scroll;
             box-sizing: border-box;
-            background: yellowgreen;
+            // background: yellowgreen;
         }
     }
     .to-lf{

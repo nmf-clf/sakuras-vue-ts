@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-12-13 15:54:42
  * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-14 20:17:29
+ * @LastEditTime: 2022-12-15 14:29:49
 -->
 <template>
      <div class="admin-aside" >
@@ -11,8 +11,6 @@
                 :default-active="currentBarkey()"
                 class="el-menu-vertical-demo"
                 :collapse="isCollapse()"
-                @open="handleOpen"
-                @close="handleClose"
             >
                 <!-- 一级菜单 -->
                 <template v-for="v1 in sideBarList">
@@ -92,16 +90,9 @@ const sideBarList = [{
     }]
 }]
 
-const handleOpen = (key: string, keyPath: string[]) => {
-  console.log(key, keyPath)
-}
-const handleClose = (key: string, keyPath: string[]) => {
-  console.log(key, keyPath)
-}
 const handleClick = (params: any) => {
     router.push(params.path)
-    console.log('xx', params);
-    store.dispatch('admin/setTags', {
+    store.dispatch('admin/addTags', {
         title: params.title,
         path: params.path
     })

@@ -2,14 +2,14 @@
  * @Author: niumengfei
  * @Date: 2022-12-13 15:54:42
  * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-13 23:47:06
+ * @LastEditTime: 2022-12-15 15:12:46
 -->
 <template>
     <div class="admin-header">
         <div class="expand" @click="changeIsCollapse">
             <el-icon><Expand /></el-icon>
         </div>
-        <div class="title">后台管理系统</div>
+        <div class="title">创作者中心</div>
         <div class="right">
             <el-dropdown>
                 <span class="el-dropdown-link">
