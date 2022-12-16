@@ -2,92 +2,140 @@
  * @Author: niumengfei
  * @Date: 2022-12-13 14:51:55
  * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-15 17:30:49
+ * @LastEditTime: 2022-12-16 16:14:47
 -->
 <template>
     <!-- 
-        gutter：列间距，行提供 gutter 属性来指定列之间的间距，其默认值为0
+        gutter?：列间距，行提供 gutter 属性来指定列之间的间距，默认值 0
+        span?: 占用当前行的空间 一行24，默认值 6
+        data：表单DOM数据源 
+        form: 表单入参数据源
+        onReset?: 情况表单数据
+        onSearch?：查询
      -->
     <el-row 
-        :gutter="20"
-    >
-        <template v-for="item in data">
-            <!-- type: 
-                    input: 输入框
-                    radio: 单选
-                    multiple: 多选
-                    date: 单选日期
-                    mul-date: 多选日期
-            -->
+        :gutter="gutter || 0"
+    >   
+        <template v-if="!data">data属性必须!</template>
+        <template v-else v-for="item in data" :key="item.key">
+            <!-- input：输入框 -->
             <template v-if="item.type == 'input'">
                 <el-col :span="item.span || 6">
                     <el-form-item :label="item.title">
-                        <el-input v-model="form.name" />
+                        <el-input v-model="form[item.key]" :placeholder="`请填写${item.title}`" />
                     </el-form-item>
                 </el-col>
             </template>
-
-            <template v-if="item.type == 'radio2'">
+            <!-- radio：单选框 -->
+            <template v-if="item.type == 'select'">
                 <el-col :span="item.span || 6">
                     <el-form-item :label="item.title">
-                        <el-input v-model="form.name" />
+                        <el-select v-model="form[item.key]" :placeholder="`请选择${item.title}`">
+                            <el-option
+                                v-for="v in item.options"
+                                :key="v.value"
+                                :label="v.label"
+                                :value="v.value"
+                            />
+                        </el-select>
                     </el-form-item>
                 </el-col>
             </template>
-
-            <template v-if="item.type == 'multiple'">
+            <!-- multiple：多选框 -->
+            <template v-if="item.type == 'mul-select'">
                 <el-col :span="item.span || 6">
-                    <!-- <el-select
-                        v-model="value1"
-                        multiple
-                        placeholder="Select"
-                        style="width: 240px"
-                    >
-                        <el-option
-                            v-for="item in options"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value"
+                    <el-form-item :label="item.title">
+                        <el-select
+                            v-model="form[item.key]"
+                            multiple
+                            :placeholder="`请选择${item.title}`"
+                            style="width: 240px"
+                        >
+                            <el-option
+                                v-for="v in item.options"
+                                :key="v.value"
+                                :label="v.label"
+                                :value="v.value"
+                            />
+                        </el-select>
+                    </el-form-item>
+                </el-col>
+            </template>
+            <!-- date：单选日期 -->
+            <template v-if="item.type == 'date'">
+                <el-col :span="item.span || 6">
+                    <el-form-item :label="item.title">
+                        <el-date-picker
+                            v-model="form[item.key]"
+                            type="date"
+                            placeholder="请选择日期"
+                            :size="item.size || 'default'"
+                            format="YYYY-MM-DD"
+                            value-format="YYYY-MM-DD"
                         />
-                    </el-select> -->
-                </el-col>
-            </template>
-
-            <template v-if="item.type == 'input'">
-                <el-col :span="item.span || 6">
-                    <el-form-item :label="item.title">
-                        <el-input v-model="form.name" />
                     </el-form-item>
                 </el-col>
             </template>
-
-            <template v-if="item.type == 'input'">
+            <!-- mul-date：多选日期 -->
+            <template v-if="item.type == 'mul-date'">
                 <el-col :span="item.span || 6">
                     <el-form-item :label="item.title">
-                        <el-input v-model="form.name" />
+                        <el-date-picker
+                            v-model="form[item.key]"
+                            type="daterange"
+                            range-separator="To"
+                            start-placeholder="开始日期"
+                            end-placeholder="结束日期"
+                            :size="item.size || 'default'"
+                            format="YYYY-MM-DD"
+                            value-format="YYYY-MM-DD"
+                        />
                     </el-form-item>
                 </el-col>
             </template>
         </template>
+        <!-- 按钮 -->
+        <el-col v-if="showBtns" :span="6">
+            <el-button v-if="onSearch" type="primary" @click="handleSearch">查询</el-button>
+            <el-button v-if="onReset" type="primary" @click="handleReset">重置</el-button>
+        </el-col>
     </el-row>
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive } from 'vue';
-import { Edit, Delete } from '@element-plus/icons-vue';
-import { toRefs, PropType } from 'vue';
-import { useStore } from "vuex";
-import router from '@/router';
+interface PropType {
+    gutter?: number,
+    form: object, 
+    data: DataType[],
+    onSearch?: () => void, 
+    onReset?: () => void,
+}
+interface OptionsType {
+    label: string,
+    value: string,
+}
+interface DataType {
+    title?: string,
+    key: string,
+    type: string,
+    options: OptionsType[],
+    span?: number,
+    size?: string,
+}
 
-const form = reactive({
-    name: '1'
-})
-
-const props = defineProps({ //子组件接收父组件传递过来的值
-    data: Array,
+const props = defineProps({
+    gutter: Number,
+    form: { type: Object, required: true },
+    data: { type: Array, required: true },
+    onSearch: Function,
+    onReset: Function,
 });
 
-const { data }: any = props;
+const { gutter, form, onSearch, onReset, data } = <PropType>props;
+
+const showBtns = onSearch || onReset;
+const handleSearch = () => onSearch && onSearch();
+const handleReset = () => onReset && onReset();
 </script>
 
 <style lang="less" scoped>

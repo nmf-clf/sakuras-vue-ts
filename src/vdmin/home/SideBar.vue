@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-12-13 15:54:42
  * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-15 14:29:49
+ * @LastEditTime: 2022-12-16 16:15:14
 -->
 <template>
      <div class="admin-aside" >
@@ -50,7 +50,6 @@ interface PathsType {
 const store = useStore();
 const route = useRoute();
 const router = useRouter();
-
 //坑点：vue3中使用store里的state数据，如果涉及到当前页面DOM更新的值，则需要通过函数形式使用
 const isCollapse = () => store.state.admin.isCollapse;
 const currentBarkey = () => {

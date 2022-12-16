@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-12-13 15:54:42
  * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-15 14:29:45
+ * @LastEditTime: 2022-12-16 15:45:56
 -->
 <template>
     <el-sub-menu :index="subItems?.path">
@@ -53,6 +53,7 @@ const handleClick = (params: any) => {
 const props = defineProps({ //子组件接收父组件传递过来的值
     subItems: Object,
 });
-// const subItems: any = props.subItems; 坑点：不太懂这里的ts类型如何标注
-const { subItems }: { subItems?: any } = toRefs(props); //使用父组件传递过来的值
+// const subItems: any = props.subItems; 坑点：不太懂这里的ts类型如何标注 toRefs作用? 会返回包裹ObjectRefImpl
+const { subItems } = toRefs(props); //使用父组件传递过来的值
+// console.log('subItems::', subItems);
 </script>
