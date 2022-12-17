@@ -2,14 +2,14 @@
  * @Author: niumengfei
  * @Date: 2022-12-07 14:13:27
  * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-08 09:24:14
+ * @LastEditTime: 2022-12-17 18:19:21
  */
 import AxiosAjax from "@/utils/http";
 import { LoginParams, User } from "./model/userModel";
 
 enum Api {
-    register = '/sakuras-api/user/register',
-    login = '/sakuras-api/user/login'
+    register = 'user/register',
+    login = 'user/login'
 }
 
 export const RegisterAjax = (data: LoginParams) => 

@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-12-13 14:51:55
  * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-16 16:36:37
+ * @LastEditTime: 2022-12-17 18:11:14
 -->
 <template>
     <div class="container">
@@ -25,7 +25,7 @@
             border: 是否带有纵向边框
          -->
         <TableGroup 
-            :tableData="tableData"
+           
         >
             <el-table 
                 :data="tableData"
@@ -61,6 +61,7 @@ import SelectGroup from '@/components/SelectGroup/index.vue';
 import { Utils } from "@/utils";
 import { TableGroup } from '@/components';
 import { Edit, Delete } from '@element-plus/icons-vue';
+import { GetArticleListAjax } from "@/api/article";
 
 let formData = reactive({
     'title': '',
@@ -81,20 +82,23 @@ const item = {
     opreation: `<div>123</div>`
 };
 
-const ArticleTypeArr = [
+const ArticleTypeArr = [ //文章类型
     { value: '1', label: '前端' },
     { value: '2', label: '后端' },
     { value: '3', label: '逻辑推理' },
 ];
 
-const ArticleStatusArr = [
+const ArticleStatusArr = [ //文章发布状态
     { value: '', label: '全部' },
-    { value: '1', label: '已完成' },
-    { value: '2', label: '未完成' },
+    { value: '1', label: '已发布' },
+    { value: '2', label: '未发布' },
 ];
 
-const tableData = ref(Array.from({ length: 8 }).fill(item));
-console.log('xasa', tableData);
+const tableData2 = Array.from({ length: 100 }).fill(item);
+let arr = tableData2.map((v:any, i)=> { return { ...v, idNo: i+1 } })
+console.log(arr);
+
+const tableData = arr.slice(0,10)
 
 const handleSearch = (e: any) => {
     console.log('查询，，', formData)
@@ -109,6 +113,14 @@ const handleEdit = (index: number, row: any) => {
 const handleDelete = (index: number) => {
 
 };
+/* 登录 */
+const getArticleList = () => {
+    GetArticleListAjax({ username: 'admin' })
+    .then(res =>{
+        console.log('login-post::',res);
+    })
+}
+getArticleList()
 </script>
 
 <style lang="less" scoped>

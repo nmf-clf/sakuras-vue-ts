@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "vue-cli-service serve",
+    "start": "vue-cli-service serve", 
+    "start:dev-mongodb": "cross-env mongodb=local vue-cli-service serve",
     "start:pro": "cross-env env=pro vue-cli-service serve",
     "build:dev": "vue-cli-service build",
     "build": "cross-env env=pro vue-cli-service build",
@@ -52,8 +53,8 @@
     "unplugin-vue-components": "^0.22.11"
   },
   "runDependencies": {
-    "dev": "http://localhost:9001",
-    "pro": "https://www.sakuras.group"
+    "dev": "http://localhost:9001/sakuras-api/",
+    "pro": "https://www.sakuras.group/sakuras-api/"
   },
   "runEnv": "sit"
 }

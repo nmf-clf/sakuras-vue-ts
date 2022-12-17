@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-11-07 15:18:04
  * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-14 13:28:45
+ * @LastEditTime: 2022-12-17 18:37:49
  */
 const { defineConfig } = require('@vue/cli-service')
 const webpack = require('webpack')
@@ -14,8 +14,9 @@ const { ElementPlusResolver } = require('unplugin-vue-components/resolvers')
 /* 配置@路径 */
 const path = require('path')
 const pk = require('./package.json')
-// const apiConfig = require('./config/api');
-
+/* 
+    process.env：cross-env 插件可以将 scripts 命令注入到此对象里
+*/
 module.exports = defineConfig({
     publicPath: './', //影响资源加载的公共路径 配置./可以打包后本地访问
     transpileDependencies: true, //转译包管理文件,可传数组
@@ -56,16 +57,12 @@ module.exports = defineConfig({
         port: '9001', //端口号
         // autoOpenBrowser: true, 
         proxy:{
-            '/local-api': { //连接本地后端服务时使用此代理
-                target: 'http://localhost:5555/',
-                changeOrigin: true,
-                pathRewrite: {
-                '^/local-api': ""
-              }
-            },
             '/sakuras-api': { //连接远程后端服务时使用此代理
-                target: 'https://sakuras.group/',
+                target: process.env?.mongodb ? 'http://localhost:5555/' : 'https://sakuras.group/', // mongodb 时连接本地node启动的后端服务
                 changeOrigin: true,
+                /* pathRewrite: {
+                    '^/local-api': "/sakuras-api"
+                } */
             },
         }
     }

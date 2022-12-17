@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-12-13 14:51:55
  * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-15 17:25:01
+ * @LastEditTime: 2022-12-16 16:53:59
 -->
 <template>
     <div class="admin-layout">
@@ -17,6 +17,7 @@
             <div class="content">
                 <router-view v-slot="{ Component }">
                     <!-- <transition name="move" mode="out-in"> -->
+                         <!-- 在这里可以通过tags去控制 打开的页面进行缓存数据 -->
                         <keep-alive :include="[]">
                             <component :is="Component"></component>
                         </keep-alive>

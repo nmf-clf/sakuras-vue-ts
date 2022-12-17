@@ -2,13 +2,17 @@
  * @Author: niumengfei
  * @Date: 2022-12-13 14:51:55
  * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-16 16:36:24
+ * @LastEditTime: 2022-12-16 17:11:01
 -->
 <template>
-   
     <slot></slot>
-     <!-- 分页 -->
-     <el-pagination class="my-pagination" background layout="prev, pager, next" :total="1000" />
+    <!-- 分页 -->
+    <el-pagination 
+        class="my-pagination" 
+        background 
+        layout="prev, pager, next" 
+        :total="1000" 
+    />
 </template>
 
 <script lang="ts" setup>
