@@ -2,10 +2,11 @@
  * @Author: niumengfei
  * @Date: 2022-12-09 16:14:27
  * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-12 19:38:49
+ * @LastEditTime: 2022-12-19 18:00:32
 -->
 <template>
     <el-form
+        v-loading="isLoading"
         class="sign-in-form"
         ref="ruleFormRef"
         :model="ruleForm" 
@@ -53,6 +54,7 @@ interface LoginParamsType {
     email?: string,
 }
 
+const isLoading = ref(false);
 const router = useRouter();
 const store = useStore();
 const ruleFormRef = ref<FormInstance>();
@@ -80,9 +82,11 @@ const submitForm = (formEl: FormInstance | undefined) => {
 }
 /* 登录 */
 const handleLogin = () => {
+    isLoading.value = true;
     LoginAjax(ruleForm)
     .then(res =>{
         console.log('login-post::',res);
+        isLoading.value = false;
         store.dispatch('user/saveUserInfo', { //暂时这样存 需要整体加密
             ...ruleForm
         });

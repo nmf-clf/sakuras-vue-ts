@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-11-07 15:18:04
  * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-17 18:37:49
+ * @LastEditTime: 2022-12-19 14:33:30
  */
 const { defineConfig } = require('@vue/cli-service')
 const webpack = require('webpack')
@@ -58,7 +58,7 @@ module.exports = defineConfig({
         // autoOpenBrowser: true, 
         proxy:{
             '/sakuras-api': { //连接远程后端服务时使用此代理
-                target: process.env?.mongodb ? 'http://localhost:5555/' : 'https://sakuras.group/', // mongodb 时连接本地node启动的后端服务
+                target: process.env?.apidev ? 'http://localhost:5555/' : 'https://sakuras.group/', // apidev 时连接本地node启动的后端服务
                 changeOrigin: true,
                 /* pathRewrite: {
                     '^/local-api': "/sakuras-api"

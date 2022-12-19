@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "vue-cli-service serve", 
-    "start:dev-mongodb": "cross-env mongodb=local vue-cli-service serve",
+    "start:api-dev": "cross-env apidev=dev vue-cli-service serve",
     "start:pro": "cross-env env=pro vue-cli-service serve",
     "build:dev": "vue-cli-service build",
     "build": "cross-env env=pro vue-cli-service build",

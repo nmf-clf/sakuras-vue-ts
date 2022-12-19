@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-12-13 14:51:55
  * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-17 18:11:14
+ * @LastEditTime: 2022-12-19 18:11:58
 -->
 <template>
     <div class="container">
@@ -25,14 +25,15 @@
             border: 是否带有纵向边框
          -->
         <TableGroup 
-           
+           :total="resData.total"
         >
             <el-table 
                 :data="tableData"
                 stripe
                 border
+                v-loading="isLoading"
             >
-                <el-table-column prop="idNo" label="序号" width="100" align="center" />
+                <el-table-column prop="uuid" label="序号" width="100" align="center" />
                 <el-table-column prop="title" label="标题"  align="center" />
                 <el-table-column prop="type" label="类型"  align="center" />
                 <el-table-column prop="content" label="内容"   align="center" />
@@ -63,24 +64,29 @@ import { TableGroup } from '@/components';
 import { Edit, Delete } from '@element-plus/icons-vue';
 import { GetArticleListAjax } from "@/api/article";
 
-let formData = reactive({
-    'title': '',
-    'status': '',
-    'type': '',
-    'createDate': '',
-    'updateDate': '',
-});
+interface DataItemType {
+    title: string,
+    type: string,
+    content: string,
+    createDate: string,
+    updateDate: string,
+    status: string,
+    opreation: string,
+}
 
-const item = {
-    idNo: 1,
-    title: '如何赚钱',
-    type: '文学著作',
-    content: '查看刑法第N条',
-    createDate: '2016-05-02',
-    updateDate: '2017-05-02',
-    status: '已发布',
-    opreation: `<div>123</div>`
-};
+const isLoading = ref(true);
+
+const formData = reactive({
+    title: '',
+    status: '',
+    type: '',
+    createDate: '',
+    updateDate: '',
+});
+const resData = reactive({
+   total: 0,
+});
+let page = 1;
 
 const ArticleTypeArr = [ //文章类型
     { value: '1', label: '前端' },
@@ -94,11 +100,7 @@ const ArticleStatusArr = [ //文章发布状态
     { value: '2', label: '未发布' },
 ];
 
-const tableData2 = Array.from({ length: 100 }).fill(item);
-let arr = tableData2.map((v:any, i)=> { return { ...v, idNo: i+1 } })
-console.log(arr);
-
-const tableData = arr.slice(0,10)
+const tableData: DataItemType[] = reactive([]); 
 
 const handleSearch = (e: any) => {
     console.log('查询，，', formData)
@@ -113,14 +115,35 @@ const handleEdit = (index: number, row: any) => {
 const handleDelete = (index: number) => {
 
 };
-/* 登录 */
+const handleChange = () =>{
+    
+}
+/* 查询 */
 const getArticleList = () => {
-    GetArticleListAjax({ username: 'admin' })
+    isLoading.value = true;
+    GetArticleListAjax({ 
+        username: 'admin',
+        page,
+        pageSize: 10,
+    })
     .then(res =>{
-        console.log('login-post::',res);
+        let { list, total } = res.data;
+        console.log('login-post::',list);
+        resData.total = total;
+        isLoading.value = false;
+        tableData.push(...list);
+        if(list.length < 10){
+            
+        }else{
+            page = page + 1;
+        }
+        console.log('asdasd', tableData);
     })
 }
-getArticleList()
+
+setTimeout(() => {
+    getArticleList();
+}, 500); 
 </script>
 
 <style lang="less" scoped>

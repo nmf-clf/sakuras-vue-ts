@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-10-29 14:36:35
  * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-13 23:18:48
+ * @LastEditTime: 2022-12-19 17:47:26
  */
 import axios, { AxiosResponse, AxiosRequestConfig } from "axios";
 import requestLog from '../../Tnlog'
@@ -29,10 +29,11 @@ const instance = axios.create({
     // headers: { 'X-Requested-With': 'XMLHttpRequest' },
 });
 const service = async<T = any> (config: AxiosRequestConfig): Promise<MyResponseType<T>> => {
-    const loading = ElLoading.service({
-        text: '正在加载中，请稍后...',
-        background: "rgba(0,0,0,0)"
-    })
+    // const loading = ElLoading.service({
+    //     customClass: 'sakuras-loading',
+    //     text: '正在加载中，请稍后...',
+    //     background: "rgba(0,0,0,0)",
+    // })
     requestLog(`发起['${config.url}]：参数=> ${JSON.stringify(config.data)}`);
     let _config = {
         ...config, //无法重新设置config的值
@@ -43,7 +44,7 @@ const service = async<T = any> (config: AxiosRequestConfig): Promise<MyResponseT
     try{
         const res = await instance.request<MyResponseType<T>>(_config);
         let { data } = res;
-        loading.close();
+        // loading.close();
         /* 1: 成功 0: 失败 */
         if(data.code == '1'){
             return { ...data };
@@ -53,7 +54,7 @@ const service = async<T = any> (config: AxiosRequestConfig): Promise<MyResponseT
             return Promise.reject(`响应异常=> ${msg}`);
         }
     }catch(err: Error | unknown){
-        loading.close();
+        // loading.close();
         let msg = '请求失败';
         err instanceof Error ? (msg = err.message) : (msg = String(err));
         ElMessage.error('响应异常=>' + msg);

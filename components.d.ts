@@ -41,4 +41,7 @@ declare module '@vue/runtime-core' {
     SideBar: typeof import('./src/components/SideBar/index.vue')['default']
     TableGroup: typeof import('./src/components/TableGroup/index.vue')['default']
   }
+  export interface ComponentCustomProperties {
+    vLoading: typeof import('element-plus/es')['ElLoadingDirective']
+  }
 }
