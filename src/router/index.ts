@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-11-07 15:18:04
  * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-14 19:54:15
+ * @LastEditTime: 2022-12-20 17:35:31
  */
 /* 引入路由模块，和vue2.0方式不同 */
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'; //导入
@@ -14,7 +14,6 @@ import FrontHome from '@/views/home/index.vue';
 import Login from '@/views/login/index.vue';
 import Test from '@/views/test/index.vue';
 
-import AdminHome from '@/vdmin/home/index.vue';
 // 简单配置  进度条,可以不配置：在axios中我们不再做配置，以用来区分。
 // NProgress.inc(0.2)
 // NProgress.configure({ easing: 'ease', speed: 500, showSpinner: false })
@@ -24,7 +23,7 @@ const routes: Array<RouteRecordRaw> = [
     { 
         path: '/', 
         redirect: '/home',
-        component: FrontHome,
+        component: () => import('@/views/home/index.vue'),
         children: [
             {
               path: 'home',
@@ -35,15 +34,15 @@ const routes: Array<RouteRecordRaw> = [
     },
     {
         path: '/login',
-        component: Login,
+        component: () => import('@/views/login/index.vue'),
     },
     {
         path: '/test',
-        component: Test,
+        component: () => import('@/views/test/index.vue'),
     },
     {
         path: '/admin',
-        component: AdminHome,
+        component: () => import('@/vdmin/home/index.vue'),
         children: [
             {
               path: 'index',
@@ -70,6 +69,17 @@ const routes: Array<RouteRecordRaw> = [
                 component: () => import('@/vdmin/statistics/index.vue'),
                 name: 'AdminStatistics',
                 meta: { title: '统计模块', permiss: '1' },
+            },{
+                path: 'writter',
+                // component: () => import('@/vdmin/writter/index.vue'),
+                // name: 'AdminEditor',
+                // meta: { title: '富文本编辑器', permiss: '1' },
+                children: [{
+                    path: 'editor',
+                    component: () => import('@/vdmin/writter/index.vue'),
+                    name: 'AdminEditor',
+                    meta: { title: '富文本编辑器', permiss: '1' },
+                }]
             }
         ]
     },

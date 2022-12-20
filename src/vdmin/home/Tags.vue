@@ -183,6 +183,6 @@ const handleTags = (command: string) => {
 	height: 30px;
 	background: #fff;
 	box-shadow: -3px 0 15px 3px rgba(0, 0, 0, 0.1);
-	z-index: 10;
+	/* z-index: 10; */
 }
 </style>

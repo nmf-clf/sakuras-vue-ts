@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-12-13 14:51:55
  * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-19 17:07:21
+ * @LastEditTime: 2022-12-20 16:37:45
 -->
 <template>
     <slot></slot>
@@ -16,11 +16,11 @@
         class="my-pagination" 
         background 
         layout="prev, pager, next" 
-        :total="total"
-        @current-change="currentChange"
-        @size-change="sizeChange"
-        @prev-click="prevClick"
-        @next-click="nextClick"
+        :total="props.total"
+        @current-change="props.currentChange"
+        @size-change="props.sizeChange"
+        @prev-click="props.prevClick"
+        @next-click="props.nextClick"
     />
 </template>
 
@@ -28,27 +28,16 @@
 import { ref, reactive, toRefs } from 'vue';
 import { Edit, Delete } from '@element-plus/icons-vue';
 
-
 const props = defineProps({ //子组件接收父组件传递过来的值
-    tableData: Array,
-    total: Number,
+    total:{ type: Number, required: true } ,
+    prevClick: Function,
+    nextClick: Function,
+    currentChange: Function,
+    sizeChange: Function,
 });
 
-const { tableData, form, onSearch, onReset, total }: any = toRefs(props); // 使用refs可以追踪变化，例如 total
-console.log('xasa22', tableData);
+// const { form, onReset, total }: any = toRefs(props); // 使用refs可以追踪变化，例如 total
 
-const sizeChange = (value: number) => {
-    console.log('sizeChange...');
-}
-const currentChange = (value: number) => {
-    console.log('currentChange....');
-}
-const prevClick = (value: number) => {
-    console.log('prevClick...');
-}
-const nextClick = (value: number) => {
-    console.log('nextClick...');
-}
 </script>
 
 <style lang="less" scoped>

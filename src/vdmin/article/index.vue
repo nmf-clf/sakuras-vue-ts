@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-12-13 14:51:55
  * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-19 18:11:58
+ * @LastEditTime: 2022-12-20 17:34:58
 -->
 <template>
     <div class="container">
@@ -11,21 +11,25 @@
             :form="formData"
             :data="[
                 { title: '文章标题', key: 'title', type: 'input' },
-                { title: '文章状态', key: 'status', type: 'select', options: ArticleStatusArr },
-                { title: '文章类型', key: 'type', type: 'mul-select', options: ArticleTypeArr },
+                { title: '文章状态', key: 'status', type: 'select', options: Static.ArticleStatusArr },
+                { title: '文章类型', key: 'type', type: 'mul-select', options: Static.ArticleTypeArr },
                 { title: '发布日期', key: 'createDate', type: 'date' },
                 { title: '更新日期', key: 'updateDate', type: 'mul-date' },
             ]"
             :onReset="handleReset"
             :onSearch="handleSearch"
         />
+        <ButtonGroup 
+            :data="btns"
+        />
         <!-- 
             data: 数据源
             stripe: 是否为斑马纹
             border: 是否带有纵向边框
-         -->
+        -->
         <TableGroup 
            :total="resData.total"
+           :currentChange="currentChange"
         >
             <el-table 
                 :data="tableData"
@@ -58,24 +62,16 @@
 
 <script lang="ts" setup>
 import { ref, reactive } from 'vue';
-import SelectGroup from '@/components/SelectGroup/index.vue';
+import { useRouter } from 'vue-router';
+import { TableGroup, ButtonGroup, SelectGroup } from '@/components';
 import { Utils } from "@/utils";
-import { TableGroup } from '@/components';
 import { Edit, Delete } from '@element-plus/icons-vue';
 import { GetArticleListAjax } from "@/api/article";
+import Static, { DataItemType } from "./type";
 
-interface DataItemType {
-    title: string,
-    type: string,
-    content: string,
-    createDate: string,
-    updateDate: string,
-    status: string,
-    opreation: string,
-}
+const router = useRouter();
 
 const isLoading = ref(true);
-
 const formData = reactive({
     title: '',
     status: '',
@@ -84,66 +80,54 @@ const formData = reactive({
     updateDate: '',
 });
 const resData = reactive({
-   total: 0,
+    total: 0,
 });
-let page = 1;
-
-const ArticleTypeArr = [ //文章类型
-    { value: '1', label: '前端' },
-    { value: '2', label: '后端' },
-    { value: '3', label: '逻辑推理' },
-];
-
-const ArticleStatusArr = [ //文章发布状态
-    { value: '', label: '全部' },
-    { value: '1', label: '已发布' },
-    { value: '2', label: '未发布' },
-];
-
 const tableData: DataItemType[] = reactive([]); 
+const btns = [
+    { text: '新增文章', type: '1', handleClick: () =>{
+            
+    }},
+    { text: '批量删除', type: '0', handleClick: () =>{
+        
+    }}
+]
 
+/* 表格查询 */
 const handleSearch = (e: any) => {
     console.log('查询，，', formData)
 };
-
+/* 查询重置 */
 const handleReset = () => Utils.clearFormData(formData);
-
+/* 文章编辑 */
 const handleEdit = (index: number, row: any) => {
-
+    router.push('/admin/writter/editor')
 };
-
+/* 文章删除 */
 const handleDelete = (index: number) => {
 
 };
-const handleChange = () =>{
-    
+/* 分页查询 */
+const currentChange = (value: number) => {
+    console.log('当前页::', value);
+    getArticleList(value);
 }
 /* 查询 */
-const getArticleList = () => {
+const getArticleList = (value: number = 1) => {
     isLoading.value = true;
     GetArticleListAjax({ 
         username: 'admin',
-        page,
+        page: value,
         pageSize: 10,
     })
     .then(res =>{
         let { list, total } = res.data;
-        console.log('login-post::',list);
         resData.total = total;
         isLoading.value = false;
-        tableData.push(...list);
-        if(list.length < 10){
-            
-        }else{
-            page = page + 1;
-        }
-        console.log('asdasd', tableData);
+        tableData.splice(0, 10, ...list);
+        console.log('数据::', tableData);
     })
 }
-
-setTimeout(() => {
-    getArticleList();
-}, 500); 
+getArticleList();
 </script>
 
 <style lang="less" scoped>

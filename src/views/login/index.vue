@@ -37,7 +37,7 @@ import { ref } from 'vue'
 import LoginForm from './LoginForm.vue' 
 import RegisterForm from './RegisterForm.vue'
 
-const container = ref(null) as any;
+const container = <any>ref(null);
 
 /* 前往注册 */
 const toSignUp = () =>{
