@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-11-07 15:18:04
  * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-20 17:35:31
+ * @LastEditTime: 2022-12-30 15:57:13
  */
 /* 引入路由模块，和vue2.0方式不同 */
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'; //导入
@@ -79,6 +79,11 @@ const routes: Array<RouteRecordRaw> = [
                     component: () => import('@/vdmin/writter/index.vue'),
                     name: 'AdminEditor',
                     meta: { title: '富文本编辑器', permiss: '1' },
+                },{
+                    path: 'markdown',
+                    component: () => import('@/vdmin/writter/Markdown.tsx'),
+                    name: 'AdminMarkdown',
+                    meta: { title: 'Markdown编辑器', permiss: '1' },
                 }]
             }
         ]

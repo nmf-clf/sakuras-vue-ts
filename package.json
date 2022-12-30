@@ -12,6 +12,8 @@
   },
   "dependencies": {
     "@element-plus/icons-vue": "^1.1.4",
+    "@types/marked": "^4.0.8",
+    "@vavt/md-editor-extension": "^1.4.0",
     "@wangeditor/editor": "^5.1.23",
     "@wangeditor/editor-for-vue": "^5.1.12",
     "animate.css": "^4.1.1",
@@ -21,6 +23,7 @@
     "github-markdown-css": "^5.1.0",
     "highlightjs-line-numbers.js": "^2.8.0",
     "less-loader": "^10.2.0",
+    "md-editor-v3": "^2.7.2",
     "nprogress": "^0.2.0",
     "pubsub.js": "^1.5.2",
     "vue": "^3.2.13",

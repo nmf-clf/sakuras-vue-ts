@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-12-13 15:54:42
  * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-16 16:15:14
+ * @LastEditTime: 2022-12-30 14:51:10
 -->
 <template>
      <div class="admin-aside" >
@@ -69,6 +69,19 @@ const sideBarList = [{
     path: '/admin/statistics',
     disabled: true,
     icon: Document,
+},{
+    title: '功能模块',
+    icon: Setting,
+    path: '5',
+    subs: [{
+        title: 'Markdown编辑器',
+        path: '/admin/writter/markdown',
+        icon: Message,
+    },{
+        title: '富文本编辑器',
+        path: '/admin/writter/editor',
+        icon: Message,
+    }]
 },{
     title: '设置',
     icon: Setting,

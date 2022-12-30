@@ -2,9 +2,10 @@
  * @Author: niumengfei
  * @Date: 2022-12-13 14:51:55
  * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-20 19:56:19
+ * @LastEditTime: 2022-12-30 11:12:57
 -->
 <template>
+   
     <div style="border: 1px solid #ccc">
         <!-- 
             全屏功能：工具栏和编辑器必须在同一层级
@@ -29,13 +30,24 @@
             @customPaste="customPaste"
         />
     </div>
+    <ButtonGroup 
+        :data="btns"
+    />
 </template>
 
 <script lang="ts" setup>
 import '@wangeditor/editor/dist/css/style.css' // 引入 css
-import { DomEditor } from '@wangeditor/editor'
+import { DomEditor, IToolbarConfig, IEditorConfig } from '@wangeditor/editor'
 import { onBeforeUnmount, ref, shallowRef, onMounted } from 'vue'
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
+import { ButtonGroup } from '@/components';
+
+const btns = [
+    { text: '发布文章', type: '1', handleClick: () =>{
+            
+    }},
+]
+
 
 // 编辑器实例，必须用 shallowRef
 const editorRef = shallowRef()
@@ -50,11 +62,28 @@ onMounted(() => {
     }, 1500)
 })
 
-const toolbarConfig = {
+const toolbarConfig: Partial<IToolbarConfig> = { //工具栏配置
 
 }
-const editorConfig = { 
-    placeholder: '请输入内容...' 
+const editorConfig: Partial<IEditorConfig> = { //编辑器配置
+    placeholder: '请输入内容...',
+    MENU_CONF:{
+        uploadImage: {
+            // 其他配置...
+
+            // 小于该值就插入 base64 格式（而不上传），默认为 0
+            base64LimitSize: 500 * 1024 // 5kb
+        },
+        codeSelectLang: {
+            codeLangs: [
+                { text: 'HTML', value: 'html' },
+                { text: 'CSS', value: 'css' },
+                { text: 'JavaScript', value: 'javascript' },
+                { text: 'TypeScript', value: 'typescript' },
+                // 其他
+            ]
+        }
+    }
 }
 
 // 组件销毁时，也及时销毁编辑器
@@ -65,12 +94,14 @@ onBeforeUnmount(() => {
 })
 
 
-const mode = 'default'; // default: 默认模式  simple: 简洁模式
+const mode = 'simple'; // default: 默认模式  simple: 简洁模式
 
 const handleCreated = (editor:any) => { // 记录 Editor 实例，重要
     editorRef.value = editor
     console.log('created', editor)
     setTimeout(()=>{
+        console.log('sasadad', editor.getMenuConfig('codeSelectLang').codeLangs);
+        
         const toolbar: any = DomEditor.getToolbar(editor)
         console.log('toobar::', toolbar);
         const curToolbarConfig = toolbar.getConfig()
@@ -103,6 +134,7 @@ const customPaste = (editor:any, event: any, callback:any) => {
     // 返回 true ，继续默认的粘贴行为
     // callback(true)
 }
+
 
 </script>
 
