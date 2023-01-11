@@ -1,8 +1,8 @@
 <!--
  * @Author: niumengfei
  * @Date: 2022-12-09 16:14:27
- * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-12 12:43:40
+ * @LastEditors: niumengfei 870424431@qq.com
+ * @LastEditTime: 2023-01-11 14:24:44
 -->
 <template>
     <el-form 
@@ -67,8 +67,8 @@ const ruleForm = reactive<LoginParamsType>({ //表单内容
 })
 //坑点: 封装rules会造成 当前组件的状态虽然传入到了函数内部 但是数据改变不会捕获到
 const rules: FormRules = reactive({ //表单校验规则
-    username: Validator.isNotEmpty({ msg: '请输入用户名' }),
-    password: Validator.isNotEmpty({ msg: '请输入密码' }),
+    username: Validator.VerifyUserName(),
+    password: Validator.VerifyPassWord(),
     email: Validator.isNotEmpty({ msg: '请输入邮箱地址' }),
 })
 /* 提交 */
