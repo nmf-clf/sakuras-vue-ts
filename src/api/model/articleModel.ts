@@ -1,13 +1,14 @@
 /*
  * @Author: niumengfei
  * @Date: 2022-12-07 17:22:21
- * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-19 16:27:51
+ * @LastEditors: niumengfei 870424431@qq.com
+ * @LastEditTime: 2023-01-12 09:55:55
  */
 export interface GetListParams {
     username: string,
     page?: number,
     pageSize?: number,
+    _id?: string, 
 }
 
 export interface ArticleListResItem {

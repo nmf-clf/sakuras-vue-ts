@@ -1,8 +1,8 @@
 <!--
  * @Author: niumengfei
  * @Date: 2022-12-13 14:51:55
- * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-16 16:14:47
+ * @LastEditors: niumengfei 870424431@qq.com
+ * @LastEditTime: 2023-01-12 15:37:24
 -->
 <template>
     <!-- 
@@ -98,6 +98,7 @@
         <el-col v-if="showBtns" :span="6">
             <el-button v-if="onSearch" type="primary" @click="handleSearch">查询</el-button>
             <el-button v-if="onReset" type="primary" @click="handleReset">重置</el-button>
+            <el-button v-if="onPublish" type="primary" @click="handlePublist">发布</el-button>
         </el-col>
     </el-row>
 </template>
@@ -109,6 +110,7 @@ interface PropType {
     data: DataType[],
     onSearch?: () => void, 
     onReset?: () => void,
+    onPublish?: () => void,
 }
 interface OptionsType {
     label: string,
@@ -129,13 +131,16 @@ const props = defineProps({
     data: { type: Array, required: true },
     onSearch: Function,
     onReset: Function,
+    onPublish: Function,
+    
 });
 
-const { gutter, form, onSearch, onReset, data } = <PropType>props;
+const { gutter, form, onSearch, onReset, data, onPublish } = <PropType>props;
 
-const showBtns = onSearch || onReset;
+const showBtns = onSearch || onReset || onPublish;
 const handleSearch = () => onSearch && onSearch();
 const handleReset = () => onReset && onReset();
+const handlePublist = () => onPublish && onPublish();
 </script>
 
 <style lang="less" scoped>

@@ -1,13 +1,13 @@
 <!--
  * @Author: niumengfei
  * @Date: 2022-12-13 14:51:55
- * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-20 16:41:57
+ * @LastEditors: niumengfei 870424431@qq.com
+ * @LastEditTime: 2023-01-12 14:41:53
 -->
 <template>
     <div class="btns">
         <template v-for="item in data">
-            <el-button type="primary">{{item.text}}</el-button>
+            <el-button type="primary" @click="item.handleClick && item.handleClick(item)">{{item.text || ''}}</el-button>
         </template>
     </div>
 </template>
@@ -15,9 +15,9 @@
 <script lang="ts" setup>
 
 interface DataItemType {
-    text: string,
+    text?: string,
     type: string | number,
-    handleClick: () => void,
+    handleClick?: (item: DataItemType) => void,
 }
 
 interface PropsType {

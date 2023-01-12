@@ -1,15 +1,18 @@
 /*
  * @Author: niumengfei
  * @Date: 2022-12-30 15:03:31
- * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-30 17:18:41
+ * @LastEditors: niumengfei 870424431@qq.com
+ * @LastEditTime: 2023-01-12 17:12:32
  */
 import { defineComponent, reactive, ref, onMounted } from 'vue';
+import { useRoute, useRouter } from "vue-router";
 import MdEditor from 'md-editor-v3';
 import type { ExposeParam, HeadList } from 'md-editor-v3';
 import 'md-editor-v3/lib/style.css';
-import { ButtonGroup } from '@/components';
-import { ReviseArticleItemAjax } from "@/api/article";
+import { SelectGroup } from '@/components';
+import { Utils } from '@/utils';
+import Static from "@/vdmin/article/type";
+import { AddArticleAjax } from "@/api/article";
 
 const generateId = (_text: string, _level: number, index: number) => `heading-${index}`;
 
@@ -21,8 +24,24 @@ type MdType = {
 
 export default defineComponent({
     setup() {
+        const Route = useRoute();
+        const { row } = Route.params;
+        const { content, title, type } = JSON.parse(Utils.atou(row));
+        console.log('params-row=>', JSON.parse(Utils.atou(row)));
+        
+
+        let content2 = content.replace(/\n/g, '<br>');
+        let content3 = content.replace(/\n/g, '')
+        console.log('content::',content);
+        console.log('content2::', content3);
+
+        const formData = reactive({
+            title,
+            type: type.split(',')
+        });
+
         const md = reactive<MdType>({
-            text: ``,
+            text: content,
             catalogList: [],
             id: 'my-editor'
         });
@@ -40,28 +59,40 @@ export default defineComponent({
         const MdCatalog = MdEditor.MdCatalog;
         const scrollElement = document.documentElement;
 
-        const btns = [
-            { text: '发布文章', type: '1', handleClick: () =>{
-                    
-            }},
-        ]
-
         /* 查询 */
-        const reviseArticleItem = (value: number = 1) => {
-            ReviseArticleItemAjax({ 
-                username: 'admin',
-            })
-            .then(res =>{
+        // const reviseArticleItem = (value: number = 1) => {
+        //     ReviseArticleItemAjax({ 
+        //         username: 'admin',
+        //         _id: '',
+        //     })
+        //     .then(res =>{
                
-            })
-        }
+        //     })
+        // }
 
         return () => (<>
-        <MdEditor
+            <SelectGroup
+                gutter={20}
+                form={formData}
+                data={[
+                    { title: '文章标题', key: 'title', type: 'input' },
+                    { title: '文章类型', key: 'type', type: 'mul-select', options: Static.ArticleTypeArr },
+                ]}
+                onPublish={()=>{
+                    AddArticleAjax({
+                        title: formData.title,
+                        content: md.text,
+                    })
+                    .then(res => {
+    
+                    })
+                }}
+            />
+            <MdEditor
                 /* Props说明 */
                 class='sakuras-markdown-editor' // 自定义类名
                 style={{ // 编辑器内联样式
-                    height: '90%'
+                    height: '85%'
                 }}
                 modelValue={md.text}
                 theme='light' // 编辑器主题 'light' | 'dark'
@@ -117,7 +148,7 @@ export default defineComponent({
 
                 /* 绑定事件 */
                 onChange={value => { // 内容变化事件（当前与textarea的oninput事件绑定，每输入一个单字即会触发）
-                    console.log(value);
+                    console.log('改变值::', value);
                     md.text = value;
                 }} 
                 onSave={(v: string, h: any) => {
@@ -137,7 +168,7 @@ export default defineComponent({
                     alert(err.message);
                 }}
             />
-            <ButtonGroup data={btns} />
+            {/* 目录 */}
             <MdCatalog
                 editorId={md.id}
                 scrollElement={scrollElement}

@@ -1,8 +1,8 @@
 /*
  * @Author: niumengfei
  * @Date: 2022-11-07 15:18:04
- * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-30 15:57:13
+ * @LastEditors: niumengfei 870424431@qq.com
+ * @LastEditTime: 2023-01-12 13:49:59
  */
 /* 引入路由模块，和vue2.0方式不同 */
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'; //导入
@@ -80,7 +80,7 @@ const routes: Array<RouteRecordRaw> = [
                     name: 'AdminEditor',
                     meta: { title: '富文本编辑器', permiss: '1' },
                 },{
-                    path: 'markdown',
+                    path: 'markdown/:row',
                     component: () => import('@/vdmin/writter/Markdown.tsx'),
                     name: 'AdminMarkdown',
                     meta: { title: 'Markdown编辑器', permiss: '1' },
@@ -114,7 +114,7 @@ router.beforeEach((to, from, next) => {
 router.afterEach((to, from, next) => {
     // console.log(to, from, s);
     // NProgress.done()
-    document.title = 'sakuras'
+    document.title = '夜语清梦'
 });
 
 export default router;

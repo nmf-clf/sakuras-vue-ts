@@ -1,8 +1,8 @@
 <!--
  * @Author: niumengfei
  * @Date: 2022-12-13 14:51:55
- * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-20 16:37:45
+ * @LastEditors: niumengfei 870424431@qq.com
+ * @LastEditTime: 2023-01-12 14:42:49
 -->
 <template>
     <slot></slot>
@@ -25,8 +25,6 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, toRefs } from 'vue';
-import { Edit, Delete } from '@element-plus/icons-vue';
 
 const props = defineProps({ //子组件接收父组件传递过来的值
     total:{ type: Number, required: true } ,
@@ -40,9 +38,15 @@ const props = defineProps({ //子组件接收父组件传递过来的值
 
 </script>
 
-<style lang="less" scoped>
-.el-pagination{
+<style lang="less">
+.my-pagination{
     margin-top: 30px;
     justify-content: flex-end;
+}
+
+.cell-nowrap{
+    .cell{
+        white-space: nowrap;
+    }
 }
 </style>

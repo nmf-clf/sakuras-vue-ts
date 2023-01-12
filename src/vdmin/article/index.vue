@@ -1,8 +1,8 @@
 <!--
  * @Author: niumengfei
  * @Date: 2022-12-13 14:51:55
- * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-20 17:34:58
+ * @LastEditors: niumengfei 870424431@qq.com
+ * @LastEditTime: 2023-01-12 15:04:43
 -->
 <template>
     <div class="container">
@@ -40,7 +40,7 @@
                 <el-table-column prop="uuid" label="序号" width="100" align="center" />
                 <el-table-column prop="title" label="标题"  align="center" />
                 <el-table-column prop="type" label="类型"  align="center" />
-                <el-table-column prop="content" label="内容"   align="center" />
+                <el-table-column prop="content" label="内容"   align="center" class-name="cell-nowrap" />
                 <el-table-column prop="createDate" label="发布日期"  align="center" />
                 <el-table-column prop="updateDate" label="更新日期"  align="center" />
                 <el-table-column prop="status" label="状态"  align="center" />
@@ -56,6 +56,18 @@
                 </el-table-column>
             </el-table>
         </TableGroup>
+        <!-- 新增文章 -->
+        <el-drawer v-model="showAddArticle">
+            <template #header>
+                <h4>新增文章</h4>
+            </template>
+            <template #footer>
+                <div style="flex: auto">
+                    <el-button @click="cancelClick">取消</el-button>
+                    <el-button type="primary" @click="confirmClick">保存</el-button>
+                </div>
+            </template>
+        </el-drawer>
     </div>
     
 </template>
@@ -63,13 +75,15 @@
 <script lang="ts" setup>
 import { ref, reactive } from 'vue';
 import { useRouter } from 'vue-router';
+import { ElMessageBox } from 'element-plus'
 import { TableGroup, ButtonGroup, SelectGroup } from '@/components';
 import { Utils } from "@/utils";
-import { Edit, Delete } from '@element-plus/icons-vue';
-import { GetArticleListAjax } from "@/api/article";
+import { Edit, Delete, Warning } from '@element-plus/icons-vue';
+import { GetArticleListAjax, GetArticleDetailAjax } from "@/api/article";
 import Static, { DataItemType } from "./type";
 
 const router = useRouter();
+const showAddArticle = ref(false);
 
 const isLoading = ref(true);
 const formData = reactive({
@@ -85,7 +99,11 @@ const resData = reactive({
 const tableData: DataItemType[] = reactive([]); 
 const btns = [
     { text: '新增文章', type: '1', handleClick: () =>{
-            
+        // showAddArticle.value = true;
+        router.push({
+            path: `/admin/writter/markdown/${Utils.utoa(JSON.stringify({}))}`,
+        })
+        
     }},
     { text: '批量删除', type: '0', handleClick: () =>{
         
@@ -100,7 +118,7 @@ const handleSearch = (e: any) => {
 const handleReset = () => Utils.clearFormData(formData);
 /* 文章编辑 */
 const handleEdit = (index: number, row: any) => {
-    router.push('/admin/writter/editor')
+    getArticleDetail(row);
 };
 /* 文章删除 */
 const handleDelete = (index: number) => {
@@ -128,6 +146,52 @@ const getArticleList = (value: number = 1) => {
     })
 }
 getArticleList();
+/* 编辑查询文章详情 */
+const getArticleDetail = (row: any) => {
+    isLoading.value = true;
+    GetArticleDetailAjax({ 
+        username: 'admin',
+        _id: row._id,
+    })
+    .then(res =>{
+        console.log('文章详情=>', res.data);
+        
+        isLoading.value = true;
+        router.push({
+            /* params传参 写法一 */
+            path: `/admin/writter/markdown/${Utils.utoa(JSON.stringify(row))}`,
+            /* params传参 写法二 */
+            // 对象写法只能和 name 搭配使用，不能和 path 搭配
+            // name: 'AdminMarkdown',
+            // params: {
+            //     row: '123'
+            // }
+        })
+    })
+    .catch(err =>{
+        isLoading.value = false;
+    })
+}
+const cancelClick = () => {
+  showAddArticle.value = false
+}
+const confirmClick = () =>{
+    ElMessageBox.confirm(
+        `是否确认创建此篇文章？`,
+        '温馨提示',
+        {
+            type: 'info',
+            cancelButtonText: '取消',
+            confirmButtonText: '确定'
+        }
+    )
+    .then(() => {
+      showAddArticle.value = false
+    })
+    .catch(() => {
+      // catch error
+    })
+}
 </script>
 
 <style lang="less" scoped>
@@ -138,6 +202,7 @@ getArticleList();
 }
 .el-row {
   margin-bottom: 20px;
+  
 }
 .el-row:last-child {
   margin-bottom: 0;

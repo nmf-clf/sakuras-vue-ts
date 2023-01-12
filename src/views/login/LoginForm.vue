@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-12-09 16:14:27
  * @LastEditors: niumengfei 870424431@qq.com
- * @LastEditTime: 2023-01-11 14:22:09
+ * @LastEditTime: 2023-01-12 14:25:10
 -->
 <template>
     <el-form
@@ -42,7 +42,7 @@ import { ref, reactive } from 'vue'
 import type { FormInstance, FormRules } from 'element-plus';
 import { useStore } from "vuex";
 import { useRouter } from 'vue-router'
-import { ElMessage } from 'element-plus'
+import { ElMessage } from 'element-plus';
 import { Lock, User } from '@element-plus/icons-vue';
 import { LoginAjax } from "@/api/user";
 import { Validator } from "@/utils";
