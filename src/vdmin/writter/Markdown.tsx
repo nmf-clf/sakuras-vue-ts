@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-12-30 15:03:31
  * @LastEditors: niumengfei 870424431@qq.com
- * @LastEditTime: 2023-01-12 17:12:32
+ * @LastEditTime: 2023-01-13 11:29:29
  */
 import { defineComponent, reactive, ref, onMounted } from 'vue';
 import { useRoute, useRouter } from "vue-router";
@@ -26,7 +26,7 @@ export default defineComponent({
     setup() {
         const Route = useRoute();
         const { row } = Route.params;
-        const { content, title, type } = JSON.parse(Utils.atou(row));
+        const { content='', title, type } = JSON.parse(Utils.atou(row));
         console.log('params-row=>', JSON.parse(Utils.atou(row)));
         
 
@@ -37,11 +37,11 @@ export default defineComponent({
 
         const formData = reactive({
             title,
-            type: type.split(',')
+            type: type && type.split(',') || []
         });
 
         const md = reactive<MdType>({
-            text: content,
+            text: content, //'# 123\n##  3233\n\n### 4344\n' || 
             catalogList: [],
             id: 'my-editor'
         });
@@ -80,6 +80,7 @@ export default defineComponent({
                 ]}
                 onPublish={()=>{
                     AddArticleAjax({
+                        username: 'niumengfei',
                         title: formData.title,
                         content: md.text,
                     })

@@ -2,11 +2,12 @@
  * @Author: niumengfei
  * @Date: 2022-10-29 14:36:35
  * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-19 17:47:26
+ * @LastEditTime: 2023-01-13 17:24:09
  */
 import axios, { AxiosResponse, AxiosRequestConfig } from "axios";
-import requestLog from '../../Tnlog'
 import { ElMessage, ElLoading } from 'element-plus'
+import { RequestLog, Utils } from "@/utils";
+import { DynamicKey } from "@/utils/Const";
 const { env, runDependencies } = ProcessEnv;
 // console.log('当前环境::', env, runDependencies);
 
@@ -34,11 +35,12 @@ const service = async<T = any> (config: AxiosRequestConfig): Promise<MyResponseT
     //     text: '正在加载中，请稍后...',
     //     background: "rgba(0,0,0,0)",
     // })
-    requestLog(`发起['${config.url}]：参数=> ${JSON.stringify(config.data)}`);
+    RequestLog(`发起['${config.url}]：参数=> ${JSON.stringify(config.data)}`);
     let _config = {
         ...config, //无法重新设置config的值
         headers: {
             Authorization: '',
+            Sid: DynamicKey.split("").reverse().join("") || Utils.encryptByRSA(DynamicKey),
         }
     }
     try{
@@ -58,7 +60,7 @@ const service = async<T = any> (config: AxiosRequestConfig): Promise<MyResponseT
         let msg = '请求失败';
         err instanceof Error ? (msg = err.message) : (msg = String(err));
         ElMessage.error('响应异常=>' + msg);
-        requestLog('响应异常=>' + err, 2);
+        RequestLog('响应异常=>' + err, 2);
         return Promise.reject(err);
         // return {
         //     code: '0',

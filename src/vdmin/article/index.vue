@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-12-13 14:51:55
  * @LastEditors: niumengfei 870424431@qq.com
- * @LastEditTime: 2023-01-12 15:04:43
+ * @LastEditTime: 2023-01-13 11:39:57
 -->
 <template>
     <div class="container">
@@ -133,7 +133,7 @@ const currentChange = (value: number) => {
 const getArticleList = (value: number = 1) => {
     isLoading.value = true;
     GetArticleListAjax({ 
-        username: 'admin',
+        username: 'niumengfei',
         page: value,
         pageSize: 10,
     })
@@ -150,7 +150,7 @@ getArticleList();
 const getArticleDetail = (row: any) => {
     isLoading.value = true;
     GetArticleDetailAjax({ 
-        username: 'admin',
+        username: 'niumengfei',
         _id: row._id,
     })
     .then(res =>{

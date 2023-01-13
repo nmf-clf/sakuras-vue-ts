@@ -1,8 +1,8 @@
 <!--
  * @Author: niumengfei
  * @Date: 2022-12-09 16:14:27
- * @LastEditors: niumengfei 870424431@qq.com
- * @LastEditTime: 2023-01-12 14:25:10
+ * @LastEditors: niumengfei
+ * @LastEditTime: 2023-01-13 15:18:48
 -->
 <template>
     <el-form
@@ -45,7 +45,7 @@ import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus';
 import { Lock, User } from '@element-plus/icons-vue';
 import { LoginAjax } from "@/api/user";
-import { Validator } from "@/utils";
+import { Utils, Validator } from "@/utils";
 import SoftWareForm from "./SoftWareForm.vue"; //坑点：如果使用vscode插件vetur这里会提示 "导入的模块没有默认导出" 但不报错，因此在vetur和volar中，我选择使用volar来避免此提示
 
 interface LoginParamsType {
@@ -60,8 +60,8 @@ const store = useStore();
 const ruleFormRef = ref<FormInstance>();
 
 const ruleForm = reactive<LoginParamsType>({ //表单内容
-    username: 'admin',
-    password: '111',
+    username: 'niumengfei',
+    password: '7758521nmf@CLF',
     email: '',
 })
 
@@ -83,7 +83,9 @@ const submitForm = (formEl: FormInstance | undefined) => {
 /* 登录 */
 const handleLogin = () => {
     isLoading.value = true;
-    LoginAjax(ruleForm)
+    LoginAjax({
+      params: Utils.encrypt.DynamicDES(JSON.stringify(ruleForm))
+    })
     .then(res =>{
         console.log('login-post::',res);
         isLoading.value = false;
