@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-12-13 15:54:42
  * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-30 14:51:10
+ * @LastEditTime: 2023-01-16 14:51:37
 -->
 <template>
      <div class="admin-aside" >
@@ -37,6 +37,7 @@ import { ref, PropType, DefineComponent } from 'vue';
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { Document, Menu as IconMenu, Location, Setting, Message, HomeFilled } from '@element-plus/icons-vue';
+import { Utils } from "@/utils";
 import sideBarItem from "./SideBarItem.vue";
 
 interface PathsType {
@@ -61,7 +62,7 @@ const sideBarList = [{
     path: '/admin/index',
     icon: HomeFilled,
 },{
-    title: '文章模块',
+    title: '文章管理',
     path: '/admin/article',
     icon: IconMenu,
 },{
@@ -75,7 +76,7 @@ const sideBarList = [{
     path: '5',
     subs: [{
         title: 'Markdown编辑器',
-        path: '/admin/writter/markdown',
+        path: `/admin/writter/markdown/${Utils.utoa(JSON.stringify({ noneHeader: true }))}`,
         icon: Message,
     },{
         title: '富文本编辑器',

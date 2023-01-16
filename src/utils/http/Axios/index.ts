@@ -2,14 +2,21 @@
  * @Author: niumengfei
  * @Date: 2022-10-29 14:36:35
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-01-13 17:24:09
+ * @LastEditTime: 2023-01-16 17:42:17
  */
 import axios, { AxiosResponse, AxiosRequestConfig } from "axios";
 import { ElMessage, ElLoading } from 'element-plus'
 import { RequestLog, Utils } from "@/utils";
 import { DynamicKey } from "@/utils/Const";
 const { env, runDependencies } = ProcessEnv;
-// console.log('当前环境::', env, runDependencies);
+
+type LoadingType = boolean | string;
+
+interface ParmsType {
+    url: string,
+    data?: object, 
+    loading?: LoadingType,
+}
 
 interface MyResponseType<T> {
     status?: number | string, 
@@ -17,10 +24,7 @@ interface MyResponseType<T> {
     message: string,
     data: T,
 }
-interface ParmsType {
-    url: string,
-    data?: object, 
-}
+
 //创建axios应用实例
 const instance = axios.create({
     /* 在这里重写参数默认值 */
@@ -29,12 +33,17 @@ const instance = axios.create({
     timeout: 10000, //请求超时时间
     // headers: { 'X-Requested-With': 'XMLHttpRequest' },
 });
-const service = async<T = any> (config: AxiosRequestConfig): Promise<MyResponseType<T>> => {
-    // const loading = ElLoading.service({
-    //     customClass: 'sakuras-loading',
-    //     text: '正在加载中，请稍后...',
-    //     background: "rgba(0,0,0,0)",
-    // })
+const service = async<T = any> (config: AxiosRequestConfig, loading: LoadingType): Promise<MyResponseType<T>> => {
+    let reqLoading;
+    if(loading){
+        reqLoading = ElLoading.service({
+            customClass: 'sakuras-loading',
+            text: 'loading...',
+            background: "rgba(255, 255, 255, 0.5)",
+            target: typeof loading == 'string' ? loading : 'body',
+        })
+    }
+   
     RequestLog(`发起['${config.url}]：参数=> ${JSON.stringify(config.data)}`);
     let _config = {
         ...config, //无法重新设置config的值
@@ -46,7 +55,7 @@ const service = async<T = any> (config: AxiosRequestConfig): Promise<MyResponseT
     try{
         const res = await instance.request<MyResponseType<T>>(_config);
         let { data } = res;
-        // loading.close();
+        reqLoading?.close();
         /* 1: 成功 0: 失败 */
         if(data.code == '1'){
             return { ...data };
@@ -56,7 +65,7 @@ const service = async<T = any> (config: AxiosRequestConfig): Promise<MyResponseT
             return Promise.reject(`响应异常=> ${msg}`);
         }
     }catch(err: Error | unknown){
-        // loading.close();
+        reqLoading?.close();
         let msg = '请求失败';
         err instanceof Error ? (msg = err.message) : (msg = String(err));
         ElMessage.error('响应异常=>' + msg);
@@ -72,11 +81,11 @@ const service = async<T = any> (config: AxiosRequestConfig): Promise<MyResponseT
 }
 
 const AxiosAjax = {
-    get: function<T>({ url }: ParmsType){
-        return service<T>({ url, method: 'Get' })
+    get: function<T>({ url, loading = false }: ParmsType){
+        return service<T>({ url, method: 'Get'}, loading)
     },
-    post: function<T>({ url, data }: ParmsType){
-        return service<T>({ url, method: 'POST', data })
+    post: function<T>({ url, data, loading = false }: ParmsType){
+        return service<T>({ url, method: 'POST', data }, loading)
     },
 }
 

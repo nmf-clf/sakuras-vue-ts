@@ -1,11 +1,11 @@
 /*
  * @Author: niumengfei
  * @Date: 2022-12-07 17:22:21
- * @LastEditors: niumengfei 870424431@qq.com
- * @LastEditTime: 2023-01-12 09:55:55
+ * @LastEditors: niumengfei
+ * @LastEditTime: 2023-01-16 13:27:56
  */
 export interface GetListParams {
-    username: string,
+    username?: string,
     page?: number,
     pageSize?: number,
     _id?: string, 

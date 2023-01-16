@@ -1,8 +1,8 @@
 /*
  * @Author: niumengfei
  * @Date: 2022-11-07 15:18:04
- * @LastEditors: niumengfei 870424431@qq.com
- * @LastEditTime: 2023-01-12 13:49:59
+ * @LastEditors: niumengfei
+ * @LastEditTime: 2023-01-16 10:49:43
  */
 /* 引入路由模块，和vue2.0方式不同 */
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'; //导入
@@ -53,7 +53,7 @@ const routes: Array<RouteRecordRaw> = [
                 path: 'article',
                 component: () => import('@/vdmin/article/index.vue'),
                 name: 'AdminArticle',
-                meta: { title: '文章模块', permiss: '2' },
+                meta: { title: '文章管理', permiss: '2' },
             },{
                 path: 'repassword',
                 component: () => import('@/vdmin/setting/Repassword.vue'),

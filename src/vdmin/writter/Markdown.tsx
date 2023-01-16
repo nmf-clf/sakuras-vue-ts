@@ -1,11 +1,12 @@
 /*
  * @Author: niumengfei
  * @Date: 2022-12-30 15:03:31
- * @LastEditors: niumengfei 870424431@qq.com
- * @LastEditTime: 2023-01-13 11:29:29
+ * @LastEditors: niumengfei
+ * @LastEditTime: 2023-01-16 17:34:57
  */
 import { defineComponent, reactive, ref, onMounted } from 'vue';
 import { useRoute, useRouter } from "vue-router";
+import { ElLoading, ElMessage } from 'element-plus';
 import MdEditor from 'md-editor-v3';
 import type { ExposeParam, HeadList } from 'md-editor-v3';
 import 'md-editor-v3/lib/style.css';
@@ -26,14 +27,7 @@ export default defineComponent({
     setup() {
         const Route = useRoute();
         const { row } = Route.params;
-        const { content='', title, type } = JSON.parse(Utils.atou(row));
-        console.log('params-row=>', JSON.parse(Utils.atou(row)));
-        
-
-        let content2 = content.replace(/\n/g, '<br>');
-        let content3 = content.replace(/\n/g, '')
-        console.log('content::',content);
-        console.log('content2::', content3);
+        const { _id, username, content='', title, type,noneHeader } = JSON.parse(Utils.atou(row));
 
         const formData = reactive({
             title,
@@ -41,9 +35,9 @@ export default defineComponent({
         });
 
         const md = reactive<MdType>({
-            text: content, //'# 123\n##  3233\n\n### 4344\n' || 
+            text: content,
             catalogList: [],
-            id: 'my-editor'
+            id: 'vdmin-article-editor'
         });
         const formatCopiedText = (text: string) => {
             return `${text}  - from www.sakuras.group`;
@@ -59,19 +53,8 @@ export default defineComponent({
         const MdCatalog = MdEditor.MdCatalog;
         const scrollElement = document.documentElement;
 
-        /* 查询 */
-        // const reviseArticleItem = (value: number = 1) => {
-        //     ReviseArticleItemAjax({ 
-        //         username: 'admin',
-        //         _id: '',
-        //     })
-        //     .then(res =>{
-               
-        //     })
-        // }
-
         return () => (<>
-            <SelectGroup
+            {!noneHeader && <SelectGroup
                 gutter={20}
                 form={formData}
                 data={[
@@ -80,15 +63,18 @@ export default defineComponent({
                 ]}
                 onPublish={()=>{
                     AddArticleAjax({
-                        username: 'niumengfei',
+                        _id,
+                        username,
                         title: formData.title,
                         content: md.text,
+                        status: '0'
                     })
                     .then(res => {
-    
+                        ElMessage.success('发布成功');
                     })
                 }}
-            />
+            />}
+            
             <MdEditor
                 /* Props说明 */
                 class='sakuras-markdown-editor' // 自定义类名

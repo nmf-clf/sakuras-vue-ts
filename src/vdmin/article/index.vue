@@ -1,8 +1,8 @@
 <!--
  * @Author: niumengfei
  * @Date: 2022-12-13 14:51:55
- * @LastEditors: niumengfei 870424431@qq.com
- * @LastEditTime: 2023-01-13 11:39:57
+ * @LastEditors: niumengfei
+ * @LastEditTime: 2023-01-16 17:46:50
 -->
 <template>
     <div class="container">
@@ -32,24 +32,24 @@
            :currentChange="currentChange"
         >
             <el-table 
+                class="vdmin-table"
                 :data="tableData"
                 stripe
                 border
-                v-loading="isLoading"
             >
-                <el-table-column prop="uuid" label="序号" width="100" align="center" />
+                <el-table-column type="index" width="50" align="center" />
                 <el-table-column prop="title" label="标题"  align="center" />
                 <el-table-column prop="type" label="类型"  align="center" />
                 <el-table-column prop="content" label="内容"   align="center" class-name="cell-nowrap" />
                 <el-table-column prop="createDate" label="发布日期"  align="center" />
                 <el-table-column prop="updateDate" label="更新日期"  align="center" />
-                <el-table-column prop="status" label="状态"  align="center" />
+                <el-table-column prop="status" label="状态" width="150" align="center" />
                 <el-table-column class="operation" prop="opreation" label="操作"  width="200" align="center" >
                     <template class="operation1" cell-class-name="operation12" #default="scope">
-                        <el-button text :icon="Edit" @click="handleEdit(scope.$index, scope.row)" >
+                        <el-button text :icon="Edit" @click="AjaxOperation('edit', scope.row)" >
                             编辑
                         </el-button>
-                        <el-button text :icon="Delete" class="red" @click="handleDelete(scope.$index)" >
+                        <el-button text :icon="Delete" class="red" @click="handleDelete(scope.row._id)" >
                             删除
                         </el-button>
                     </template>
@@ -73,19 +73,19 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive } from 'vue';
+import { ref, reactive, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { ElMessageBox } from 'element-plus'
+import { ElMessageBox, ElMessage } from 'element-plus';
+import type { Action } from 'element-plus';
 import { TableGroup, ButtonGroup, SelectGroup } from '@/components';
 import { Utils } from "@/utils";
 import { Edit, Delete, Warning } from '@element-plus/icons-vue';
-import { GetArticleListAjax, GetArticleDetailAjax } from "@/api/article";
+import { GetArticleListAjax, GetArticleDetailAjax, deleteArticleAjax } from "@/api/article";
 import Static, { DataItemType } from "./type";
 
 const router = useRouter();
 const showAddArticle = ref(false);
 
-const isLoading = ref(true);
 const formData = reactive({
     title: '',
     status: '',
@@ -99,9 +99,10 @@ const resData = reactive({
 const tableData: DataItemType[] = reactive([]); 
 const btns = [
     { text: '新增文章', type: '1', handleClick: () =>{
-        // showAddArticle.value = true;
         router.push({
-            path: `/admin/writter/markdown/${Utils.utoa(JSON.stringify({}))}`,
+            path: `/admin/writter/markdown/${Utils.utoa(JSON.stringify({
+                username: 'niumengfei'
+            }))}`,
         })
         
     }},
@@ -110,20 +111,30 @@ const btns = [
     }}
 ]
 
+onMounted(()=>{
+    getArticleList();
+})
+
+/* 各类操作 */
+const AjaxOperation = (type: string, data: any) => {
+    switch (type) {
+        case 'edit':
+            getArticleDetail(data);
+            break;
+        case 'delete':
+            deleteArticle(data);
+            break;
+        default:
+            break;
+    }
+}
 /* 表格查询 */
 const handleSearch = (e: any) => {
     console.log('查询，，', formData)
 };
 /* 查询重置 */
 const handleReset = () => Utils.clearFormData(formData);
-/* 文章编辑 */
-const handleEdit = (index: number, row: any) => {
-    getArticleDetail(row);
-};
-/* 文章删除 */
-const handleDelete = (index: number) => {
 
-};
 /* 分页查询 */
 const currentChange = (value: number) => {
     console.log('当前页::', value);
@@ -131,7 +142,6 @@ const currentChange = (value: number) => {
 }
 /* 查询 */
 const getArticleList = (value: number = 1) => {
-    isLoading.value = true;
     GetArticleListAjax({ 
         username: 'niumengfei',
         page: value,
@@ -140,26 +150,23 @@ const getArticleList = (value: number = 1) => {
     .then(res =>{
         let { list, total } = res.data;
         resData.total = total;
-        isLoading.value = false;
         tableData.splice(0, 10, ...list);
         console.log('数据::', tableData);
     })
 }
-getArticleList();
 /* 编辑查询文章详情 */
 const getArticleDetail = (row: any) => {
-    isLoading.value = true;
     GetArticleDetailAjax({ 
-        username: 'niumengfei',
         _id: row._id,
     })
     .then(res =>{
         console.log('文章详情=>', res.data);
-        
-        isLoading.value = true;
         router.push({
             /* params传参 写法一 */
-            path: `/admin/writter/markdown/${Utils.utoa(JSON.stringify(row))}`,
+            path: `/admin/writter/markdown/${Utils.utoa(JSON.stringify({
+                ...row,
+                username: 'niumengfei'
+            }))}`,
             /* params传参 写法二 */
             // 对象写法只能和 name 搭配使用，不能和 path 搭配
             // name: 'AdminMarkdown',
@@ -168,12 +175,25 @@ const getArticleDetail = (row: any) => {
             // }
         })
     })
-    .catch(err =>{
-        isLoading.value = false;
+}
+/* 删除文章 */
+const handleDelete = (_id: string) =>{
+    ElMessageBox.alert('是否确认删除？', '温馨提示', {
+        confirmButtonText: '确定',
+        callback: (action: Action) => {
+            action === 'confirm' && AjaxOperation('delete', _id);
+        },
+    })
+}
+const deleteArticle = (_id: string) => {
+    deleteArticleAjax({ _id })
+    .then(res => {
+        ElMessage.success('删除成功！');
+        getArticleList();
     })
 }
 const cancelClick = () => {
-  showAddArticle.value = false
+    showAddArticle.value = false;
 }
 const confirmClick = () =>{
     ElMessageBox.confirm(

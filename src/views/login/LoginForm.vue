@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-12-09 16:14:27
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-01-13 15:18:48
+ * @LastEditTime: 2023-01-16 17:31:45
 -->
 <template>
     <el-form
@@ -54,7 +54,7 @@ interface LoginParamsType {
     email?: string,
 }
 
-const isLoading = ref(false);
+const isLoading = ref(false); // 登录单独用此方式，其他页面接口 统一在 axios 请求拦截器里 通过 ElLoading.service 注册处理
 const router = useRouter();
 const store = useStore();
 const ruleFormRef = ref<FormInstance>();
@@ -65,7 +65,7 @@ const ruleForm = reactive<LoginParamsType>({ //表单内容
     email: '',
 })
 
-const rules: FormRules = reactive({ //表单校验规则
+const rules: FormRules = reactive({ // 表单校验规则
     username: Validator.VerifyUserName(),
     password: Validator.VerifyPassWord(),
 })
@@ -89,7 +89,7 @@ const handleLogin = () => {
     .then(res =>{
         console.log('login-post::',res);
         isLoading.value = false;
-        store.dispatch('user/saveUserInfo', { //暂时这样存 需要整体加密
+        store.dispatch('user/saveUserInfo', { // 暂时这样存 需要整体加密
             ...ruleForm
         });
         router.push({ path: '/' });
