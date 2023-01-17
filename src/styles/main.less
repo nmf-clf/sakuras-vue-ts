@@ -8,12 +8,22 @@ html{
 body{
     font-family: 'PingFang SC', "Helvetica Neue", Helvetica, "microsoft yahei", arial, STHeiTi, sans-serif;
     height: 100%;
+    cursor: pointer;
+    cursor: url(../assets/imgs/normal.cur), auto;
 }
 
 a{
     text-decoration: none
 }
+/* 滚动条 */
+::-webkit-scrollbar{
+    width: 6px;
+}
+::-webkit-scrollbar-thumb{
+    background: #FE9600;
+}
 
+/* 请求加载中 */
 .sakuras-loading{
     color: red,
 }

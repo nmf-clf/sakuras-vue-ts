@@ -2,17 +2,12 @@
  * @Author: niumengfei
  * @Date: 2022-11-07 15:18:04
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-01-16 10:49:43
+ * @LastEditTime: 2023-01-17 14:58:39
  */
 /* 引入路由模块，和vue2.0方式不同 */
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'; //导入
 // import NProgress from 'nprogress'
 // import 'nprogress/nprogress.css'
-// console.log(createRouter);
-// 1. 定义路由组件 (也可以从其他文件导入)
-import FrontHome from '@/views/home/index.vue';
-import Login from '@/views/login/index.vue';
-import Test from '@/views/test/index.vue';
 
 // 简单配置  进度条,可以不配置：在axios中我们不再做配置，以用来区分。
 // NProgress.inc(0.2)
@@ -34,6 +29,7 @@ const routes: Array<RouteRecordRaw> = [
     },
     {
         path: '/login',
+        name: 'login',
         component: () => import('@/views/login/index.vue'),
     },
     {
@@ -42,6 +38,7 @@ const routes: Array<RouteRecordRaw> = [
     },
     {
         path: '/admin',
+        name: 'Admin',
         component: () => import('@/vdmin/home/index.vue'),
         children: [
             {
@@ -58,17 +55,17 @@ const routes: Array<RouteRecordRaw> = [
                 path: 'repassword',
                 component: () => import('@/vdmin/setting/Repassword.vue'),
                 name: 'AdminRepassword',
-                meta: { title: '修改密码', permiss: '3' },
+                meta: { title: '修改密码', permiss: '4' },
             },{
                 path: 'logout',
                 component: () => import('@/vdmin/setting/Logout.vue'),
                 name: 'AdminLogout',
-                meta: { title: '退出登录', permiss: '3' },
+                meta: { title: '退出登录', permiss: '5' },
             },{
                 path: 'statistics',
                 component: () => import('@/vdmin/statistics/index.vue'),
                 name: 'AdminStatistics',
-                meta: { title: '统计模块', permiss: '1' },
+                meta: { title: '统计模块', permiss: '6' },
             },{
                 path: 'writter',
                 // component: () => import('@/vdmin/writter/index.vue'),
@@ -78,12 +75,12 @@ const routes: Array<RouteRecordRaw> = [
                     path: 'editor',
                     component: () => import('@/vdmin/writter/index.vue'),
                     name: 'AdminEditor',
-                    meta: { title: '富文本编辑器', permiss: '1' },
+                    meta: { title: '富文本编辑器', permiss: '7' },
                 },{
                     path: 'markdown/:row',
                     component: () => import('@/vdmin/writter/Markdown.tsx'),
                     name: 'AdminMarkdown',
-                    meta: { title: 'Markdown编辑器', permiss: '1' },
+                    meta: { title: 'Markdown编辑器', permiss: '8' },
                 }]
             }
         ]

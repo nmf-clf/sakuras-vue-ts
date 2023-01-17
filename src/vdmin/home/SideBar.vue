@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-12-13 15:54:42
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-01-16 14:51:37
+ * @LastEditTime: 2023-01-17 10:59:41
 -->
 <template>
      <div class="admin-aside" >
@@ -59,10 +59,12 @@ const currentBarkey = () => {
 
 const sideBarList = [{
     title: '首页',
+    name: 'AdminHome',
     path: '/admin/index',
     icon: HomeFilled,
 },{
     title: '文章管理',
+    name: 'AdminArticle',
     path: '/admin/article',
     icon: IconMenu,
 },{
@@ -76,10 +78,12 @@ const sideBarList = [{
     path: '5',
     subs: [{
         title: 'Markdown编辑器',
+        name: 'AdminMarkdown',
         path: `/admin/writter/markdown/${Utils.utoa(JSON.stringify({ noneHeader: true }))}`,
         icon: Message,
     },{
         title: '富文本编辑器',
+        name: 'AdminEditor',
         path: '/admin/writter/editor',
         icon: Message,
     }]
@@ -107,7 +111,8 @@ const handleClick = (params: any) => {
     router.push(params.path)
     store.dispatch('admin/addTags', {
         title: params.title,
-        path: params.path
+        path: params.path,
+        name: params.name,
     })
 }
 </script>

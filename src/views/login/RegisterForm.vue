@@ -1,8 +1,8 @@
 <!--
  * @Author: niumengfei
  * @Date: 2022-12-09 16:14:27
- * @LastEditors: niumengfei 870424431@qq.com
- * @LastEditTime: 2023-01-11 14:24:44
+ * @LastEditors: niumengfei
+ * @LastEditTime: 2023-01-17 14:41:13
 -->
 <template>
     <el-form 
@@ -49,7 +49,7 @@ import type { FormInstance, FormRules } from 'element-plus';
 import { ElMessage } from 'element-plus'
 import { Lock, User, Message } from '@element-plus/icons-vue';
 import { RegisterAjax } from "@/api/user";
-import { Validator } from "@/utils";
+import { Validator, Utils } from "@/utils";
 import SoftWareForm from "./SoftWareForm.vue";
 
 interface LoginParamsType {
@@ -84,9 +84,8 @@ const submitForm = (formEl: FormInstance | undefined) => {
 }
 /* 注册 */
 const handleRegister = () =>{
-    RegisterAjax(ruleForm)
+    RegisterAjax({ params: Utils.encrypt.DynamicDES(JSON.stringify(ruleForm)) })
     .then(res =>{
-        console.log(res);
         ElMessage({
             message: res.message,
             type: 'success',

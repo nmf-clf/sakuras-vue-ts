@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-12-13 15:54:42
  * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-16 15:45:56
+ * @LastEditTime: 2023-01-17 10:59:00
 -->
 <template>
     <el-sub-menu :index="subItems?.path">
@@ -46,7 +46,8 @@ const handleClick = (params: any) => {
     router.push(params.path)
     store.dispatch('admin/addTags', {
         title: params.title,
-        path: params.path
+        path: params.path,
+        name: params.name,
     })
 }
 

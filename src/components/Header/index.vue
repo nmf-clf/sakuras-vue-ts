@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-04-12 15:56:02
  * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-13 16:15:41
+ * @LastEditTime: 2023-01-17 16:48:07
 -->
 <template>
   <el-header :class="'myHeader' + (' myHeader-' + deviceType())">
@@ -34,12 +34,15 @@ const deviceType = () => store.getters.deviceType;
 
 <style lang="less" scope>
 .myHeader{
+  position: fixed;
+  width: 100%;
   padding: 0.7rem 1.5rem;
-  border-bottom: 1px solid #eaecef;
+  // border-bottom: 1px solid #eaecef;
   display: flex;
   align-items: center;
   justify-content: space-between;
   height: 3.5rem;
+  z-index: 999;
   // position: fixed;
   // width: 100%;
   .lf-box{
@@ -58,6 +61,9 @@ const deviceType = () => store.getters.deviceType;
     }
   }
   
+}
+.myHeader:hover{
+  background: #fff;
 }
 .myHeader-pc{
   .lf-select{

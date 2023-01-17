@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-12-13 14:51:55
  * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-16 16:53:59
+ * @LastEditTime: 2023-01-17 11:02:00
 -->
 <template>
     <div class="admin-layout">
@@ -18,7 +18,8 @@
                 <router-view v-slot="{ Component }">
                     <!-- <transition name="move" mode="out-in"> -->
                          <!-- 在这里可以通过tags去控制 打开的页面进行缓存数据 -->
-                        <keep-alive :include="[]">
+                        <!-- <keep-alive :include=[tagsNameList()]> 遗留问题 include 不生效 -->
+                        <keep-alive>
                             <component :is="Component"></component>
                         </keep-alive>
                     <!-- </transition> -->
@@ -29,6 +30,7 @@
 </template>
 
 <script lang="ts" setup>
+import { onUpdated } from "vue";
 import Header from "./Header.vue";
 import SideBar from "./SideBar.vue";
 import Tags from "./Tags.vue";
@@ -36,8 +38,12 @@ import { useStore } from "vuex";
 
 const store = useStore();
 const isCollapse = () => store.state.admin.isCollapse;
+const tagsNameList = () => store.getters.tagsNameList;
 
-const tags = store.state.admin.tags;
+console.log('默认tagsNameList=>', tagsNameList());
+onUpdated(() => {
+    console.log('更新tagsNameList=>', tagsNameList());
+})
 </script>
 
 <style lang="less" scoped>
