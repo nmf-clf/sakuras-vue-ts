@@ -2,13 +2,13 @@
  * @Author: niumengfei
  * @Date: 2022-04-27 17:25:41
  * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-14 13:27:45
+ * @LastEditTime: 2023-01-28 14:50:01
 -->
 <template>
   <div :class="'rg-options' + (' rg-options-' + deviceType())">
     <!-- 首页 -->
     <div class="hidden-dropdown">
-      <span class="el-dropdown-link" @click="turnPage('/')">首页</span>
+      <span class="el-dropdown-link animate__fadeInRight" @click="turnPage('/')">首页</span>
     </div>
     <!-- 学习笔记 -->
     <el-dropdown class="hidden-dropdown">
@@ -88,7 +88,7 @@ const toAdmin = (path: string) =>{
     cursor: pointer;
     display: flex;
     align-items: center;
-    font-size: 15px;
+    font-size: 1.2rem;
     text-align: center;
     // color: var(--el-color-primary);
   }
