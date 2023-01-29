@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-04-27 17:25:41
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-01-28 14:50:01
+ * @LastEditTime: 2023-01-29 16:50:05
 -->
 <template>
   <div :class="'rg-options' + (' rg-options-' + deviceType())">
@@ -88,7 +88,7 @@ const toAdmin = (path: string) =>{
     cursor: pointer;
     display: flex;
     align-items: center;
-    font-size: 1.2rem;
+    font-size: 1rem;
     text-align: center;
     // color: var(--el-color-primary);
   }
