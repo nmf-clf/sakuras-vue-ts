@@ -22,6 +22,7 @@ a{
 /* 滚动条 */
 ::-webkit-scrollbar{
     width: 6px;
+    background-color: rgb(234, 232, 232);
 }
 ::-webkit-scrollbar-thumb{
     background: #FE9600;
@@ -30,9 +31,20 @@ a{
 /* 请求加载中 */
 .sakuras-loading{
     color: red,
-}
+}   
 
 /* Markdown编辑器 */
 .sakuras-markdown-editor{
     // height: 100% !important;
+}
+
+/* nprogress */
+#nprogress{
+    .bar{
+        height: 3px;
+        background: #FE9600;
+    }
+    .peg{
+        display: none;
+    }
 }

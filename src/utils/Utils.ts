@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-10-29 14:04:02
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-01-13 17:24:03
+ * @LastEditTime: 2023-01-30 19:18:43
  */
 import { StaticKey, DynamicKey, RSAKey } from './Const';
 import  { JSEncrypt }  from 'jsencrypt';
@@ -181,7 +181,7 @@ class Utils{
         }
     }
     // DES加密(针对用户信息本地存储固定key加密)
-    StaticEncryptByDES2 = (message: string) =>{
+    StaticEncryptByDES2 = (message: string) => {
         var keyHex = CryptoJS.enc.Utf8.parse(StaticKey);
 
         var encrypted = CryptoJS.DES.encrypt(message, keyHex, {
@@ -191,7 +191,7 @@ class Utils{
         return encrypted.ciphertext.toString();
     }
     // DES解密(针对用户信息本地存储固定key解密)
-    StaticDecryptByDES2 = (ciphertext: string) =>{
+    StaticDecryptByDES2 = (ciphertext: string) => {
         try{
             var keyHex = CryptoJS.enc.Utf8.parse(StaticKey);
             var decrypted = CryptoJS.DES.decrypt({
@@ -213,6 +213,27 @@ class Utils{
         encrypt.setPublicKey(RSAKey);
         const encrypted = encrypt.encrypt(Key24);
         return encrypted;
+    }
+    // 防抖
+    debounce = (func: ()=>void, wait: number) =>{
+        let timer:any = null;
+        return function(this: any, ...args: any) {
+            if(timer) clearTimeout(timer);
+            timer = setTimeout(() => {
+                func.apply(this, args)
+            }, wait);
+        }
+    }
+    // 节流
+    throttle = (func: () => void, wait: number) => {
+        let lastTime = 0; 
+        return function() {
+            let curTime = new Date().getTime();
+            if((curTime - lastTime) > wait){
+                func()
+                lastTime = curTime
+            }
+        }
     }
 }
 
