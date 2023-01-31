@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-11-07 15:18:04
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-01-30 19:00:16
+ * @LastEditTime: 2023-01-31 11:13:31
  */
 /* 引入路由模块，和vue2.0方式不同 */
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'; //导入
@@ -18,12 +18,17 @@ const routes: Array<RouteRecordRaw> = [
     { 
         path: '/', 
         redirect: '/home',
-        component: () => import('@/views/home/index.vue'),
+        component: () => import('@/views/layout/index.vue'),
         children: [
             {
               path: 'home',
               component: () => import('@/views/home/index.vue'),
               name: 'FrontHome',
+            },
+            {
+                path: 'article',
+                component: () => import('@/views/article/index.vue'),
+                name: 'FrontArticle',
             }
         ]
     },

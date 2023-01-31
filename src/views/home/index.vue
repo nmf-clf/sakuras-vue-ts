@@ -2,13 +2,13 @@
  * @Author: niumengfei
  * @Date: 2022-04-06 23:49:03
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-01-30 17:23:15
+ * @LastEditTime: 2023-01-31 13:51:23
 -->
 <template>
-    <el-container :class="'frontHome-' + deviceType()" class="frontHome">
-        <MyHeader 
+    <!-- <el-container :class="'frontHome-' + deviceType()" class="frontHome"> -->
+        <!-- <MyHeader 
             :headerClass="headerClass"
-        />
+        /> -->
         <!-- 背景图片 -->
         <!-- :src="require('@/assets/imgs/home_bg.jpg')" -->        
         <!-- :src="'https://www.sakuras.group/img/home_bg.db6001f7.jpg'" -->
@@ -34,6 +34,7 @@
                         v-for="v in [1,2,3,4,5,6,7,8,9,0]"
                         :key="v"
                         shadow="always" class="item articleItem"
+                        @click="viewDetails"
                     >
                         <div class="bimg" v-if="v % 2 == 0">
                             <img class="limg" src="@/assets/imgs/home_bg.jpg" />
@@ -84,16 +85,19 @@
         <el-footer v-if="false" class="footer">
             <a href="https://beian.miit.gov.cn/">豫ICP备20014071号-1</a>
         </el-footer>
-    </el-container>
+    <!-- </el-container> -->
     <!-- Copyright © 2018-2022  关于我们-->
 </template>
 
 <script lang="ts" setup>
 import { onMounted, ref, reactive } from 'vue';
 import { useStore } from "vuex";
+import { useRouter } from 'vue-router'
 import { MyHeader } from '@/components'
+import { ElContainer, ElMain, ElCard, ElFooter } from 'element-plus';
 
 const store = useStore();
+const router = useRouter();
 const deviceType = () => store.getters.deviceType;
 
 /* 定义数据 */
@@ -163,6 +167,10 @@ const onLoadImg = (e: any) => {
     localStorage.setItem('IS_VISIT', String(new Date().getTime()));
     document.documentElement.scrollTop = 0;
 }
+
+const viewDetails = () => {
+    router.push({ path: '/article' });
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -184,7 +192,7 @@ const onLoadImg = (e: any) => {
         transform: translateY(0px) scaleX(1.5);
     }
 }
-.frontHome{
+// .frontHome{
     .bg{
         position: fixed;
         margin: 0;
@@ -356,6 +364,6 @@ const onLoadImg = (e: any) => {
             text-decoration: none;
         }
     }
-}
+// }
 
 </style>
