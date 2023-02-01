@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-04-06 23:49:03
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-01-31 17:17:58
+ * @LastEditTime: 2023-02-01 13:49:13
 -->
 <template>
     <div class="detail-top">
@@ -72,6 +72,7 @@ const store = useStore();
             align-items: center;
             img{
                 width: 1.5rem;
+                border-radius: 50%;
             }
             span{
                 margin: 0 5px;

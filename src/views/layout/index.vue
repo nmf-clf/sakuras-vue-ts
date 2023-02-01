@@ -2,13 +2,12 @@
  * @Author: niumengfei
  * @Date: 2022-04-06 23:49:03
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-01-31 13:51:31
+ * @LastEditTime: 2023-02-01 17:04:12
 -->
 <template>
     <el-container :class="'frontHome-' + deviceType()" class="frontHome">
-        <MyHeader 
-            :headerClass="headerClass"
-        />
+        <MyHeader :headerClass="headerClass" />
+        <img class="sk-sroll" :class="headerClass ? 'sk-sroll-active' : null" @click="scrollToTop" src="@/assets/imgs/scroll.png" />
         <div class="sk-main">
             <router-view v-slot="{ Component }">
                 <!-- <transition name="move" mode="out-in"> -->
@@ -20,6 +19,21 @@
                 <!-- </transition> -->
             </router-view>
         </div>
+        <div class="sk-footer">
+            <p class="ft-logo"></p>
+            <p class="ft-desc">powered  by  myself • Crafted with  by vuecli</p>
+            <p>
+              © 2023 夜语清梦&nbsp;<a class="ft-gov" href="https://beian.miit.gov.cn/">豫ICP备20014071号-1</a></p>
+        </div>
+        <el-main v-if="false" class="main animate__animated animate__bounce">
+            <h2>Hello，sakuras!</h2>
+            <h2>Goodbye Friends!</h2>
+            <h1 @click="changeText">{{mainTxt}}</h1>
+            <!-- <a href="https://beian.miit.gov.cn/">豫ICP备20014071号-1</a> -->
+        </el-main>
+        <el-footer v-if="false" class="footer">
+            <a href="https://beian.miit.gov.cn/">豫ICP备20014071号-1</a>
+        </el-footer>
     </el-container>
 </template>
 
@@ -51,11 +65,6 @@ let headerClass = ref(false);
 
 let sign = false;
 
-
-const styleObject = reactive({
-    height: document.body.clientHeight + 'px'
-})
-
 onMounted(() => {
     // 判断是否是第一次访问此网站
     if(!localStorage.getItem('IS_VISIT')){
@@ -82,36 +91,75 @@ onMounted(() => {
     })
 });
 
-const scrollTopToBottom = () => {
+const scrollToTop = () => {
     let speed = 1;
-    let timetop = setInterval(function(){
-        speed < 20 ? (speed+=1) : null;
-        document.documentElement.scrollTop = document.documentElement.scrollTop + speed;
-        if(document.documentElement.scrollTop >= document.body.clientHeight){
+    let timetop = setInterval(() => {
+        speed < 20 ? (speed+=1) : null; // 匀加速
+        document.documentElement.scrollTop = document.documentElement.scrollTop - speed;
+        if(document.documentElement.scrollTop <= 0){ // 当滚动距离 大于等于 视图窗口高度时，停止滚动
             clearInterval(timetop)
         }
     }, 10)
-}
-
-const onErrorImg = (e: any) =>{
-}
-
-const onLoadImg = (e: any) => {
-    if(localStorage.getItem('IS_VISIT')) return;
-    localStorage.setItem('IS_VISIT', String(new Date().getTime()));
-    document.documentElement.scrollTop = 0;
-}
-
-const viewDetails = () => {
-    router.push({ path: '/article' });
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang='less' scoped>
+@keyframes poi-deg{
+    0%{
+        transform:rotate(0)
+    }
+    100%{
+        transform:rotate(360deg)
+    }
+}
 .frontHome{
+    display: flex;
+    flex-direction: column;
     .sk-main{
         width: 100%;
+    }
+    .sk-footer{
+        width: 100%;
+        background: #fff;
+        padding: 30px 0;
+        padding: 100px 0 50px 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: #b9b9b9; 
+        font-size: 0.8rem;
+        .ft-logo{
+            background-image: url('@/assets/imgs/sakura.svg');
+            width: 30px;
+            height: 30px;
+            opacity: .3;
+            margin: 0 auto;
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            animation: poi-deg 12s infinite linear;
+        }
+        .ft-desc{
+            font-family: 'Ubuntu', sans-serif;
+            margin: 15px 0;
+        }
+        .ft-gov{
+            // font-family: 'Ubuntu', sans-serif;
+            color: #b9b9b9; 
+            margin: 15px 0;
+        }
+    }
+    .sk-sroll{
+        position: fixed;
+        right: 20px;
+        height: 90%;
+        z-index: 2;
+        transform: translateY(-100%);
+        transition: all .5s ease-in-out;
+    }
+    .sk-sroll-active{
+        transform: translateY(0);
     }
 }
 </style>

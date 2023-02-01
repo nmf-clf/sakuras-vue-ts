@@ -2,25 +2,24 @@
  * @Author: niumengfei
  * @Date: 2022-12-12 12:55:25
  * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-13 18:40:25
+ * @LastEditTime: 2023-02-01 10:33:57
  */
 interface StateType {
     screenWidth: number;
     screenHeight: number;
     username: string
 }
-
 const _u = localStorage.getItem('userInfo') || '';
 const userInfo = _u ? JSON.parse(_u) : {};
 
 export default {
     state: (): StateType => {
-        return userInfo || {
+        return {
             screenWidth: document.documentElement.clientWidth,
             screenHeight: document.documentElement.clientHeight,
-            // userInfo: {
-            username: ''
-            // }, //用户信息
+            fontSize: 18,
+            username: '',
+            ...userInfo,
         }
     },
     actions: {
@@ -37,7 +36,7 @@ export default {
             state.screenHeight = value[1]
         },
         SAVE_USER_INFO(state: any, value: any){
-            state.username = value.username
+            state.username = value.username;
         }
     },
 }

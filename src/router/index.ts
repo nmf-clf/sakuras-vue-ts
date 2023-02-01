@@ -2,16 +2,17 @@
  * @Author: niumengfei
  * @Date: 2022-11-07 15:18:04
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-01-31 11:13:31
+ * @LastEditTime: 2023-02-01 17:08:47
  */
 /* 引入路由模块，和vue2.0方式不同 */
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'; //导入
-// import NProgress from 'nprogress'
-// import 'nprogress/nprogress.css'
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
+import { Utils } from "@/utils";
 
 // 简单配置  进度条,可以不配置：在axios中我们不再做配置，以用来区分。
 // NProgress.inc(0.2)
-// NProgress.configure({ easing: 'ease', speed: 500, showSpinner: false })
+NProgress.configure({ easing: 'ease', speed: 500, showSpinner: false, minimum: 0 });
 
 // 2. 定义一些路由：每个路由都需要映射到一个组件。 我们后面再讨论嵌套路由。
 const routes: Array<RouteRecordRaw> = [
@@ -103,7 +104,7 @@ router.beforeEach((to, from, next) => {
     // NProgress.start()
     // document.title = `${to.meta.title} | sakuras`;
     const userInfo = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo') || '') : {};
-    if(['/home'].includes(to.path)) { //排除不需要登录的页面
+    if(['/home', '/article'].includes(to.path)) { //排除不需要登录的页面
         next();
     }else if (!userInfo.username && to.path !== '/login') { //未登录的需要登录
         next('/login');
@@ -116,7 +117,39 @@ router.beforeEach((to, from, next) => {
 router.afterEach((to, from, next) => {
     // console.log(to, from, s);
     // NProgress.done()
+    loadingProgress();
     document.title = '夜语清梦'
 });
 
+// 统一处理阅读进度条
+const loadingProgress = () => {
+    document.documentElement.scrollTop = 0; // 每次切换路由应该使滚动条滚动到最上面，如需特殊设置，则配置路由限制
+    setTimeout(() => {
+        let scrollHeight = document.documentElement.scrollHeight; // 获取文档总高度
+        let clientHeight = document.documentElement.clientHeight; // 获取窗口高度
+        let hiddenHeight = scrollHeight - clientHeight; // 获取隐藏高度
+
+        let loadingProgress =  Utils.debounce(()=>{
+            // 处理顶部进度条
+            let scrollTop = document.documentElement.scrollTop; // 获取当前滚动距离
+            let percent = scrollTop / hiddenHeight; // 获取滚动进度百分比
+            let _p = Number(percent.toFixed(2));
+            if(!_p){
+                NProgress.set(0); console.log('scroll:0');
+            }else{
+                if(_p > 0.99){
+                    NProgress.set(0.999); console.log('scroll:end');
+                }else{
+                    NProgress.set(Number(percent.toFixed(2)));  console.log('scroll:ing');
+                }
+            }
+        }, 100)
+        console.log('文档总高度>>', scrollHeight);
+        window.addEventListener('scroll', ()=>{
+            // 1. 原则上滚动条做出响应的等待时间间隔应较小才能表现丝滑，因此采用防抖处理顶部进度条也可以;
+            // 2. 同时由于节流表现出问题是第一次滚动不会被记载需要特殊处理，况且即便是节流仍然需要指定实践触发的单位时间间隔.
+            loadingProgress(); 
+        })
+    }, 0);
+}
 export default router;

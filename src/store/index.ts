@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-11-07 15:18:04
  * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-13 18:43:50
+ * @LastEditTime: 2023-02-01 10:31:43
  */
 import { createStore } from 'vuex';
 import createPersistedState from "vuex-persistedstate"; //vuex状态持久化

@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-12-12 14:20:39
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-01-17 10:46:46
+ * @LastEditTime: 2023-02-01 09:41:54
  */
 const getters = {
     userInfo: (state: any) => state.user,
