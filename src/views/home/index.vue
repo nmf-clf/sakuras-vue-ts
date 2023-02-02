@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-04-06 23:49:03
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-01 16:53:35
+ * @LastEditTime: 2023-02-02 18:02:59
 -->
 <template>
     <!-- 背景图片 -->
@@ -30,18 +30,18 @@
                     v-for="(item, index) in articles"
                     :key="index"
                     shadow="always" class="item articleItem"
-                    @click="viewDetails"
+                    @click="viewDetails(item, index)"
                 >
                     <div class="bimg" v-if="index % 2 == 0">
-                        <img class="limg" v-show="item.loaded" :src="item.url" @load="imgLoaded(index)"/>
+                        <img class="limg" v-show="item.loaded" :src="imgUrls[Math.floor( (Math.random() * imgUrls.length) )]" @load="imgLoaded(index)"/>
                         <img class="limg" v-show="!item.loaded" src="@/assets/imgs/img_loading.svg" />
                     </div>
                     <div class="lcnt">
                         <div class="time">
                             <svg t="1674961196823" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="11337" width="16" height="16"><path d="M949.638897 509.757936c0-241.799068-196.006116-437.805184-437.805184-437.805184-241.800092 0-437.806207 196.006116-437.806207 437.805184 0 241.811348 196.006116 437.817464 437.806207 437.817464 99.262748 0 190.149734-33.771151 263.59242-89.425705 3.015683-3.421936 4.999874-7.789407 4.999874-12.698207 0-10.717086-8.692986-19.407002-19.408025-19.407002-5.562692 0-10.513448 2.207271-14.048971 5.944386l-0.246617 0c-65.719794 48.358381-146.610102 77.313853-234.459916 77.313853-218.947618 0-396.469754-177.544649-396.469754-396.482033 0-218.97013 177.522136-396.470777 396.469754-396.470777 218.969107 0 396.469754 177.500647 396.469754 396.470777 0 66.865897-15.692401 129.814578-44.962028 185.110975l0 0.325411c-0.538259 1.845021-1.12359 3.645017-1.12359 5.627161 0 10.719132 8.688893 19.407002 19.407002 19.407002 8.353248 0 15.331173-5.357008 18.055215-12.742209l0 0.135076C931.289993 650.424676 949.638897 582.250994 949.638897 509.757936zM506.813373 276.017404c0-11.527544-9.367345-20.892843-20.917402-20.892843-11.527544 0-20.892843 9.365298-20.892843 20.892843l0 248.508887c0 0-2.520403 42.010813 41.786709 41.785685L731.994971 566.311976c0.068562 0 0.156566 0.045025 0.228197 0.045025 11.546987 0 20.914332-9.364275 20.914332-20.891819s-9.367345-20.892843-20.892843-20.938891L506.79086 524.526291 506.79086 276.153504C506.79086 276.108478 506.813373 276.06243 506.813373 276.017404z" fill="#A8A8A8" p-id="11338"></path></svg>
-                            发布于 2023-1-29
+                            {{ '发布于'+ item.createDate }}
                         </div>
-                        <h3 class="title">雪国</h3>
+                        <h3 class="title">{{ item.title }}</h3>
                         <div class="meta">
                             <div class="meta-item">
                                 <svg t="1674960208493" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5326" width="0.8rem" height="0.8rem"><path d="M360.725 33c3.526 1.457 7.052 2.909 10.575 4.374 24.202 10.07 48.704 19.484 72.535 30.362 36.75 16.774 71.604 37.031 104.774 60.142 26.75 18.64 51.616 39.576 75.127 62.087 8.946 8.564 17.269 17.852 25.224 27.354 11.313 13.515 22.512 27.179 32.88 41.417 16.44 22.572 30.486 46.615 41.868 72.193 9.157 20.583 17.27 41.491 22.289 63.505 1.506 6.607 2.988 13.217 4.803 21.235 22.57-30.853 27.756-66.112 34.339-102.473 12.856 20.155 25.33 38.876 36.948 58.113 19.011 31.48 37.17 63.487 51.968 97.194 10.17 23.167 20.189 46.494 28.429 70.384 7.825 22.688 14.158 45.995 19.464 69.411 4.837 21.353 8.16 43.128 8.012 65.212-0.008 1.095 0.677 2.192 1.04 3.287v28.275c-0.367 5.083-0.316 10.237-1.177 15.235-3.069 17.82-5.747 35.75-9.874 53.332-6.161 26.25-17.03 50.81-31.715 73.345-9.397 14.419-20.491 27.767-31.257 41.251-12.39 15.518-27.201 28.644-43.358 40.07-14.476 10.239-29.266 20.104-44.455 29.242-21.161 12.732-43.663 22.72-68 30.057 0.362-1.721 0.494-3.108 0.943-4.385 0.256-0.727-0.038-1.391-0.884-1.995 3.78-2.514 7.52-5.092 11.223-7.714 9.023-6.387 17.294-13.725 24.214-22.4 6.013-7.538 12.209-15.001 17.456-23.061 8.202-12.599 14.272-26.329 17.712-41.003 2.305-9.83 3.801-19.853 5.514-29.815 0.482-2.794 0.453-5.675 0.658-8.517v-15.806c-0.203-0.613-0.585-1.226-0.58-1.838 0.082-12.346-1.774-24.519-4.475-36.456-2.963-13.09-6.5-26.12-10.87-38.804-4.602-13.355-10.197-26.396-15.877-39.347-8.265-18.843-18.406-36.737-29.023-54.335-6.488-10.754-13.455-21.22-20.634-32.488-3.677 20.327-6.573 40.039-19.178 57.287-1.013-4.483-1.841-8.178-2.682-11.872-2.804-12.306-7.334-23.994-12.448-35.501-6.357-14.3-14.2-27.74-23.381-40.359-5.791-7.96-12.046-15.598-18.364-23.153-4.442-5.313-9.09-10.505-14.086-15.293-13.13-12.584-27.017-24.288-41.957-34.708-18.524-12.92-37.99-24.245-58.513-33.622-13.31-6.081-26.993-11.345-40.51-16.974-1.966-0.819-3.936-1.63-5.905-2.445h-1.823c2.422 5.634 5.001 11.206 7.237 16.915 5.352 13.666 9.691 27.673 12.132 42.149 1.853 10.98 3.211 22.066 4.24 33.156 0.716 7.715 1.045 15.546 0.599 23.27-1.31 22.64-5.744 44.64-14.715 65.61-7.112 16.63-16.064 32.158-27.791 45.931-7.035 8.261-14.661 16.02-22.068 23.96-0.871 0.934-2.038 1.592-3.418 2.645-9.25-20.868-19.72-40.931-33.244-60.231-0.746 3.928-1.463 7.05-1.916 10.21-1.707 11.923-5.19 23.362-9.133 34.7-5.79 16.647-13.894 32.063-24.987 45.738-4.47 5.51-10.332 9.877-14.917 15.309-3.614 4.28-6.848 9.116-9.181 14.197-4.825 10.504-7.04 21.814-8.917 33.158l-0.338 2.063c-0.528 3.25-0.448 6.599-0.698 9.898-0.033 0.422-0.378 0.821-0.579 1.231v24.319c0.404 2.901 0.709 5.82 1.23 8.7 1.621 8.97 2.588 18.146 5.19 26.827 2.969 9.909 6.878 19.636 11.374 28.962 5.008 10.388 11.799 19.73 19.437 28.488 12.581 14.425 27.58 25.594 44.386 34.512a198.767 198.767 0 0 0 6.817 3.451c-9.097 0.587-18.404 1.198-27.916 1.832-0.197-0.284-0.353-0.777-0.596-0.823-11.847-2.27-23.729-4.365-35.549-6.763-33.377-6.77-65.133-18.109-95.23-34.062-30.092-15.952-56.95-35.931-79.477-61.735-13.677-15.665-25.836-32.376-34.804-50.96-8.05-16.682-15.05-34.08-20.366-51.805-4.659-15.53-6.391-31.942-9.295-47.987-0.932-5.152-1.478-10.374-2.201-15.564v-43.5c0.36-0.734 0.978-1.448 1.036-2.204 0.449-5.901 0.305-11.89 1.25-17.705 3.502-21.524 7.41-43.074 16.572-63.002 4.178-9.089 9.969-17.74 16.44-25.396 8.21-9.716 18.708-17.527 26.71-27.384 19.863-24.463 34.374-52.038 44.742-81.817 7.06-20.28 13.297-40.742 16.354-62.07 0.81-5.652 2.095-11.237 3.43-18.264 24.216 34.524 42.964 70.413 59.527 107.742 2.47-1.884 4.56-3.06 6.12-4.732 13.263-14.204 26.918-28.082 39.515-42.86 20.998-24.637 37.028-52.413 49.763-82.159 16.064-37.512 24.004-76.865 26.348-117.362 0.8-13.818 0.21-27.827-1.07-41.626-1.844-19.838-4.276-39.669-7.593-59.31-4.371-25.893-12.142-50.95-21.725-75.394-4.003-10.213-8.62-20.18-12.959-30.258h3.265z" fill="#E50404" p-id="5327"></path></svg>
@@ -58,19 +58,20 @@
                             
                         </div>
                         <div class="brief">
-                            这张脸同早晨雪天映在镜子中的那张脸一样，红扑扑的。出自名著：在岛村看来，这又是介于梦幻同现实之间的另一种颜色。出自名著：(《雪国》)
+                            {{ item.content }}
                         </div>
                         <div class="enter">
                             <svg t="1674958997504" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1680" width="32" height="32"><path d="M150.528 431.104q37.888 0 58.368 24.064t20.48 51.712l0 11.264q0 34.816-17.92 58.88t-59.904 24.064l-7.168 0q-38.912 0-61.952-21.504t-23.04-59.392l0-14.336q0-13.312 5.632-26.624t15.872-24.064 25.6-17.408 33.792-6.656l10.24 0zM519.168 431.104q37.888 0 58.368 24.064t20.48 51.712l0 11.264q0 34.816-17.92 58.88t-59.904 24.064l-7.168 0q-38.912 0-61.952-21.504t-23.04-59.392l0-14.336q0-13.312 5.632-26.624t15.872-24.064 25.6-17.408 33.792-6.656l10.24 0zM887.808 431.104q37.888 0 58.368 24.064t20.48 51.712l0 11.264q0 34.816-17.92 58.88t-59.904 24.064l-7.168 0q-38.912 0-61.952-21.504t-23.04-59.392l0-14.336q0-13.312 5.632-26.624t15.872-24.064 25.6-17.408 33.792-6.656l10.24 0z" p-id="1681" fill="#515151"></path></svg>
                         </div>
                     </div>
                     <div class="bimg" v-if="index % 2 == 1">
-                        <img class="limg" v-show="item.loaded" :src="item.url" @load="imgLoaded(index)"/>
+                        <img class="limg" v-show="item.loaded" :src="imgUrls[Math.floor( (Math.random() * imgUrls.length) )]" @load="imgLoaded(index)"/>
                         <img class="limg" v-show="!item.loaded" src="@/assets/imgs/img_loading.svg" />
                     </div>
                 </el-card>
             </div>
-            <p class="unarticle">没有更多文章啦</p>
+            <p  v-if="hasMoreArticle" class="unarticle" @click="getArticleList">加载更多</p>
+            <p  v-else class="unarticle">没有更多数据啦</p>
         </div>
     </el-main>
 </template>
@@ -79,21 +80,18 @@
 import { onMounted, ref, reactive } from 'vue';
 import { useStore } from "vuex";
 import { useRouter } from 'vue-router'
-import { MyHeader } from '@/components'
-import { ElContainer, ElMain, ElCard, ElFooter } from 'element-plus';
+import { ElMain, ElCard } from 'element-plus';
+import { GetNewArticleListAjax } from "@/api/article";
+import { DataItemType } from "@/vdmin/article/type";
 
 const store = useStore();
 const router = useRouter();
 
-let headerClass = ref(false);
-
-let sign = false;
-
-
-const styleObject = reactive({
-    height: document.body.clientHeight + 'px'
-})
-
+const styleObject = reactive({ height: document.body.clientHeight + 'px' });
+const articles: DataItemType[] = reactive([]);
+const hasMoreArticle = ref(true);
+let page = 1;
+let pageSize = 5;
 const imgUrls = [
     'https://view.lixingyong.com/images/2022/07/11/501.jpg?image_process=resize,w_640',
     'https://view.lixingyong.com/images/2021/11/19/GGR9ZZOHUFPUZ0.png?image_process=resize,w_640',
@@ -103,18 +101,8 @@ const imgUrls = [
     'https://halo-ivan.oss-cn-hangzhou.aliyuncs.com/attachments/upload/103449051_p0.jpg',
 ]
 
-const articles = reactive([
-    { loaded: false, url: imgUrls[Math.floor( (Math.random() * imgUrls.length) )] }, 
-    { loaded: false, url: imgUrls[Math.floor( (Math.random() * imgUrls.length) )] }, 
-    { loaded: false, url: imgUrls[Math.floor( (Math.random() * imgUrls.length) )] }, 
-    { loaded: false, url: imgUrls[Math.floor( (Math.random() * imgUrls.length) )] }, 
-    { loaded: false, url: imgUrls[Math.floor( (Math.random() * imgUrls.length) )] }, 
-    { loaded: false, url: imgUrls[Math.floor( (Math.random() * imgUrls.length) )] }, 
-    { loaded: false, url: imgUrls[Math.floor( (Math.random() * imgUrls.length) )] }, 
-    { loaded: false, url: imgUrls[Math.floor( (Math.random() * imgUrls.length) )] }, 
-])
-
 onMounted(() => {
+    getArticleList();
     // 判断是否是第一次访问此网站
     if(!localStorage.getItem('IS_VISIT')){
         document.documentElement.scrollTop = document.body.clientHeight;
@@ -123,13 +111,6 @@ onMounted(() => {
     let articleItemDOMs = document.getElementsByClassName('articleItem'); // 文章列表DOM集合
     // 监听滚动事件，实现顶部过渡
     window.addEventListener('scroll', function () {
-        var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
-        if(scrollTop >= 100){
-            sign = true;
-            headerClass.value = true;
-        }else{
-            sign && (headerClass.value = false);
-        }
         // 监听元素距离顶部的距离，当文章将要显示时，使文章往上过渡
         for(let i = 0; i < articleItemDOMs.length; i++){
             let currentDOM = articleItemDOMs[i];
@@ -164,11 +145,32 @@ const onLoadImg = (e: any) => {
 
 const imgLoaded = (index: number) => {
     console.log('加载完毕');
-    articles[index].loaded = true;
+    articles[index]['loaded'] = true;
 }
 
-const viewDetails = () => {
-    router.push({ path: '/article' });
+const viewDetails = (item: any, index: number) => {
+    router.push({ path: `/article/${item._id}` });
+}
+
+// 查询最新文章
+const getArticleList = () => {
+    GetNewArticleListAjax({ 
+        username: 'niumengfei',
+        page: page,
+        pageSize,
+    })
+    .then(res =>{
+        let { list } = res.data;
+        console.log('数据::', list);
+        if(list.length < 1) return; 
+        if(list.length < pageSize){ // 没有下一页
+            hasMoreArticle.value = false; 
+        }else{
+            page++;
+        }
+        articles.push(...list);
+        console.log(articles);
+    })
 }
 </script>
 
@@ -249,7 +251,7 @@ const viewDetails = () => {
                     flex-direction: row;
                     padding: 0;
                     .lcnt{
-                        flex: 8;
+                        width: 320px;
                         padding: 20px;
                         .time{
                             color: #888;
@@ -298,7 +300,7 @@ const viewDetails = () => {
                         }
                     }
                     .bimg{
-                        flex: 11;
+                        flex: 1;
                         overflow: hidden;
                         .limg{
                             width: 100%;
@@ -329,6 +331,11 @@ const viewDetails = () => {
             margin-top: 30px;
             font-size: 15px;
             color: #989898;
+            transition: all 0.6s;
+        }
+        .unarticle:hover{
+            font-size: 16px;
+            color: #FE9600;
         }
     }
 }

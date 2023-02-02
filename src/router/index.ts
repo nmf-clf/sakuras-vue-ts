@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-11-07 15:18:04
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-01 17:08:47
+ * @LastEditTime: 2023-02-02 15:43:57
  */
 /* 引入路由模块，和vue2.0方式不同 */
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'; //导入
@@ -25,11 +25,13 @@ const routes: Array<RouteRecordRaw> = [
               path: 'home',
               component: () => import('@/views/home/index.vue'),
               name: 'FrontHome',
+              meta: { keepAlive: true }
             },
             {
-                path: 'article',
+                path: 'article/:_id',
                 component: () => import('@/views/article/index.vue'),
                 name: 'FrontArticle',
+                meta: { noNeedLogin: true }
             }
         ]
     },
@@ -104,9 +106,9 @@ router.beforeEach((to, from, next) => {
     // NProgress.start()
     // document.title = `${to.meta.title} | sakuras`;
     const userInfo = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo') || '') : {};
-    if(['/home', '/article'].includes(to.path)) { //排除不需要登录的页面
+    if(['/home', '/article'].includes(to.path) || to.meta.noNeedLogin) { //排除不需要登录的页面
         next();
-    }else if (!userInfo.username && to.path !== '/login') { //未登录的需要登录
+    }else if (!userInfo.username && to.path.indexOf('/admin') > -1) { //未登录的需要登录
         next('/login');
     }else{
         next();
@@ -140,16 +142,17 @@ const loadingProgress = () => {
                 if(_p > 0.99){
                     NProgress.set(0.999); console.log('scroll:end');
                 }else{
+                    console.log('滑动百分比>>>', Number(percent.toFixed(2)))
                     NProgress.set(Number(percent.toFixed(2)));  console.log('scroll:ing');
                 }
             }
         }, 100)
-        console.log('文档总高度>>', scrollHeight);
-        window.addEventListener('scroll', ()=>{
+        console.log('文档总高度>>', scrollHeight, hiddenHeight);
+        window.addEventListener('scroll', ()=>{0
             // 1. 原则上滚动条做出响应的等待时间间隔应较小才能表现丝滑，因此采用防抖处理顶部进度条也可以;
             // 2. 同时由于节流表现出问题是第一次滚动不会被记载需要特殊处理，况且即便是节流仍然需要指定实践触发的单位时间间隔.
             loadingProgress(); 
         })
-    }, 0);
+    }, 500);
 }
 export default router;

@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-12-20 16:59:36
  * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-20 17:05:43
+ * @LastEditTime: 2023-02-02 11:02:42
  */
 export interface DataItemType {
     title: string,
@@ -12,6 +12,8 @@ export interface DataItemType {
     updateDate: string,
     status: string,
     opreation: string,
+    loaded?: boolean,
+    url?: string,
 }
 
 export default {

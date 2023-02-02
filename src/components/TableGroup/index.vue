@@ -1,8 +1,8 @@
 <!--
  * @Author: niumengfei
  * @Date: 2022-12-13 14:51:55
- * @LastEditors: niumengfei 870424431@qq.com
- * @LastEditTime: 2023-01-12 14:42:49
+ * @LastEditors: niumengfei
+ * @LastEditTime: 2023-02-02 14:21:30
 -->
 <template>
     <slot></slot>
@@ -27,7 +27,7 @@
 <script lang="ts" setup>
 
 const props = defineProps({ //子组件接收父组件传递过来的值
-    total:{ type: Number, required: true } ,
+    total: { type: Number, required: true } ,
     prevClick: Function,
     nextClick: Function,
     currentChange: Function,

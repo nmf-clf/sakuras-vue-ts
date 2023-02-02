@@ -2,13 +2,13 @@
  * @Author: niumengfei
  * @Date: 2022-12-07 17:22:21
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-01-16 13:27:56
+ * @LastEditTime: 2023-02-02 15:20:09
  */
 export interface GetListParams {
     username?: string,
     page?: number,
     pageSize?: number,
-    _id?: string, 
+    _id?: string | string[], 
 }
 
 export interface ArticleListResItem {
@@ -19,6 +19,8 @@ export interface ArticleListResItem {
     updateDate: string,
     status: string,
     opreation: string,
+    username: string,
+    readNum: number,
 }
 
 export type ArticleListRes = {

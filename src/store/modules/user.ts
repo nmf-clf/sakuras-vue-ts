@@ -1,8 +1,10 @@
+import { Utils } from "@/utils";
+
 /*
  * @Author: niumengfei
  * @Date: 2022-12-12 12:55:25
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-01 10:33:57
+ * @LastEditTime: 2023-02-02 17:22:31
  */
 interface StateType {
     screenWidth: number;
@@ -36,7 +38,12 @@ export default {
             state.screenHeight = value[1]
         },
         SAVE_USER_INFO(state: any, value: any){
-            state.username = value.username;
+            if(Utils.isEmptyObj(value)){
+                state.username = '';
+            }else{
+                state.username = 'niumengfei';
+                state.nickname = '夜雨清梦';
+            }
         }
     },
 }

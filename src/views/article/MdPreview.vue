@@ -2,11 +2,11 @@
  * @Author: niumengfei
  * @Date: 2023-01-31 14:31:26
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-01 09:48:48
+ * @LastEditTime: 2023-02-02 14:35:30
 -->
 <template>
     <md-editor
-        v-model="state.text"
+        v-model="props.content"
         :editor-id="state.id"
         theme="light"
         preview-theme="cyanosis"
@@ -23,50 +23,27 @@
   </template>
   
 <script lang="ts" setup>
-import { reactive } from 'vue';
+import { reactive, Prop, toRefs, onMounted } from 'vue';
 import MdEditor from 'md-editor-v3';
 import 'md-editor-v3/lib/style.css';
 
-  const MdCatalog = MdEditor.MdCatalog;
-  
-  const state = reactive({
-    text:  `
-# 第一章 如何修改DOM
-1233333333333
-## 1.1
-###  1.1.1
-###  1.1.2
+const MdCatalog = MdEditor.MdCatalog;
 
-# 第一章 如何修改DOM2
-##  2.1  
+const props = defineProps({ //子组件接收父组件传递过来的值
+    content: { type: String, required: true },
+});
 
-## 666666666
-[13123]()
+const { content } = toRefs(props);
 
-# 第一章 如何修改DOM3
-## 3.1
-###  3.1.1
-
-# 第一章 如何修改DOM4
-##  111111
-
-## 222222
-
-## 33333333333
-[13123]()
-
-# 第一章 如何修改DOM5
-## 555555555
-###  666666666
-
-# 第一章 如何修改DOM6
-##  88888888
-
-## 9999999999999
-[13123]()`,
+const state = reactive({
+    // text: content,
     id: 'my-editor'
-  });
-  
+});
+
+onMounted(() => {
+    // state.text = content
+});
+
 const scrollElement = document.documentElement;
 
 let htmlSize = document.documentElement.style.fontSize;
@@ -74,6 +51,7 @@ let scrollElementOffsetTop: number = 0;
 if(htmlSize){
     scrollElementOffsetTop = Number(document.documentElement.style.fontSize.replace('px', '')) * 4;
 }
+
 
 </script>
 

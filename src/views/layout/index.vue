@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-04-06 23:49:03
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-01 17:04:12
+ * @LastEditTime: 2023-02-02 15:23:16
 -->
 <template>
     <el-container :class="'frontHome-' + deviceType()" class="frontHome">
@@ -11,11 +11,10 @@
         <div class="sk-main">
             <router-view v-slot="{ Component }">
                 <!-- <transition name="move" mode="out-in"> -->
-                        <!-- 在这里可以通过tags去控制 打开的页面进行缓存数据 -->
-                    <!-- <keep-alive :include=[tagsNameList()]> 遗留问题 include 不生效 -->
-                    <!-- <keep-alive> -->
-                        <component :is="Component"></component>
-                    <!-- </keep-alive> -->
+                    <keep-alive>
+                            <component v-if="Route.meta.keepAlive" :is="Component"></component>
+                    </keep-alive>
+                    <component v-if="!Route.meta.keepAlive" :is="Component"></component>
                 <!-- </transition> -->
             </router-view>
         </div>
@@ -25,45 +24,23 @@
             <p>
               © 2023 夜语清梦&nbsp;<a class="ft-gov" href="https://beian.miit.gov.cn/">豫ICP备20014071号-1</a></p>
         </div>
-        <el-main v-if="false" class="main animate__animated animate__bounce">
-            <h2>Hello，sakuras!</h2>
-            <h2>Goodbye Friends!</h2>
-            <h1 @click="changeText">{{mainTxt}}</h1>
-            <!-- <a href="https://beian.miit.gov.cn/">豫ICP备20014071号-1</a> -->
-        </el-main>
-        <el-footer v-if="false" class="footer">
-            <a href="https://beian.miit.gov.cn/">豫ICP备20014071号-1</a>
-        </el-footer>
+        
     </el-container>
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref, reactive } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useStore } from "vuex";
-import { useRouter } from 'vue-router'
+import { useRoute } from "vue-router";
 import { MyHeader } from '@/components'
-import { ElContainer, ElMain, ElCard, ElFooter } from 'element-plus';
+import { ElContainer } from 'element-plus';
 
 const store = useStore();
-const router = useRouter();
+const Route = useRoute();
 const deviceType = () => store.getters.deviceType;
 
-/* 定义数据 */
-let txtList = [
-  '读很多的书，走很远的路，见很多的人。',
-  '滴水穿石，非一日之功',
-  '为天地立心，为生民立命，为往圣继绝学，为万世开太平。',
-  '悟已往之不谏，知来者之可追。',
-  '醉后不知天在水，满船清梦压星河。',
-];
-
-let mainTxt = ref(txtList[Math.floor( (Math.random() * txtList.length) )]);
-
-let changeText = () => mainTxt.value = txtList[Math.floor( (Math.random() * txtList.length) )];
-
 let headerClass = ref(false);
-
-let sign = false;
+let sign = false; // 标识，如果顶部未曾展示过，监听滚动事件时理应不改变 headerClass 的值，但即使改变也可以
 
 onMounted(() => {
     // 判断是否是第一次访问此网站
@@ -90,11 +67,11 @@ onMounted(() => {
         }
     })
 });
-
+// 点击小猫，页面滚动到最上层
 const scrollToTop = () => {
     let speed = 1;
     let timetop = setInterval(() => {
-        speed < 20 ? (speed+=1) : null; // 匀加速
+        speed += 2;
         document.documentElement.scrollTop = document.documentElement.scrollTop - speed;
         if(document.documentElement.scrollTop <= 0){ // 当滚动距离 大于等于 视图窗口高度时，停止滚动
             clearInterval(timetop)
@@ -163,3 +140,24 @@ const scrollToTop = () => {
     }
 }
 </style>
+
+<!-- 初始主页 遗留代码 -->
+<!-- script: part -->
+<!-- let txtList = [
+  '读很多的书，走很远的路，见很多的人。',
+  '滴水穿石，非一日之功',
+  '为天地立心，为生民立命，为往圣继绝学，为万世开太平。',
+  '悟已往之不谏，知来者之可追。',
+  '醉后不知天在水，满船清梦压星河。',
+];
+let changeText = () => mainTxt.value = txtList[Math.floor( (Math.random() * txtList.length) )];
+let mainTxt = ref(txtList[Math.floor( (Math.random() * txtList.length) )]); -->
+<!-- html: part -->
+<!-- <el-main v-if="false" class="main animate__animated animate__bounce">
+    <h2>Hello，sakuras!</h2>
+    <h2>Goodbye Friends!</h2>
+    <h1 @click="changeText">{{mainTxt}}</h1>
+</el-main>
+<el-footer v-if="false" class="footer">
+    <a href="https://beian.miit.gov.cn/">豫ICP备20014071号-1</a>
+</el-footer> -->

@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-12-13 14:51:55
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-01-17 11:02:00
+ * @LastEditTime: 2023-02-02 14:45:01
 -->
 <template>
     <div class="admin-layout">
@@ -19,7 +19,10 @@
                     <!-- <transition name="move" mode="out-in"> -->
                          <!-- 在这里可以通过tags去控制 打开的页面进行缓存数据 -->
                         <!-- <keep-alive :include=[tagsNameList()]> 遗留问题 include 不生效 -->
-                        <keep-alive>
+                        <!-- <keep-alive>
+                            <component :is="Component"></component>
+                        </keep-alive> -->
+                        <keep-alive include="FrontHome">
                             <component :is="Component"></component>
                         </keep-alive>
                     <!-- </transition> -->

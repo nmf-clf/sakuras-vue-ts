@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-12-09 16:14:27
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-01-16 17:31:45
+ * @LastEditTime: 2023-02-02 17:08:07
 -->
 <template>
     <el-form
@@ -51,7 +51,6 @@ import SoftWareForm from "./SoftWareForm.vue"; //坑点：如果使用vscode插�
 interface LoginParamsType {
     username: string,
     password: string,
-    email?: string,
 }
 
 const isLoading = ref(false); // 登录单独用此方式，其他页面接口 统一在 axios 请求拦截器里 通过 ElLoading.service 注册处理
@@ -62,7 +61,6 @@ const ruleFormRef = ref<FormInstance>();
 const ruleForm = reactive<LoginParamsType>({ //表单内容
     username: 'niumengfei',
     password: '7758521nmf@CLF',
-    email: '',
 })
 
 const rules: FormRules = reactive({ // 表单校验规则
@@ -84,19 +82,19 @@ const submitForm = (formEl: FormInstance | undefined) => {
 const handleLogin = () => {
     isLoading.value = true;
     LoginAjax({
-      params: Utils.encrypt.DynamicDES(JSON.stringify(ruleForm))
+      	params: Utils.encrypt.DynamicDES(JSON.stringify(ruleForm))
     })
     .then(res =>{
         console.log('login-post::',res);
         isLoading.value = false;
         store.dispatch('user/saveUserInfo', { // 暂时这样存 需要整体加密
-            ...ruleForm
+            ...res.data
         });
         router.push({ path: '/' });
         ElMessage.success(res.message);
     })
     .catch(()=>{
-      isLoading.value = false;
+      	isLoading.value = false;
     })
 }
 </script>

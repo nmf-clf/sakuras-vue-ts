@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-04-27 17:25:41
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-01-29 16:50:05
+ * @LastEditTime: 2023-02-02 16:57:09
 -->
 <template>
   <div :class="'rg-options' + (' rg-options-' + deviceType())">
@@ -10,9 +10,13 @@
     <div class="hidden-dropdown">
       <span class="el-dropdown-link animate__fadeInRight" @click="turnPage('/')">首页</span>
     </div>
+    <!-- 技术文章 -->
+    <el-dropdown class="hidden-dropdown">
+      <span class="el-dropdown-link" @click="openPage('https://sakuras.group/sakuras-docs/')">技术文章</span>
+    </el-dropdown>
     <!-- 学习笔记 -->
     <el-dropdown class="hidden-dropdown">
-      <span class="el-dropdown-link" @click="openPage('https://sakuras.group/sakuras-docs/')">{{'学习笔记'}}</span>
+      <span class="el-dropdown-link" @click="openPage('https://sakuras.group/sakuras-docs/')">学习笔记</span>
     </el-dropdown>
     <!-- 个人中心 trigger="click"-->
     <el-dropdown class="hidden-dropdown">
@@ -21,7 +25,7 @@
       </span>
       <template #dropdown>
         <el-dropdown-menu>
-          <el-dropdown-item v-if="userInfo.username"><el-icon><user /></el-icon>{{userInfo.username}}</el-dropdown-item>
+          <el-dropdown-item v-if="userInfo.username"><el-icon><user /></el-icon>{{userInfo.nickname || userInfo.username}}</el-dropdown-item>
           <el-dropdown-item :divided="userInfo.username ? true : false" @click="loginOrOut('/login')">{{userInfo.username ? '注销' : '登录'}}</el-dropdown-item>
           <el-dropdown-item divided @click="toAdmin('/admin/index')">进入后台</el-dropdown-item>
         </el-dropdown-menu>

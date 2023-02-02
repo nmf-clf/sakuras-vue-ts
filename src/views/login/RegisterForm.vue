@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-12-09 16:14:27
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-01-17 14:41:13
+ * @LastEditTime: 2023-02-02 17:32:10
 -->
 <template>
     <el-form 
@@ -15,7 +15,14 @@
     >
         <h2 class="form-title">注册</h2>
         <el-form-item class="form_item" prop="username" label-width="'auto'">
-            <el-input class="form_input" v-model="ruleForm.username" type="username" autocomplete="off" placeholder="用户名">
+            <el-input class="form_input" v-model="ruleForm.username" type="username" autocomplete="off" placeholder="账号">
+                <template #prepend>
+                    <el-button :icon="User"></el-button>
+                </template>
+            </el-input>
+        </el-form-item>
+        <el-form-item class="form_item" prop="nickname" label-width="'auto'">
+            <el-input class="form_input" v-model="ruleForm.nickname" type="nickname" autocomplete="off" placeholder="昵称">
                 <template #prepend>
                     <el-button :icon="User"></el-button>
                 </template>
@@ -56,12 +63,14 @@ interface LoginParamsType {
     username: string,
     password: string,
     email?: string,
+    nickname: string,
 }
 
 const ruleFormRef = ref<FormInstance>();
 
 const ruleForm = reactive<LoginParamsType>({ //表单内容
-    username: '',
+    username: '', // 账号名
+    nickname: '', // 昵称
     password: '',
     email: '',
 })

@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-04-06 23:49:03
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-01 13:49:13
+ * @LastEditTime: 2023-02-02 15:20:58
 -->
 <template>
     <div class="detail-top">
@@ -11,29 +11,54 @@
             :src="require('@/assets/imgs/home_bg.jpg')" 
         />
         <div class="desc">
-            <div class="title">这是测试的标题</div>
+            <div class="title">{{ mdData.title }}</div>
             <div class="btm">
                 <img :src="require('@/assets/imgs/photo.jpg')" />
-                <span>夜语清梦</span> ·
-                <span>发布于 2023-01-06</span> ·
-                <span>最后编辑于 2023-01-07</span> ·
-                <span>24次阅读</span>
+                <span>{{ mdData.username }}</span> ·
+                <span>发布于 {{ mdData.createDate }}</span> ·
+                <span>最后编辑于 {{ mdData.updateDate }}</span> ·
+                <span>{{ mdData.readNum || 24 }}次阅读</span>
             </div>
         </div>
     </div>
     <div class="content">
         <MdPreview 
-        
+            :content="mdData.content"
         />
     </div>
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref, reactive } from 'vue';
+import { onMounted, ref, reactive, toRefs } from 'vue';
+import { useRoute } from 'vue-router';
 import { useStore } from "vuex";
 import MdPreview from "./MdPreview.vue";
+import { GetArticleNewDetailAjax } from "@/api/article";
+import { ArticleListResItem } from "@/api/model/articleModel";
 
-const store = useStore();
+const Route = useRoute();
+
+const { _id } = Route.params;
+
+let mdData = <ArticleListResItem>reactive({});
+
+console.log('Route::', Route);
+
+onMounted(() => {
+    // 查询文章详情
+    GetArticleNewDetailAjax({ 
+        _id, 
+    })
+    .then(res =>{
+        console.log('文章详情=>', res.data);
+        const { data } = res;
+        mdData.content = data.content; // 父组件更新props，子组件需要通过 toRefs(props) 接收，从而监听数据变化重新更新视图
+        mdData.title = data.title;
+        mdData.username = data.username;
+        mdData.createDate = data.createDate;
+        mdData.updateDate = data.updateDate;
+    })
+});
 
 </script>
 
