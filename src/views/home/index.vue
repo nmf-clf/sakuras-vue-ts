@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-04-06 23:49:03
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-02 18:02:59
+ * @LastEditTime: 2023-02-03 17:12:36
 -->
 <template>
     <!-- 背景图片 -->
@@ -149,7 +149,12 @@ const imgLoaded = (index: number) => {
 }
 
 const viewDetails = (item: any, index: number) => {
-    router.push({ path: `/article/${item._id}` });
+    
+    const newWindow = window.open(`${window.location.origin}/#/article/${item._id}`) as any;
+    newWindow.onload = () => {
+        newWindow.document.title = item.title + ' - 夜语清梦';
+    }
+    // router.push({ path: `/article/${item._id}` });
 }
 
 // 查询最新文章

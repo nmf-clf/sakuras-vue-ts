@@ -36,7 +36,10 @@ a{
 .sakuras-markdown-editor{
     // height: 100% !important;
 }
-
+#app{
+    width: 100%;
+    min-height: 100%;
+}
 /* nprogress */
 #nprogress{
     .bar{
@@ -45,5 +48,12 @@ a{
     }
     .peg{
         display: none;
+    }
+    .spinner {
+        display: block;
+        position: fixed;
+        z-index: 1031;
+        top: 50% !important;
+        right: 50% !important;
     }
 }

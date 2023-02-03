@@ -4,7 +4,7 @@ import { Utils } from "@/utils";
  * @Author: niumengfei
  * @Date: 2022-12-12 12:55:25
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-02 17:22:31
+ * @LastEditTime: 2023-02-03 14:59:45
  */
 interface StateType {
     screenWidth: number;
@@ -41,8 +41,8 @@ export default {
             if(Utils.isEmptyObj(value)){
                 state.username = '';
             }else{
-                state.username = 'niumengfei';
-                state.nickname = '夜雨清梦';
+                state.username = value.username;
+                state.nickname = value.nickname;
             }
         }
     },

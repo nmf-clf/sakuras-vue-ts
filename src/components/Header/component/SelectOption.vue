@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-04-27 17:25:41
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-02 16:57:09
+ * @LastEditTime: 2023-02-03 17:16:54
 -->
 <template>
   <div :class="'rg-options' + (' rg-options-' + deviceType())">
@@ -12,7 +12,7 @@
     </div>
     <!-- 技术文章 -->
     <el-dropdown class="hidden-dropdown">
-      <span class="el-dropdown-link" @click="openPage('https://sakuras.group/sakuras-docs/')">技术文章</span>
+      <span class="el-dropdown-link" @click="turnPage('/category')">技术文章</span>
     </el-dropdown>
     <!-- 学习笔记 -->
     <el-dropdown class="hidden-dropdown">
@@ -50,14 +50,11 @@ const userInfo = store.getters.userInfo;
 
 const openPage = (url: string) => window.open(url);
 
-const turnPage = (path: string, pdfUrl?: string) =>{
-    // context.emit('changeColor', '666')
+const turnPage = (path: string) =>{
     const datas = { 
         path,
         name: path.charAt(0) == '/' ? '' : path,  //(使用params传参时，必须使用name属性进行路由跳转，不能使用path配置项跳转)
-        params: {
-            pdfUrl
-        }
+        params: {}
     }
     router.push(datas);
 }

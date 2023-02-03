@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-11-07 15:18:04
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-02 15:43:57
+ * @LastEditTime: 2023-02-03 17:19:48
  */
 /* 引入路由模块，和vue2.0方式不同 */
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'; //导入
@@ -25,13 +25,18 @@ const routes: Array<RouteRecordRaw> = [
               path: 'home',
               component: () => import('@/views/home/index.vue'),
               name: 'FrontHome',
-              meta: { keepAlive: true }
+              meta: { title: '主页', keepAlive: true }
             },
             {
-                path: 'article/:_id',
+                path: 'article/:_id', // 由于可能查看文章会开启新窗口，所以这里采用 params 参数传递文章唯一id，通过 id 查询文章数据
                 component: () => import('@/views/article/index.vue'),
                 name: 'FrontArticle',
-                meta: { noNeedLogin: true }
+                meta: { title: '文章', noNeedLogin: true }
+            }, {
+                path: 'category',
+                component: () => import('@/views/category/index.vue'),
+                name: 'FrontCategory',
+                meta: {  title: '分类', noNeedLogin: true }
             }
         ]
     },
@@ -39,6 +44,7 @@ const routes: Array<RouteRecordRaw> = [
         path: '/login',
         name: 'login',
         component: () => import('@/views/login/index.vue'),
+        meta: {  title: '登录' }
     },
     {
         path: '/test',
@@ -53,7 +59,7 @@ const routes: Array<RouteRecordRaw> = [
               path: 'index',
               component: () => import('@/vdmin/home/Home.vue'),
               name: 'AdminHome',
-              meta: { title: '首页', permiss: '1' },
+              meta: { title: '创作者中心', permiss: '1' },
             },{
                 path: 'article',
                 component: () => import('@/vdmin/article/index.vue'),
@@ -117,10 +123,11 @@ router.beforeEach((to, from, next) => {
 
 /* 路由后置守卫 */
 router.afterEach((to, from, next) => {
-    // console.log(to, from, s);
+    console.log(to, from);
+    const title = to.meta.title as string;
+    document.title = title ? title + ' - 夜语清梦' : '夜语清梦';
     // NProgress.done()
     loadingProgress();
-    document.title = '夜语清梦'
 });
 
 // 统一处理阅读进度条

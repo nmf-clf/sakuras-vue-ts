@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-04-06 23:49:03
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-02 15:20:58
+ * @LastEditTime: 2023-02-03 15:04:35
 -->
 <template>
     <div class="detail-top">
@@ -11,19 +11,19 @@
             :src="require('@/assets/imgs/home_bg.jpg')" 
         />
         <div class="desc">
-            <div class="title">{{ mdData.title }}</div>
+            <div class="title">{{ formData.mdData.title }}</div>
             <div class="btm">
                 <img :src="require('@/assets/imgs/photo.jpg')" />
-                <span>{{ mdData.username }}</span> ·
-                <span>发布于 {{ mdData.createDate }}</span> ·
-                <span>最后编辑于 {{ mdData.updateDate }}</span> ·
-                <span>{{ mdData.readNum || 24 }}次阅读</span>
+                <span>{{ formData.mdData.nickname || formData.mdData.username }}</span> ·
+                <span>发布于 {{ formData.mdData.createDate }}</span> ·
+                <span>最后编辑于 {{ formData.mdData.updateDate }}</span> ·
+                <span>{{ formData.mdData.readNum || 24 }}次阅读</span>
             </div>
         </div>
     </div>
     <div class="content">
         <MdPreview 
-            :content="mdData.content"
+            :content="formData.mdData.content"
         />
     </div>
 </template>
@@ -36,11 +36,17 @@ import MdPreview from "./MdPreview.vue";
 import { GetArticleNewDetailAjax } from "@/api/article";
 import { ArticleListResItem } from "@/api/model/articleModel";
 
+interface FormDataType {
+    mdData: ArticleListResItem
+}
+
 const Route = useRoute();
 
 const { _id } = Route.params;
 
-let mdData = <ArticleListResItem>reactive({});
+const formData = <FormDataType>reactive({
+    mdData: {}
+});
 
 console.log('Route::', Route);
 
@@ -52,11 +58,7 @@ onMounted(() => {
     .then(res =>{
         console.log('文章详情=>', res.data);
         const { data } = res;
-        mdData.content = data.content; // 父组件更新props，子组件需要通过 toRefs(props) 接收，从而监听数据变化重新更新视图
-        mdData.title = data.title;
-        mdData.username = data.username;
-        mdData.createDate = data.createDate;
-        mdData.updateDate = data.updateDate;
+        formData.mdData = data;
     })
 });
 
