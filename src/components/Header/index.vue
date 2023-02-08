@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-04-12 15:56:02
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-01-29 10:38:54
+ * @LastEditTime: 2023-02-07 10:57:02
 -->
 <template>
     <el-header class="myHeader" :class="['myHeader-' + deviceType(), (props.headerClass || isMouseEnter) ? 'hover-class' : '' ]" 
@@ -69,7 +69,7 @@ const mouseLeave = () => { isMouseEnter.value = false }
     z-index: 999;
     opacity: 0.8;
     transition: all 0.8s ease;
-    font-family: cursive;
+    // font-family: cursive;
     .lf-box{
         display: flex;
         align-items: center;

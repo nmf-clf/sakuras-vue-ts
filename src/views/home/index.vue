@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-04-06 23:49:03
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-03 17:12:36
+ * @LastEditTime: 2023-02-08 17:34:22
 -->
 <template>
     <!-- 背景图片 -->
@@ -69,6 +69,7 @@
                         <img class="limg" v-show="!item.loaded" src="@/assets/imgs/img_loading.svg" />
                     </div>
                 </el-card>
+                <el-skeleton  v-if="isLoading" :rows="5" animated />
             </div>
             <p  v-if="hasMoreArticle" class="unarticle" @click="getArticleList">加载更多</p>
             <p  v-else class="unarticle">没有更多数据啦</p>
@@ -83,6 +84,7 @@ import { useRouter } from 'vue-router'
 import { ElMain, ElCard } from 'element-plus';
 import { GetNewArticleListAjax } from "@/api/article";
 import { DataItemType } from "@/vdmin/article/type";
+import { DictionaryApi } from '@/api';
 
 const store = useStore();
 const router = useRouter();
@@ -90,6 +92,7 @@ const router = useRouter();
 const styleObject = reactive({ height: document.body.clientHeight + 'px' });
 const articles: DataItemType[] = reactive([]);
 const hasMoreArticle = ref(true);
+const isLoading = ref(false);
 let page = 1;
 let pageSize = 5;
 const imgUrls = [
@@ -102,7 +105,8 @@ const imgUrls = [
 ]
 
 onMounted(() => {
-    getArticleList();
+    getArticleList(); // 获取文章列表
+    getDictionaryList(); // 获取字典列表
     // 判断是否是第一次访问此网站
     if(!localStorage.getItem('IS_VISIT')){
         document.documentElement.scrollTop = document.body.clientHeight;
@@ -120,6 +124,17 @@ onMounted(() => {
         }
     })
 });
+// 获取数据列表 
+const getDictionaryList = () => {
+    DictionaryApi.GetDictionaryListAjax({})
+    .then(res =>{
+        let list = res.data;
+        let dictironary = {};
+        list.map(item => { dictironary[item.type] = item.children || [] })
+        console.log('获取字典值>>>', dictironary);
+        store.dispatch('user/saveDictionary', dictironary)
+    })
+}
 
 const scrollTopToBottom = () => {
     let speed = 1;
@@ -159,15 +174,20 @@ const viewDetails = (item: any, index: number) => {
 
 // 查询最新文章
 const getArticleList = () => {
+    isLoading.value = true;
     GetNewArticleListAjax({ 
         username: 'niumengfei',
         page: page,
         pageSize,
     })
     .then(res =>{
+        isLoading.value = false;
         let { list } = res.data;
         console.log('数据::', list);
-        if(list.length < 1) return; 
+        if(list.length < 1){
+            hasMoreArticle.value = false; 
+            return;
+        }
         if(list.length < pageSize){ // 没有下一页
             hasMoreArticle.value = false; 
         }else{
@@ -175,6 +195,9 @@ const getArticleList = () => {
         }
         articles.push(...list);
         console.log(articles);
+    })
+    .catch(err =>{
+        isLoading.value = false;
     })
 }
 </script>

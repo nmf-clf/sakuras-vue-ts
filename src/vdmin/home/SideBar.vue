@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-12-13 15:54:42
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-01-17 10:59:41
+ * @LastEditTime: 2023-02-06 15:16:03
 -->
 <template>
      <div class="admin-aside" >
@@ -66,6 +66,11 @@ const sideBarList = [{
     title: '文章管理',
     name: 'AdminArticle',
     path: '/admin/article',
+    icon: IconMenu,
+},{
+    title: '字典管理',
+    name: 'AdminDictionary',
+    path: '/admin/dictionary',
     icon: IconMenu,
 },{
     title: '统计模块',

@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-12-13 14:51:55
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-02 14:21:30
+ * @LastEditTime: 2023-02-06 15:12:35
 -->
 <template>
     <slot></slot>
@@ -46,7 +46,7 @@ const props = defineProps({ //子组件接收父组件传递过来的值
 
 .cell-nowrap{
     .cell{
-        white-space: nowrap;
+        white-space: nowrap !important;
     }
 }
 </style>

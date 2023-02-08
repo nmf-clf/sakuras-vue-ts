@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2023-01-29 14:21:32
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-02 11:43:17
+ * @LastEditTime: 2023-02-08 14:24:53
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -36,17 +36,110 @@
     </div>
 </body>
 <script>
-    function dasd2(e){
-        console.log('dasdasdd');
+const jsonData = [
+    { id: '0', pid: '-1', name: '666' },
+    { id: '4', pid: '1', name: '大家电' },
+    { id: '5', pid: '1', name: '生活电器' },
+    { id: '1', pid: '0', name: '家用电器' },
+    { id: '2', pid: '0', name: '服饰' },
+    { id: '3', pid: '0', name: '化妆' },
+    { id: '7', pid: '4', name: '空调' },
+    { id: '8', pid: '4', name: '冰箱' },
+    { id: '9', pid: '4', name: '洗衣机' },
+    { id: '10', pid: '4', name: '热水器' },
+    { id: '11', pid: '3', name: '面部护理' },
+    { id: '12', pid: '3', name: '口腔护理' },
+    { id: '13', pid: '2', name: '男装' },
+    { id: '14', pid: '2', name: '女装' },
+    { id: '15', pid: '7', name: '海尔空调' },
+    { id: '16', pid: '7', name: '美的空调' },
+    { id: '19', pid: '5', name: '加湿器' },
+    { id: '20', pid: '5', name: '电熨斗' },
+    { id: '21', pid: '20', name: '电熨斗子项' },
+    { id: '23', pid: '-1', name: '777' },
+];
+const arr = [
+  {
+    "_id": "63e33be792d614b5e42bd33d",
+    "label": "1",
+    "value": "1",
+    "pid": null,
+    "__v": 0
+  },
+  {
+    "_id": "63e33be992d614b5e42bd33f",
+    "label": "2",
+    "value": "2",
+    "pid": null,
+    "__v": 0
+  },
+  {
+    "_id": "63e33beb92d614b5e42bd341",
+    "label": "3",
+    "value": "3",
+    "pid": null,
+    "__v": 0
+  },
+  {
+    "_id": "63e33bed92d614b5e42bd343",
+    "label": "4",
+    "value": "4",
+    "pid": null,
+    "__v": 0
+  },
+  {
+    "_id": "63e33e6892d614b5e42bd355",
+    "label": "1-1",
+    "value": "1-1",
+    "pid": "63e33be792d614b5e42bd33d",
+    "__v": 0
+  }
+]
+/**
+ * 根据id和pid把json结构 转 树状结构
+ * @param  jsonArr  {json}      json数据
+ * @param  idStr  {String}    id的属性名
+ * @param  pidStr  {String}    父id的属性名
+ * @param  childrenStr  {String}    children的属性名
+ * @return  {Array}     数组
+ */
+const transData = (jsonArr, idStr, pidStr, childrenStr) => {
+    // 存放的最终结果树数组
+    const result = [];
+    const id = idStr;
+    const pid = pidStr;
+    const children = childrenStr;
+    const len = jsonArr.length;
+
+    // 遍历得到以id为键名的对象(建立整棵树的索引)
+    const hash = {};
+    jsonArr.forEach(item => {
+        // hash[item[id]] = JSON.parse(JSON.stringify(item));
+        hash[item[id]] = item; // 利用值的引用传递
+    });
+    console.log(hash);
+    // 核心思想 如果
+    for (let j = 0; j < len; j++) {
+        const jsonArrItem = jsonArr[j];
+        const hashItem = hash[jsonArrItem[pid]]; // 获取当前遍历元素的上级元素
+        // console.log('hashItem::', hashItem);
+        if (hashItem) { 
+            console.log('当前遍历元素有上级元素hashItem', hashItem, jsonArrItem);
+            // 如果当前项还没有children属性，则添加该属性并设置为空数组
+            console.log('那么hashItem就是当前遍历元素的父元素，则应该将当前遍历元素添加到它的父元素上边');
+            // 这里利用了对象的引用传递，将有上级元素的对象的children
+            !hashItem[children] && (hashItem[children] = []);
+            hashItem[children].push(jsonArrItem);
+        } else {
+            console.log('找不到此元素的上级元素::', jsonArrItem);
+            result.push(jsonArrItem);
+        }
     }
-    let arr = [
-        { name: 'nmf2' },
-        { name: 'nmf3' },
-        { name: 'nmf3' },
-        { name: 'nmf52' },
-        { name: 'nmf6' },
-    ]
-    let sd = [];
-    console.log(sd);
+    return result;
+};
+
+const jsonDataTree2 = transData(arr, '_id', 'pid', 'children');
+console.log(jsonDataTree2);
+
 </script>
 </html>

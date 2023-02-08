@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-12-07 14:13:27
  * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-19 16:49:30
+ * @LastEditTime: 2023-02-07 17:08:50
  */
 import AxiosAjax from "@/utils/http";
 import { LoginParams, UserRes } from "./model/userModel";
@@ -17,4 +17,9 @@ export const RegisterAjax = (data: LoginParams) =>
 
 export const LoginAjax = (data: LoginParams) =>
     AxiosAjax.post<UserRes>({ url: Api.login, data })
+
+export default {
+    LoginAjax,
+    RegisterAjax,
+}
 

@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-04-06 23:49:03
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-03 17:34:04
+ * @LastEditTime: 2023-02-06 10:44:02
 -->
 <template>
     <el-container :class="'frontHome-' + deviceType()" class="frontHome">
@@ -93,10 +93,13 @@ const scrollToTop = () => {
 .frontHome{
     display: flex;
     flex-direction: column;
-    height: 100%;
+    // height: 100%;
+    width: 100%;
+    min-height: 100vh;
     .sk-main{
-        width: 100%;
-        height: 100%;
+        // width: 100%;
+        // height: 100%;
+        flex: 1;
     }
     .sk-footer{
         width: 100%;

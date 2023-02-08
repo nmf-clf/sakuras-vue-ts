@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-12-13 14:51:55
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-02 14:45:01
+ * @LastEditTime: 2023-02-06 15:54:16
 -->
 <template>
     <div class="admin-layout">
@@ -79,6 +79,8 @@ onUpdated(() => {
             overflow-y: scroll;
             box-sizing: border-box;
             // background: yellowgreen;
+            display: flex;
+            flex-direction: column;
         }
     }
     .to-lf{

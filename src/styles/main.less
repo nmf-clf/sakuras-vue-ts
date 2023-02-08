@@ -2,14 +2,19 @@
     margin: 0;
     padding: 0;
 }
+@font-face {
+    font-family: "My Custom Font";
+    src: url("../assets/fonts/default_font.woff") format("truetype");
+}
 html{
     height: 100%;
 }
 body{
     // font-family:"Times New Roman",Times,serif;
     // font-family: "楷体", "楷体_GB2312", serif;
-    font-family: 'NSimSun';
+    // font-family: 'NSimSun';
     // font-family: '宋体';
+    font-family: "My Custom Font";
     height: 100%;
     cursor: pointer;
     cursor: url(../assets/imgs/normal.cur), auto;
@@ -18,6 +23,7 @@ body{
 a{
     text-decoration: none
 }
+
 /* 滚动条 */
 ::-webkit-scrollbar{
     width: 6px;
@@ -37,8 +43,6 @@ a{
     // height: 100% !important;
 }
 #app{
-    width: 100%;
-    min-height: 100%;
 }
 /* nprogress */
 #nprogress{
@@ -56,4 +60,9 @@ a{
         top: 50% !important;
         right: 50% !important;
     }
+}
+/* 覆盖 Element-Plus 样式 */
+.el-input__inner,
+.el-button>span{
+    font-family: "My Custom Font";
 }

@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-12-07 14:13:27
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-02 14:24:47
+ * @LastEditTime: 2023-02-07 17:09:29
  */
 import AxiosAjax from "@/utils/http";
 import { GetListParams, ArticleListRes, ArticleListResItem } from "./model/articleModel";
@@ -31,3 +31,12 @@ export const GetNewArticleListAjax = (data: GetListParams) =>
 // 获取文章详情-前台
 export const GetArticleNewDetailAjax = (data: GetListParams) => 
 AxiosAjax.post<ArticleListResItem>({ url: Api.getDetail,  data})
+
+export default {
+    GetArticleListAjax,
+    GetArticleDetailAjax,
+    AddArticleAjax,
+    deleteArticleAjax,
+    GetNewArticleListAjax,
+    GetArticleNewDetailAjax,
+}

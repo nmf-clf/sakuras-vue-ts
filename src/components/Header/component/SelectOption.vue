@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-04-27 17:25:41
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-03 17:16:54
+ * @LastEditTime: 2023-02-06 14:43:11
 -->
 <template>
   <div :class="'rg-options' + (' rg-options-' + deviceType())">
@@ -10,17 +10,21 @@
     <div class="hidden-dropdown">
       <span class="el-dropdown-link animate__fadeInRight" @click="turnPage('/')">首页</span>
     </div>
-    <!-- 技术文章 -->
+    <!-- 分类 -->
     <el-dropdown class="hidden-dropdown">
-      <span class="el-dropdown-link" @click="turnPage('/category')">技术文章</span>
+      <span class="el-dropdown-link" @click="turnPage('/category')">分类</span>
     </el-dropdown>
     <!-- 学习笔记 -->
     <el-dropdown class="hidden-dropdown">
-      <span class="el-dropdown-link" @click="openPage('https://sakuras.group/sakuras-docs/')">学习笔记</span>
+      <span class="el-dropdown-link" @click="openPage('https://sakuras.group/sakuras-docs/')">笔记</span>
+    </el-dropdown>
+    <!-- 关于 -->
+    <el-dropdown class="hidden-dropdown">
+      <span class="el-dropdown-link" @click="turnPage('/category')">关于</span>
     </el-dropdown>
     <!-- 个人中心 trigger="click"-->
     <el-dropdown class="hidden-dropdown">
-      <span class="el-dropdown-link">个人中心
+      <span class="el-dropdown-link">个人
         <el-icon class="el-icon--right"><arrow-down /></el-icon>
       </span>
       <template #dropdown>

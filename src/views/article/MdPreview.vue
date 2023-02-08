@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2023-01-31 14:31:26
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-02 14:35:30
+ * @LastEditTime: 2023-02-07 14:14:06
 -->
 <template>
     <md-editor
@@ -56,14 +56,17 @@ if(htmlSize){
 </script>
 
 <style lang='less'>
+.md-editor-previewOnly{
+    font-family: "My Custom Font";
+}
 .sk-md-preview{
     position: absolute;
     right: 80px;
     top: 20px;
     min-width: 200px;
     max-width: 200px;
-    background: #fafafa;
-    padding: 10px;
+    // background: #fafafa;
+    // padding: 10px;
     border-radius: 10px;
     font-size: 0.8rem;
     letter-spacing: 1px;

@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-04-06 23:49:03
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-03 15:04:35
+ * @LastEditTime: 2023-02-03 18:20:36
 -->
 <template>
     <div class="detail-top">
@@ -21,6 +21,7 @@
             </div>
         </div>
     </div>
+    <el-skeleton  v-if="isLoading" :rows="5" animated class="detail-loading"/>
     <div class="content">
         <MdPreview 
             :content="formData.mdData.content"
@@ -44,21 +45,27 @@ const Route = useRoute();
 
 const { _id } = Route.params;
 
-const formData = <FormDataType>reactive({
-    mdData: {}
-});
+const formData = <FormDataType>reactive({ mdData: {} });
+const isLoading = ref(false);
+
 
 console.log('Route::', Route);
 
 onMounted(() => {
     // 查询文章详情
+    isLoading.value = true;
     GetArticleNewDetailAjax({ 
         _id, 
     })
-    .then(res =>{
+    .then(res => {
         console.log('文章详情=>', res.data);
+        isLoading.value = false;
         const { data } = res;
         formData.mdData = data;
+        
+    })
+    .catch(err => {
+        isLoading.value = false;
     })
 });
 
@@ -106,6 +113,10 @@ onMounted(() => {
             }
         }
     }
+}
+.detail-loading{
+    width: 50%;
+    margin: 50px auto;
 }
 .content{
     margin-left: 27%;

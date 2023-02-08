@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-11-07 15:18:04
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-03 17:19:48
+ * @LastEditTime: 2023-02-07 15:42:48
  */
 /* 引入路由模块，和vue2.0方式不同 */
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'; //导入
@@ -66,6 +66,11 @@ const routes: Array<RouteRecordRaw> = [
                 name: 'AdminArticle',
                 meta: { title: '文章管理', permiss: '2' },
             },{
+                path: 'dictionary',
+                component: () => import('@/vdmin/dictionary/index.vue'),
+                name: 'AdminDictionary',
+                meta: { title: '字典管理', permiss: '2' },
+            },{
                 path: 'repassword',
                 component: () => import('@/vdmin/setting/Repassword.vue'),
                 name: 'AdminRepassword',
@@ -123,9 +128,11 @@ router.beforeEach((to, from, next) => {
 
 /* 路由后置守卫 */
 router.afterEach((to, from, next) => {
-    console.log(to, from);
+    console.log('router.afterEach>>>', to, from);
     const title = to.meta.title as string;
-    document.title = title ? title + ' - 夜语清梦' : '夜语清梦';
+    if(from.name){
+        document.title = title ? title + ' - 夜语清梦' : '夜语清梦';
+    }
     // NProgress.done()
     loadingProgress();
 });

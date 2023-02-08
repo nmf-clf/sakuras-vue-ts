@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-12-13 14:51:55
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-01-16 17:46:50
+ * @LastEditTime: 2023-02-08 17:46:02
 -->
 <template>
     <div class="container">
@@ -11,8 +11,9 @@
             :form="formData"
             :data="[
                 { title: '文章标题', key: 'title', type: 'input' },
-                { title: '文章状态', key: 'status', type: 'select', options: Static.ArticleStatusArr },
-                { title: '文章类型', key: 'type', type: 'mul-select', options: Static.ArticleTypeArr },
+                { title: '文章类型', key: 'type', type: 'select', options: dictionary.articleType },
+                { title: '文章标签', key: 'tag', type: 'mul-select', options: dictionary.articleTag },
+                { title: '文章状态', key: 'status', type: 'select', options: dictionary.articleStatus },
                 { title: '发布日期', key: 'createDate', type: 'date' },
                 { title: '更新日期', key: 'updateDate', type: 'mul-date' },
             ]"
@@ -75,6 +76,7 @@
 <script lang="ts" setup>
 import { ref, reactive, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
+import { useStore } from "vuex";
 import { ElMessageBox, ElMessage } from 'element-plus';
 import type { Action } from 'element-plus';
 import { TableGroup, ButtonGroup, SelectGroup } from '@/components';
@@ -84,8 +86,11 @@ import { GetArticleListAjax, GetArticleDetailAjax, deleteArticleAjax } from "@/a
 import Static, { DataItemType } from "./type";
 
 const router = useRouter();
-const showAddArticle = ref(false);
+const store = useStore();
 
+const { dictionary={} } = store.getters.userInfo;
+
+const showAddArticle = ref(false);
 const formData = reactive({
     title: '',
     status: '',

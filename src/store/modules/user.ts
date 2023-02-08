@@ -4,7 +4,7 @@ import { Utils } from "@/utils";
  * @Author: niumengfei
  * @Date: 2022-12-12 12:55:25
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-03 14:59:45
+ * @LastEditTime: 2023-02-08 17:34:50
  */
 interface StateType {
     screenWidth: number;
@@ -22,6 +22,7 @@ export default {
             fontSize: 18,
             username: '',
             ...userInfo,
+            dictionary: {},
         }
     },
     actions: {
@@ -30,6 +31,9 @@ export default {
         },
         saveUserInfo({ commit }: any, value: any){
             commit('SAVE_USER_INFO', value)
+        },
+        saveDictionary({ commit }: any, value: any){
+            commit('SAVE_DICTIONARY', value)
         }
     },
     mutations: {
@@ -44,6 +48,9 @@ export default {
                 state.username = value.username;
                 state.nickname = value.nickname;
             }
-        }
+        },
+        SAVE_DICTIONARY(state: any, value: any){
+            state.dictionary = value;
+        },
     },
 }
