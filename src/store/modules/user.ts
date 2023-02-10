@@ -21,8 +21,8 @@ export default {
             screenHeight: document.documentElement.clientHeight,
             fontSize: 18,
             username: '',
-            ...userInfo,
             dictionary: {},
+            ...userInfo,
         }
     },
     actions: {

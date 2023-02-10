@@ -1,8 +1,8 @@
 <!--
  * @Author: niumengfei
  * @Date: 2022-12-13 14:51:55
- * @LastEditors: niumengfei 870424431@qq.com
- * @LastEditTime: 2023-01-12 15:37:24
+ * @LastEditors: niumengfei
+ * @LastEditTime: 2023-02-09 17:27:30
 -->
 <template>
     <!-- 
@@ -144,5 +144,7 @@ const handlePublist = () => onPublish && onPublish();
 </script>
 
 <style lang="less" scoped>
-
+.el-select{
+    width: 100%;
+}
 </style>

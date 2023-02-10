@@ -2,10 +2,11 @@
  * @Author: niumengfei
  * @Date: 2022-12-30 15:03:31
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-01-16 17:34:57
+ * @LastEditTime: 2023-02-09 17:32:12
  */
 import { defineComponent, reactive, ref, onMounted } from 'vue';
 import { useRoute, useRouter } from "vue-router";
+import { useStore } from "vuex";
 import { ElLoading, ElMessage } from 'element-plus';
 import MdEditor from 'md-editor-v3';
 import type { ExposeParam, HeadList } from 'md-editor-v3';
@@ -27,13 +28,19 @@ export default defineComponent({
     setup() {
         const Route = useRoute();
         const { row } = Route.params;
-        const { _id, username, content='', title, type,noneHeader } = JSON.parse(Utils.atou(row));
+        const { _id, username, content='', title, type, noneHeader, tag=[] } = JSON.parse(Utils.atou(row));
+        
+        const router = useRouter();
+        const store = useStore();
+
+        const { dictionary={} } = store.getters.userInfo;
 
         const formData = reactive({
             title,
-            type: type && type.split(',') || []
+            type,
+            tag,
         });
-
+        
         const md = reactive<MdType>({
             text: content,
             catalogList: [],
@@ -52,25 +59,30 @@ export default defineComponent({
         
         const MdCatalog = MdEditor.MdCatalog;
         const scrollElement = document.documentElement;
-
+        console.log(dictionary);
+        
         return () => (<>
             {!noneHeader && <SelectGroup
                 gutter={20}
                 form={formData}
                 data={[
                     { title: '文章标题', key: 'title', type: 'input' },
-                    { title: '文章类型', key: 'type', type: 'mul-select', options: Static.ArticleTypeArr },
+                    { title: '文章类型', key: 'type', type: 'select', options: dictionary.articleType },
+                    { title: '文章标签', key: 'tag', type: 'mul-select', options: dictionary.articleTag },
                 ]}
                 onPublish={()=>{
                     AddArticleAjax({
                         _id,
                         username,
-                        title: formData.title,
                         content: md.text,
-                        status: '0'
+                        status: '已发布',
+                        ...formData
                     })
                     .then(res => {
                         ElMessage.success('发布成功');
+                        router.push({
+                            path: `/admin/article`,
+                        })
                     })
                 }}
             />}

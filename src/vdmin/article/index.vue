@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-12-13 14:51:55
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-08 17:46:02
+ * @LastEditTime: 2023-02-09 17:29:49
 -->
 <template>
     <div class="container">
@@ -14,7 +14,7 @@
                 { title: '文章类型', key: 'type', type: 'select', options: dictionary.articleType },
                 { title: '文章标签', key: 'tag', type: 'mul-select', options: dictionary.articleTag },
                 { title: '文章状态', key: 'status', type: 'select', options: dictionary.articleStatus },
-                { title: '发布日期', key: 'createDate', type: 'date' },
+                { title: '发布日期', key: 'createDate', type: 'mul-date' },
                 { title: '更新日期', key: 'updateDate', type: 'mul-date' },
             ]"
             :onReset="handleReset"
@@ -41,6 +41,7 @@
                 <el-table-column type="index" width="50" align="center" />
                 <el-table-column prop="title" label="标题"  align="center" />
                 <el-table-column prop="type" label="类型"  align="center" />
+                <el-table-column prop="tag" label="标签"  align="center" />
                 <el-table-column prop="content" label="内容"   align="center" class-name="cell-nowrap" />
                 <el-table-column prop="createDate" label="发布日期"  align="center" />
                 <el-table-column prop="updateDate" label="更新日期"  align="center" />
@@ -120,7 +121,7 @@ onMounted(()=>{
     getArticleList();
 })
 
-/* 各类操作 */
+// 各类操作
 const AjaxOperation = (type: string, data: any) => {
     switch (type) {
         case 'edit':
@@ -133,19 +134,29 @@ const AjaxOperation = (type: string, data: any) => {
             break;
     }
 }
-/* 表格查询 */
+// 表格查询
 const handleSearch = (e: any) => {
-    console.log('查询，，', formData)
+    GetArticleListAjax({ 
+        username: 'niumengfei',
+        page: 1,
+        pageSize: 10,
+        ...formData,
+    })
+    .then(res =>{
+        let { list, total } = res.data;
+        resData.total = total;
+        tableData.splice(0, 10, ...list);
+    })
 };
-/* 查询重置 */
+// 查询重置
 const handleReset = () => Utils.clearFormData(formData);
 
-/* 分页查询 */
+// 分页查询
 const currentChange = (value: number) => {
     console.log('当前页::', value);
     getArticleList(value);
 }
-/* 查询 */
+// 查询
 const getArticleList = (value: number = 1) => {
     GetArticleListAjax({ 
         username: 'niumengfei',
@@ -159,7 +170,7 @@ const getArticleList = (value: number = 1) => {
         console.log('数据::', tableData);
     })
 }
-/* 编辑查询文章详情 */
+// 编辑查询文章详情
 const getArticleDetail = (row: any) => {
     GetArticleDetailAjax({ 
         _id: row._id,
@@ -181,7 +192,7 @@ const getArticleDetail = (row: any) => {
         })
     })
 }
-/* 删除文章 */
+// 删除文章
 const handleDelete = (_id: string) =>{
     ElMessageBox.alert('是否确认删除？', '温馨提示', {
         confirmButtonText: '确定',
@@ -224,6 +235,7 @@ const confirmClick = () =>{
     background: #fff;
     border-radius: 5px;
     padding: 20px;
+    flex: 1;
 }
 .el-row {
   margin-bottom: 20px;

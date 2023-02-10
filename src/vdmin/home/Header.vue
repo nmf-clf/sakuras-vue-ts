@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-12-13 15:54:42
  * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-15 15:12:46
+ * @LastEditTime: 2023-02-10 17:36:15
 -->
 <template>
     <div class="admin-header">
@@ -13,7 +13,7 @@
         <div class="right">
             <el-dropdown>
                 <span class="el-dropdown-link">
-                    <span>{{userInfo.username}}</span>
+                    <span>{{userInfo.nickname || userInfo.username}}</span>
                     <el-icon class="el-icon--right"><arrow-down /></el-icon>
                 </span>
                 <template #dropdown>
