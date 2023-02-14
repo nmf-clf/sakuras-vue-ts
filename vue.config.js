@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-11-07 15:18:04
  * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-19 14:33:30
+ * @LastEditTime: 2023-02-13 10:56:11
  */
 const { defineConfig } = require('@vue/cli-service')
 const webpack = require('webpack')
@@ -39,8 +39,14 @@ module.exports = defineConfig({
             // ElementPlus(),
         ],
     },
-    /* chainWebpack: config => {
-        config.module
+    chainWebpack: config => {
+        config
+        .plugin('html')
+        .tap(args => {
+            args[0].title = '夜语清梦'
+            return args
+        })
+        /* config.module
         .rule('md')
         .test(/\.md$/)
         .use('html-loader')
@@ -49,8 +55,8 @@ module.exports = defineConfig({
         
         .use('markdown-loader')
         .loader('markdown-loader')
-        .end()
-    }, */
+        .end() */
+    },
     devServer: {
         // open: true, //自动打开浏览器
         host: 'localhost', //主机名

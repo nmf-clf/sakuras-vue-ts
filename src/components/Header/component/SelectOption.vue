@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-04-27 17:25:41
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-06 14:43:11
+ * @LastEditTime: 2023-02-13 14:27:59
 -->
 <template>
   <div :class="'rg-options' + (' rg-options-' + deviceType())">
@@ -21,6 +21,10 @@
     <!-- 关于 -->
     <el-dropdown class="hidden-dropdown">
       <span class="el-dropdown-link" @click="turnPage('/category')">关于</span>
+    </el-dropdown>
+    <!-- 发布 -->
+    <el-dropdown class="hidden-dropdown">
+      <span class="el-dropdown-link" @click="openWritterPage()">发布</span>
     </el-dropdown>
     <!-- 个人中心 trigger="click"-->
     <el-dropdown class="hidden-dropdown">
@@ -61,6 +65,10 @@ const turnPage = (path: string) =>{
         params: {}
     }
     router.push(datas);
+}
+
+const openWritterPage = () => {
+   window.open(`${window.location.origin}/#/writter`);
 }
 
 const loginOrOut = (e: string) =>{

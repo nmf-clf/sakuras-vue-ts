@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-12-13 15:54:42
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-06 15:16:03
+ * @LastEditTime: 2023-02-13 14:17:00
 -->
 <template>
      <div class="admin-aside" >
@@ -84,12 +84,12 @@ const sideBarList = [{
     subs: [{
         title: 'Markdown编辑器',
         name: 'AdminMarkdown',
-        path: `/admin/writter/markdown/${Utils.utoa(JSON.stringify({ noneHeader: true }))}`,
+        path: `/admin/editor/markdown/${Utils.utoa(JSON.stringify({ noneHeader: true }))}`,
         icon: Message,
     },{
         title: '富文本编辑器',
-        name: 'AdminEditor',
-        path: '/admin/writter/editor',
+        name: 'AdminRichText',
+        path: '/admin/editor/richtext',
         icon: Message,
     }]
 },{

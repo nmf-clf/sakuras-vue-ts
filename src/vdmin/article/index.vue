@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-12-13 14:51:55
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-09 17:29:49
+ * @LastEditTime: 2023-02-13 14:13:26
 -->
 <template>
     <div class="container">
@@ -106,7 +106,7 @@ const tableData: DataItemType[] = reactive([]);
 const btns = [
     { text: '新增文章', type: '1', handleClick: () =>{
         router.push({
-            path: `/admin/writter/markdown/${Utils.utoa(JSON.stringify({
+            path: `/admin/editor/markdown/${Utils.utoa(JSON.stringify({
                 username: 'niumengfei'
             }))}`,
         })
@@ -179,7 +179,7 @@ const getArticleDetail = (row: any) => {
         console.log('文章详情=>', res.data);
         router.push({
             /* params传参 写法一 */
-            path: `/admin/writter/markdown/${Utils.utoa(JSON.stringify({
+            path: `/admin/editor/markdown/${Utils.utoa(JSON.stringify({
                 ...row,
                 username: 'niumengfei'
             }))}`,

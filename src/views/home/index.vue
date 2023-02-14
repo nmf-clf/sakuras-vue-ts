@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-04-06 23:49:03
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-08 17:34:22
+ * @LastEditTime: 2023-02-13 16:44:32
 -->
 <template>
     <!-- 背景图片 -->
@@ -16,6 +16,7 @@
         :src="require('@/assets/imgs/home_bg.jpg')"
     />
     <!-- 按钮 -->
+    <p class="home-middle-text">{{ homeMiddleText }}</p>
     <svg t="1674892605582" class="icon-down" @click="scrollTopToBottom" viewBox="0 0 1664 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3900" width="24" height="24"><path d="M1560.32 103.68c-52.48-52.48-136.96-52.48-189.44 0L832 642.56 291.84 103.68C239.36 51.2 154.88 51.2 102.4 103.68c-52.48 52.48-52.48 136.96 0 189.44L730.88 921.6c26.88 26.88 64 39.68 99.84 38.4 35.84 1.28 72.96-10.24 101.12-38.4l628.48-628.48c52.48-52.48 52.48-138.24 0-189.44z" fill="#ffffff" p-id="3901"></path></svg>
     <!-- 内容区域 -->
     <el-main class="new-main">
@@ -93,6 +94,9 @@ const styleObject = reactive({ height: document.body.clientHeight + 'px' });
 const articles: DataItemType[] = reactive([]);
 const hasMoreArticle = ref(true);
 const isLoading = ref(false);
+const copyTextArr = ['欢迎来到我的小窝', '读很多的书，走很远的路，见很多的人'];
+const homeMiddleText = ref('');
+let textIndex = 0;
 let page = 1;
 let pageSize = 5;
 const imgUrls = [
@@ -107,6 +111,7 @@ const imgUrls = [
 onMounted(() => {
     getArticleList(); // 获取文章列表
     getDictionaryList(); // 获取字典列表
+    setTimeout(() => { createTypewriter() }, 1000); // 创建打字机效果
     // 判断是否是第一次访问此网站
     if(!localStorage.getItem('IS_VISIT')){
         document.documentElement.scrollTop = document.body.clientHeight;
@@ -135,7 +140,7 @@ const getDictionaryList = () => {
         store.dispatch('user/saveDictionary', dictironary)
     })
 }
-
+// 点击 ↓ 滚动 1个 vh 高度
 const scrollTopToBottom = () => {
     let speed = 1;
     let timetop = setInterval(function(){
@@ -146,7 +151,31 @@ const scrollTopToBottom = () => {
         }
     }, 10)
 }
-
+// 创建打字机效果
+const createTypewriter = () => {
+    let index = 0;
+    const copyText = copyTextArr[textIndex];
+    let timer = setInterval(()=>{
+        homeMiddleText.value = homeMiddleText.value + copyText[index];
+        index += 1;
+        if(index >= copyText.length){
+            clearInterval(timer);
+            setTimeout(() => {
+                let clearTimer = setInterval(()=>{
+                    index -= 1;
+                    homeMiddleText.value = homeMiddleText.value.slice(0, index);
+                    if(index === 0){
+                        clearInterval(clearTimer);
+                        textIndex = textIndex ? 0 : 1;
+                        setTimeout(() => {
+                            createTypewriter();
+                        }, 1000);
+                    }
+                }, 70)
+            }, 1000);
+        }
+    }, 200)
+}
 const onErrorImg = (e: any) =>{
 }
 // 主页大图加载完毕后，返回到图片主页
@@ -164,10 +193,11 @@ const imgLoaded = (index: number) => {
 }
 
 const viewDetails = (item: any, index: number) => {
-    
     const newWindow = window.open(`${window.location.origin}/#/article/${item._id}`) as any;
-    newWindow.onload = () => {
-        newWindow.document.title = item.title + ' - 夜语清梦';
+    newWindow.onload = () => { 
+        let _t = item.title + ' - 夜语清梦';
+        localStorage.setItem('DOCUMENT_TITLE', _t); // 这里使用 SessionStorage 出现问题：每次获取的值都是上一次的值
+        newWindow.document.title = _t;
     }
     // router.push({ path: `/article/${item._id}` });
 }
@@ -231,6 +261,23 @@ const getArticleList = () => {
     background-attachment: fixed;
     background-size: cover;
     background-position: center center;
+}
+.home-middle-text{
+    width: 500px;
+    height: 50px;
+    position: absolute;
+    left: 50%;
+    top: 55%;
+    margin-left: -250px;
+    margin-top: -25px;
+    text-align: center;
+    color: #fff;
+    font-size: 1.2rem;
+}
+.home-middle-text::after{
+      content: '|';
+      color:darkgray;
+      animation: blink 1s infinite;
 }
 .icon-down{
     position: absolute;

@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2023-01-31 14:31:26
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-07 14:14:06
+ * @LastEditTime: 2023-02-13 10:16:04
 -->
 <template>
     <md-editor
@@ -71,7 +71,8 @@ if(htmlSize){
     font-size: 0.8rem;
     letter-spacing: 1px;
     color: #7e7777;
-   
+    height: 50vh;
+    overflow-y: scroll;
     .md-editor-catalog-active > span{
         color: #005bb7;
     }

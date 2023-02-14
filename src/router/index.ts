@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-11-07 15:18:04
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-07 15:42:48
+ * @LastEditTime: 2023-02-13 14:22:01
  */
 /* 引入路由模块，和vue2.0方式不同 */
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'; //导入
@@ -86,24 +86,27 @@ const routes: Array<RouteRecordRaw> = [
                 name: 'AdminStatistics',
                 meta: { title: '统计模块', permiss: '6' },
             },{
-                path: 'writter',
-                // component: () => import('@/vdmin/writter/index.vue'),
-                // name: 'AdminEditor',
-                // meta: { title: '富文本编辑器', permiss: '1' },
+                path: 'editor',
                 children: [{
-                    path: 'editor',
-                    component: () => import('@/vdmin/writter/index.vue'),
-                    name: 'AdminEditor',
+                    path: 'richtext',
+                    component: () => import('@/vdmin/editor/RichText.vue'),
+                    name: 'AdminRichText',
                     meta: { title: '富文本编辑器', permiss: '7' },
                 },{
                     path: 'markdown/:row',
-                    component: () => import('@/vdmin/writter/Markdown.tsx'),
+                    component: () => import('@/vdmin/editor/Markdown.tsx'),
                     name: 'AdminMarkdown',
                     meta: { title: 'Markdown编辑器', permiss: '8' },
                 }]
             }
         ]
     },
+    {
+        path: '/writter',
+        component: () => import('@/vdmin/writter/index.vue'),
+        name: 'Writter',
+        meta: { title: '创作' },
+    }
 ];
 // 3. 创建路由实例并传递 `routes` 配置
 const router = createRouter({
@@ -115,7 +118,6 @@ const router = createRouter({
 /* 路由前置守卫 */
 router.beforeEach((to, from, next) => {
     // NProgress.start()
-    // document.title = `${to.meta.title} | sakuras`;
     const userInfo = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo') || '') : {};
     if(['/home', '/article'].includes(to.path) || to.meta.noNeedLogin) { //排除不需要登录的页面
         next();
@@ -130,8 +132,14 @@ router.beforeEach((to, from, next) => {
 router.afterEach((to, from, next) => {
     console.log('router.afterEach>>>', to, from);
     const title = to.meta.title as string;
-    if(from.name){
-        document.title = title ? title + ' - 夜语清梦' : '夜语清梦';
+    if(to.name){
+        let _t =  title ? title + ' - 夜语清梦' : '夜语清梦' as string;
+        if(to.name === 'FrontArticle'){
+            document.title = localStorage.getItem('DOCUMENT_TITLE') || '夜语清梦';
+        }else{
+            localStorage.setItem('DOCUMENT_TITLE', _t);
+            document.title = localStorage.getItem('DOCUMENT_TITLE') || '夜语清梦';
+        }
     }
     // NProgress.done()
     loadingProgress();
