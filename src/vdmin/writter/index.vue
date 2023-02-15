@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-12-13 14:51:55
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-13 18:14:31
+ * @LastEditTime: 2023-02-15 17:22:24
 -->
 <template>
     <div class="writter">
@@ -19,11 +19,11 @@
                     key="dragggable"
                     :list="categoryList"
                     v-bind="dragOptions"
-                    @start="dragOpeartion(1)"
-                    @end="dragOpeartion(0)"
+                    @start="cateDragOpeartion(1)"
+                    @end="cateDragOpeartion(0)"
                 >
-                <template #item="{ element }">
-                    <li :key="element.name">
+                <template #item="{ element, index }">
+                    <li :key="element.name" :class="cateIndex == index ? 'active' : ''" @click="switchCateItem(element, index)">
                         {{ element.name }}
                     </li>
                 </template>
@@ -40,17 +40,17 @@
                     class="note-list-group"
                     item-key="name"
                     key="dragggable"
-                    :list="categoryList"
+                    :list="noteList"
                     v-bind="dragOptions"
-                    @start="dragOpeartion(1)"
-                    @end="dragOpeartion(0)"
+                    @start="noteDragOpeartion(1)"
+                    @end="noteDragOpeartion(0)"
                 >
                     <template #item="{ element, index }">
-                        <li :key="element.name" :class="noteIndex == index ? 'active' : ''" @click="switchNoteItem(element, index)">
+                        <li :key="index" :class="noteIndex == index ? 'active' : ''" @click="switchNoteItem(element, index)">
                             <img class="book" />
                             <div class="desc">
                                 <div class="title">
-                                    {{ element.name }}
+                                    {{ element?.title }}
                                 </div>
                                 <div class="brief"></div>
                             </div>
@@ -58,8 +58,18 @@
                     </template>
                 </draggable>
             </transition-group>
+            <div class="new-note new-note-bt" @click="addArticle">
+                <svg t="1676277252611" class="icon-add" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3761" width="16" height="16"><path d="M514.048 62.464q93.184 0 175.616 35.328t143.872 96.768 96.768 143.872 35.328 175.616q0 94.208-35.328 176.128t-96.768 143.36-143.872 96.768-175.616 35.328q-94.208 0-176.64-35.328t-143.872-96.768-96.768-143.36-35.328-176.128q0-93.184 35.328-175.616t96.768-143.872 143.872-96.768 176.64-35.328zM772.096 576.512q26.624 0 45.056-18.944t18.432-45.568-18.432-45.056-45.056-18.432l-192.512 0 0-192.512q0-26.624-18.944-45.568t-45.568-18.944-45.056 18.944-18.432 45.568l0 192.512-192.512 0q-26.624 0-45.056 18.432t-18.432 45.056 18.432 45.568 45.056 18.944l192.512 0 0 191.488q0 26.624 18.432 45.568t45.056 18.944 45.568-18.944 18.944-45.568l0-191.488 192.512 0z" p-id="3762" fill="#515151"></path></svg>
+                在下方新建文章
+            </div>
         </div>
-        <div class="editor">编辑器</div>
+        <div class="editor">
+            <el-input class="title" v-model="noteDetail.title" placeholder="请输入文章标题" />
+            <MdWritter
+                :noteDetail="noteDetail"
+                :content="noteDetail.content"
+            />
+        </div>
     </div>
 </template>
 <script lang="ts" setup>
@@ -67,6 +77,8 @@ import draggable from 'vuedraggable';
 import { onMounted, ref, reactive } from 'vue';
 import { DictionaryApi, ArticleApi } from "@/api";
 import { ElMessage } from 'element-plus';
+import MdWritter from "./MdWritter.vue";
+import { Utils } from "@/utils";
 
 const message = [
   'vue.draggable',
@@ -91,9 +103,13 @@ const dragOptions = ref({
 });
 const drag = ref(false);
 const categoryList = <any>reactive([]); // 分类列表
+const cateIndex = ref(0); // 分类下标
 const noteList = <any>reactive([]); // 笔记列表
-const noteIndex = ref(0);
-
+const noteIndex = ref(0); // 笔记下标
+let currentCate: any; // 当前选中的分类对象
+let currentNote: any; // 当前选中的笔记对象
+const noteDetail = ref({ title: '', content: '' }); // 标题内容
+  
 onMounted(() => {
     DictionaryApi.GetDictionaryListAjax({})
     .then(res=> {
@@ -107,13 +123,15 @@ onMounted(() => {
                 order: index + 1
             })
         })
-        getFirstCateList({
-            type: articleList![0].label
+        getNoteList({
+            type: articleList![0].label, // 默认查询第一个分类的笔记
+            sortByIndex: true,
+            loading: '.note', 
         });
     })
 })
-// 默认获取分类一的文章
-const getFirstCateList = (params: any) => {
+// 获取分类对应的文章
+const getNoteList = (params: any) => {
     ArticleApi.GetNewArticleListAjax({
         username: 'niumengfei',
         page: 1,
@@ -121,45 +139,88 @@ const getFirstCateList = (params: any) => {
         ...params,
     })
     .then(res => {
-        let list = res.data;
+        noteList.length = 0; // 清空响应式数组数据
+        let firstlist = res.data.list;
+        firstlist?.map((item, index) => {
+            noteList.push({ // 默认查询第一个分类的笔记
+                ...item,
+                order: index + 1
+            })
+        })
+        noteDetail.value = noteList[0] || {}; // 默认获取第一个笔记
     })
 }
-const dragOpeartion = (start: number) => {
+// 编辑列表顺序
+const cateDragOpeartion = (start: number) => {
     if(start){
-        console.log('start');
-        drag.value = true
+        drag.value = true;
+        currentCate = categoryList[cateIndex.value]; // 1. 找出当前ref下标对应的分类
     }else{
         drag.value = false;
+        let newIndex = 0;
+        categoryList.map((v: any, i: number) =>{ // 2. 并且获取此分类的新的index，
+            if(v.label == currentCate.label){
+                newIndex = i;
+            }
+        })
+        cateIndex.value = newIndex; // 3. 然后改变ref下标的值，使得 .active 样式可以与 上次选中的同步
         let newChildrenIdList = categoryList.map((v: any) => v._id);
-        console.log('end', newChildrenIdList);
-        DictionaryApi.ResetDictionaryIndexAjax({
-            newChildrenIdList
-        })
-        .then(res =>{
-            // ElMessage({ type: 'success', message: `排序更新成功` });
-        })
+        DictionaryApi.ResetDictionaryIndexAjax({ newChildrenIdList })
     }
+}
+// 编辑文章顺序
+const noteDragOpeartion = (start: number) => {
+    if(start){
+        drag.value = true;
+        currentNote = noteList[noteIndex.value]; // 1. 找出当前ref下标对应的文章
+    }else{
+        drag.value = false;
+        let newIndex = 0;
+        noteList.map((v: any, i: number) =>{ // 2. 并且获取此文章的新的index
+            if(v.title == currentNote.title){
+                newIndex = i;
+            }
+        })
+        noteIndex.value = newIndex; // 3. 然后改变ref下标的值，使得 .active 样式可以与 上次选中的同步
+        let newChildrenIdList = noteList.map((v: any) => v._id);
+        ArticleApi.ResetArticleIndexAjax({ newChildrenIdList })
+    }
+}
+// 切换分类
+const switchCateItem = (element: any, index: number) => {
+    cateIndex.value = index;
+    noteIndex.value = 0; // 重置笔记下标
+    getNoteList({
+        type: categoryList![index].label, // 默认获取一级分类的文章
+        sortByIndex: true,
+        loading: '.note', 
+    });
 }
 // 切换文章
 const switchNoteItem = (element: any, index: number) => {
     noteIndex.value = index;
+    noteDetail.value = noteList[index] || {};
 };
-
-const sort = () => {
-  console.log('here');
-  list.value = list.value.sort((a, b) => a.order - b.order);
-};
-
-
+// 新建文章
+const addArticle = () => {
+    let parms = {
+        title: Utils.moment().currentDate(),
+        content: '',
+    }
+    noteList.push(parms)
+    noteIndex.value = noteList + 1;
+    noteDetail.value = parms;
+}
 </script>
 
 <style lang="less" scoped>
 .writter{
+     font-family:"Times New Roman",Times,serif;
+    // font-family: "楷体", "楷体_GB2312", serif;
     display: flex;
     flex-direction: row;
     width: 100%;
     height: 100vh;
-    cursor: pointer;
     .category{
         width: 16.6%;
         background: #404040;
@@ -178,12 +239,14 @@ const sort = () => {
             margin: 30px 0;
             font-size: 1rem;
             border-radius: 20px;
+            cursor: pointer;
         }
         .new-category{
             color: #fff;
             width: 100%;
             display: flex;
             align-items: center;
+            cursor: pointer;
             .icon-add{
                 margin: 0 5px 0 12px;
             }
@@ -193,15 +256,18 @@ const sort = () => {
             color: #fff;
             margin-top: 10px;
             font-size: 1rem;
+            cursor: pointer;
             li{
                 padding-left: 10px;
                 height: 40px;
                 display: flex;
                 align-items: center;
                 list-style: none;
+                border-left: 5px solid rgba(255, 255, 255, 0);
             }
-            li:nth-child(1){
+            .active{
                 background: #666;
+                border-left: 5px solid #ec7259;
             }
             li:hover{
                 background: #666;
@@ -226,22 +292,32 @@ const sort = () => {
             font-size: 0.9rem;
             color: #595959;
             padding: 20px 0;
+            cursor: pointer;
             .icon-add{
                 margin: 0 5px 0 30px;
             }
         }
+        .new-note-bt{
+            font-size: 0.8rem;
+            color: #666;
+        }
+        .new-note:hover,
+        .new-note-bt:hover{
+            color: #000;
+        }
         .note-list-group{
             width: 100%;
+            cursor: pointer;
             li{
                 padding-left: 10px;
                 height: 90px;
                 display: flex;
                 align-items: center;
                 border-bottom: 1px solid #d8d8d8;
-                border-left: 5px solid #fff;
                 list-style: none;
                 position: relative;
                 padding: 0px 10px 0px 60px;
+                border-left: 5px solid rgba(255, 255, 255, 0);
                 .book{
                     position: absolute;
                     top: 30px;
@@ -266,6 +342,27 @@ const sort = () => {
     }
     .editor{
         flex: 1;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        .title{
+            height: 60px;
+            :deep(.el-input__wrapper){
+                box-shadow: none;
+            }
+            :deep(.el-input__inner){
+                height: 100%;
+                font-size: 1.3rem;
+                border: none;
+                outline: none;
+                box-shadow: none;
+            }
+            :deep(.is-focus){
+                border: none;
+                outline: none;
+                box-shadow: none;
+            }
+        }
     }
 }
 </style>

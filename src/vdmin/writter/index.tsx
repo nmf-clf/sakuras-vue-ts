@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-12-30 15:03:31
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-09 17:32:12
+ * @LastEditTime: 2023-02-15 11:36:20
  */
 import { defineComponent, reactive, ref, onMounted } from 'vue';
 import { useRoute, useRouter } from "vue-router";
@@ -34,7 +34,7 @@ export default defineComponent({
         const store = useStore();
 
         const { dictionary={} } = store.getters.userInfo;
-
+        
         const formData = reactive({
             title,
             type,
@@ -62,31 +62,6 @@ export default defineComponent({
         console.log(dictionary);
         
         return () => (<>
-            {!noneHeader && <SelectGroup
-                gutter={20}
-                form={formData}
-                data={[
-                    { title: '文章标题', key: 'title', type: 'input' },
-                    { title: '文章类型', key: 'type', type: 'select', options: dictionary.articleType },
-                    { title: '文章标签', key: 'tag', type: 'mul-select', options: dictionary.articleTag },
-                ]}
-                onPublish={()=>{
-                    AddArticleAjax({
-                        _id,
-                        username,
-                        content: md.text,
-                        status: '已发布',
-                        ...formData
-                    })
-                    .then(res => {
-                        ElMessage.success('发布成功');
-                        router.push({
-                            path: `/admin/article`,
-                        })
-                    })
-                }}
-            />}
-            
             <MdEditor
                 /* Props说明 */
                 class='sakuras-markdown-editor' // 自定义类名
@@ -167,12 +142,6 @@ export default defineComponent({
                     alert(err.message);
                 }}
             />
-            {/* 目录 */}
-            <MdCatalog
-                editorId={md.id}
-                scrollElement={scrollElement}
-            />
-
         </>);
     }
 });

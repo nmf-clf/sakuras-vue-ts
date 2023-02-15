@@ -2,10 +2,11 @@
  * @Author: niumengfei
  * @Date: 2022-10-29 14:04:02
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-01-30 19:18:43
+ * @LastEditTime: 2023-02-15 17:17:36
  */
 import { StaticKey, DynamicKey, RSAKey } from './Const';
 import  { JSEncrypt }  from 'jsencrypt';
+import moment from "moment";
 var CryptoJS = require("crypto-js");
 
 // 公共方法
@@ -232,6 +233,15 @@ class Utils{
             if((curTime - lastTime) > wait){
                 func()
                 lastTime = curTime
+            }
+        }
+    }
+    // 日期
+    moment = () => {
+        return {
+            // 获取当前日期
+            currentDate: (type?: string) => {
+                return type ? moment().format(type) : moment().format('YYYY-MM-DD');
             }
         }
     }
