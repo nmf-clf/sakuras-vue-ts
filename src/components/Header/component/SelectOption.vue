@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-04-27 17:25:41
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-13 14:27:59
+ * @LastEditTime: 2023-02-17 10:41:14
 -->
 <template>
   <div :class="'rg-options' + (' rg-options-' + deviceType())">
@@ -18,17 +18,18 @@
     <el-dropdown class="hidden-dropdown">
       <span class="el-dropdown-link" @click="openPage('https://sakuras.group/sakuras-docs/')">笔记</span>
     </el-dropdown>
-    <!-- 关于 -->
-    <el-dropdown class="hidden-dropdown">
-      <span class="el-dropdown-link" @click="turnPage('/category')">关于</span>
-    </el-dropdown>
     <!-- 发布 -->
     <el-dropdown class="hidden-dropdown">
-      <span class="el-dropdown-link" @click="openWritterPage()">发布</span>
+        <span class="el-dropdown-link" @click="openWritterPage()">发布</span>
     </el-dropdown>
+    <!-- 关于 -->
+    <el-dropdown class="hidden-dropdown">
+        <span class="el-dropdown-link" @click="turnPage('/category')">关于我</span>
+    </el-dropdown>
+
     <!-- 个人中心 trigger="click"-->
     <el-dropdown class="hidden-dropdown">
-      <span class="el-dropdown-link">个人
+      <span class="el-dropdown-link">个人中心
         <el-icon class="el-icon--right"><arrow-down /></el-icon>
       </span>
       <template #dropdown>

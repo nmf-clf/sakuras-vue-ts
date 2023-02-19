@@ -2,16 +2,23 @@
  * @Author: niumengfei
  * @Date: 2022-12-13 14:51:55
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-15 17:22:24
+ * @LastEditTime: 2023-02-19 21:04:10
 -->
 <template>
     <div class="writter">
         <div class="category">
             <el-button class="back-home">回首页</el-button>
-            <div class="new-category">
+            <div class="new-category" @click="showNewCateName = !showNewCateName">
                 <svg t="1676271816247" class="icon-add" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2810" width="0.9rem" height="0.9rem"><path d="M925.696 384q19.456 0 37.376 7.68t30.72 20.48 20.48 30.72 7.68 37.376q0 20.48-7.68 37.888t-20.48 30.208-30.72 20.48-37.376 7.68l-287.744 0 0 287.744q0 20.48-7.68 37.888t-20.48 30.208-30.72 20.48-37.376 7.68q-20.48 0-37.888-7.68t-30.208-20.48-20.48-30.208-7.68-37.888l0-287.744-287.744 0q-20.48 0-37.888-7.68t-30.208-20.48-20.48-30.208-7.68-37.888q0-19.456 7.68-37.376t20.48-30.72 30.208-20.48 37.888-7.68l287.744 0 0-287.744q0-19.456 7.68-37.376t20.48-30.72 30.208-20.48 37.888-7.68q39.936 0 68.096 28.16t28.16 68.096l0 287.744 287.744 0z" p-id="2811" fill="#ffffff"></path></svg>
                 新建文集
             </div>
+            <!-- <transition> -->
+                <div v-if='showNewCateName' class="new-cate-name">
+                    <el-input class="cate-name" v-model="newCateName" placeholder="请输入文集名" />
+                    <el-button class="cn-submit">提交</el-button>
+                    <el-button class="cn-cancel" @click="showNewCateName = !showNewCateName">取消</el-button>
+                </div>
+            <!-- </transition> -->
             <transition-group>
                 <draggable
                     class="cate-list-group"
@@ -31,7 +38,7 @@
             </transition-group>
         </div>
         <div class="note">
-            <div class="new-note">
+            <div class="new-note" @click="addArticle('top')">
                 <svg t="1676277252611" class="icon-add" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3761" width="16" height="16"><path d="M514.048 62.464q93.184 0 175.616 35.328t143.872 96.768 96.768 143.872 35.328 175.616q0 94.208-35.328 176.128t-96.768 143.36-143.872 96.768-175.616 35.328q-94.208 0-176.64-35.328t-143.872-96.768-96.768-143.36-35.328-176.128q0-93.184 35.328-175.616t96.768-143.872 143.872-96.768 176.64-35.328zM772.096 576.512q26.624 0 45.056-18.944t18.432-45.568-18.432-45.056-45.056-18.432l-192.512 0 0-192.512q0-26.624-18.944-45.568t-45.568-18.944-45.056 18.944-18.432 45.568l0 192.512-192.512 0q-26.624 0-45.056 18.432t-18.432 45.056 18.432 45.568 45.056 18.944l192.512 0 0 191.488q0 26.624 18.432 45.568t45.056 18.944 45.568-18.944 18.944-45.568l0-191.488 192.512 0z" p-id="3762" fill="#515151"></path></svg>
                 新建文章
             </div>
@@ -58,7 +65,7 @@
                     </template>
                 </draggable>
             </transition-group>
-            <div class="new-note new-note-bt" @click="addArticle">
+            <div class="new-note new-note-bt" @click="addArticle('bottom')">
                 <svg t="1676277252611" class="icon-add" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3761" width="16" height="16"><path d="M514.048 62.464q93.184 0 175.616 35.328t143.872 96.768 96.768 143.872 35.328 175.616q0 94.208-35.328 176.128t-96.768 143.36-143.872 96.768-175.616 35.328q-94.208 0-176.64-35.328t-143.872-96.768-96.768-143.36-35.328-176.128q0-93.184 35.328-175.616t96.768-143.872 143.872-96.768 176.64-35.328zM772.096 576.512q26.624 0 45.056-18.944t18.432-45.568-18.432-45.056-45.056-18.432l-192.512 0 0-192.512q0-26.624-18.944-45.568t-45.568-18.944-45.056 18.944-18.432 45.568l0 192.512-192.512 0q-26.624 0-45.056 18.432t-18.432 45.056 18.432 45.568 45.056 18.944l192.512 0 0 191.488q0 26.624 18.432 45.568t45.056 18.944 45.568-18.944 18.944-45.568l0-191.488 192.512 0z" p-id="3762" fill="#515151"></path></svg>
                 在下方新建文章
             </div>
@@ -80,21 +87,8 @@ import { ElMessage } from 'element-plus';
 import MdWritter from "./MdWritter.vue";
 import { Utils } from "@/utils";
 
-const message = [
-  'vue.draggable',
-  'draggable',
-  'component',
-  'for',
-  'vue.js 2.0',
-  'based',
-  'on',
-  'Sortablejs',
-];
-const list = ref(
-  message.map((name, index) => {
-    return { name, order: index + 1 };
-  })
-);
+const showNewCateName = ref(false);
+const newCateName = ref('');
 const dragOptions = ref({
   animation: 200,
   group: 'description',
@@ -108,15 +102,17 @@ const noteList = <any>reactive([]); // 笔记列表
 const noteIndex = ref(0); // 笔记下标
 let currentCate: any; // 当前选中的分类对象
 let currentNote: any; // 当前选中的笔记对象
-const noteDetail = ref({ title: '', content: '' }); // 标题内容
+const noteDetail = ref({ 
+    title: '', // Y
+    content: '', // Y
+}); // 标题内容
   
 onMounted(() => {
     DictionaryApi.GetDictionaryListAjax({})
     .then(res=> {
         let list = res.data || {};
-        let articleList = list.filter(v => v.type === 'articleType')[0].children;
-        console.log(articleList);
-        articleList?.map((item, index) => {
+        let cates = list.filter(v => v.type === 'articleType')[0].children;
+        cates?.map((item, index) => {
             categoryList.push({
                 ...item,
                 name: item.label,
@@ -124,14 +120,14 @@ onMounted(() => {
             })
         })
         getNoteList({
-            type: articleList![0].label, // 默认查询第一个分类的笔记
+            type: cates![0].label, // 默认查询第一个分类的笔记
             sortByIndex: true,
             loading: '.note', 
         });
     })
 })
 // 获取分类对应的文章
-const getNoteList = (params: any) => {
+const getNoteList = (params: any, noteIndex?: number) => {
     ArticleApi.GetNewArticleListAjax({
         username: 'niumengfei',
         page: 1,
@@ -147,7 +143,7 @@ const getNoteList = (params: any) => {
                 order: index + 1
             })
         })
-        noteDetail.value = noteList[0] || {}; // 默认获取第一个笔记
+        noteDetail.value = noteList[noteIndex || 0] || {}; // 默认获取第一个笔记
     })
 }
 // 编辑列表顺序
@@ -202,14 +198,41 @@ const switchNoteItem = (element: any, index: number) => {
     noteDetail.value = noteList[index] || {};
 };
 // 新建文章
-const addArticle = () => {
-    let parms = {
+const addArticle = (type: string) => {
+    let params = {
+        _id: null,
         title: Utils.moment().currentDate(),
         content: '',
+        type: categoryList[cateIndex.value].value,
+        username: 'niumengfei',
+        status: '已发布',
     }
-    noteList.push(parms)
-    noteIndex.value = noteList + 1;
-    noteDetail.value = parms;
+    if(type == 'top'){
+        params['index'] = Number(noteList[0].index) - 1, 
+        noteList.unshift(params)
+        noteIndex.value = 0;
+        noteDetail.value = params;
+    }
+    if(type == 'bottom'){
+        params['index'] = Number(noteList[noteList.length-1].index) + 1, 
+        noteList.push(params)
+        noteIndex.value = noteList.length - 1;
+        noteDetail.value = params;
+    }
+    addArticleRequest(params);
+}
+const addArticleRequest = (params: any) => { 
+    ArticleApi.AddNewArticleAjax({
+        ...params
+    })
+    .then(res => {
+        let data = res.data;
+        // noteDetail.value = data;
+        getNoteList({
+            type: categoryList![cateIndex.value].label, // 默认查询第一个分类的笔记
+            sortByIndex: true,
+        }, noteIndex.value);
+    })
 }
 </script>
 
@@ -240,6 +263,7 @@ const addArticle = () => {
             font-size: 1rem;
             border-radius: 20px;
             cursor: pointer;
+            z-index: 10;
         }
         .new-category{
             color: #fff;
@@ -247,6 +271,8 @@ const addArticle = () => {
             display: flex;
             align-items: center;
             cursor: pointer;
+            background: #404040;
+            z-index: 10;
             .icon-add{
                 margin: 0 5px 0 12px;
             }
@@ -277,6 +303,49 @@ const addArticle = () => {
             opacity: 0.5;
             background: #c8ebfb;
         }
+        .new-cate-name{
+            width: 80%;
+            margin: 15px auto;
+            z-index: 2;
+            :deep(.cate-name){
+                .el-input__wrapper{
+                    background: #666;
+                    box-shadow: none;
+                }
+                .el-input__inner{
+                    color: #fff;
+                }
+                .is-focus{
+                    border: none;
+                    outline: none;
+                    box-shadow: none;
+                }
+            }
+            .cn-submit, .cn-cancel{
+                margin-top: 10px;
+                border-radius: 10px;
+                background: #404040;
+            }
+            .cn-submit{
+                color: #42c02e;
+                border-color: #42c02e;
+            }
+            .cn-cancel{
+                color: #Fff;
+                border: none;
+            }
+        }
+        .v-enter-active,
+        .v-leave-active {
+            transition: transform 0.5s ease;
+        }
+
+        .v-enter-from{
+            transform: translateY(-100%);
+        }
+        .v-leave-to {
+            transform: translateY(0%);
+        }
     }
     .note{
         width: 25%;
@@ -296,6 +365,9 @@ const addArticle = () => {
             .icon-add{
                 margin: 0 5px 0 30px;
             }
+        }
+        .new-note:first-child{
+            border-bottom: 1px solid #E6E6E6;
         }
         .new-note-bt{
             font-size: 0.8rem;

@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2023-01-31 14:31:26
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-15 17:06:27
+ * @LastEditTime: 2023-02-17 12:26:38
 -->
 <template>
     <md-editor
@@ -90,7 +90,8 @@ const state = reactive({
     '-',
     'fullscreen',
     ],
-    content: ''
+    content: '',
+    _id: '',
 });
 /* 坑点：
     由于 props.content 默认值为空，因此 srcipt 代码块 初始化仅执行一次，
@@ -101,6 +102,8 @@ const state = reactive({
 
 watch(content, (newValue, oldValue) => {
     state.content = newValue;
+    console.log('xxxxxxxxxxxxxxxxxxsssssssssss', props.noteDetail);
+    
 },{ immediate:true })
 
 const onChange = (value: string) => {
@@ -112,13 +115,17 @@ const onSave = (value: string) => {
     ArticleApi.AddNewArticleAjax({
         _id: props.noteDetail?._id,
         title: props.noteDetail?.title,
-        username: props.noteDetail?.username,
+        username: props.noteDetail?.username || 'niumengfei',
+        type: props.noteDetail?.type,
+        index: props.noteDetail?.index,
         content: value,
         status: '已发布',
         // loading: '.editor',
     })
     .then(res => {
+        // let data = res.data;
         saveVal.value = '已保存';
+        // state._id = data._id;
     })
     .catch(res => {
         saveVal.value = '保存失败';

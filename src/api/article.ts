@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-12-07 14:13:27
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-15 16:58:51
+ * @LastEditTime: 2023-02-17 11:05:23
  */
 import AxiosAjax from "@/utils/http";
 import { GetListParams, ArticleListRes, ArticleListResItem } from "./model/articleModel";
@@ -37,7 +37,7 @@ export const ResetArticleIndexAjax = (data: any) =>
 AxiosAjax.post<any>({ url: Api.resetIndex, data, loading: data.loading})
 // 文章新增/更新
 export const AddNewArticleAjax = (data: any) => 
-    AxiosAjax.post<ArticleListRes>({ url: Api.addArticle, data, loading: data.loading })
+    AxiosAjax.post<ArticleListResItem>({ url: Api.addArticle, data, loading: data.loading })
 
 export default {
     GetArticleListAjax,
