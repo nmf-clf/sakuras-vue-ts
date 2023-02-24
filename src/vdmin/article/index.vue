@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-12-13 14:51:55
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-13 14:13:26
+ * @LastEditTime: 2023-02-24 16:48:12
 -->
 <template>
     <div class="container">
@@ -81,7 +81,7 @@ import { useStore } from "vuex";
 import { ElMessageBox, ElMessage } from 'element-plus';
 import type { Action } from 'element-plus';
 import { TableGroup, ButtonGroup, SelectGroup } from '@/components';
-import { Utils } from "@/utils";
+import { Utils, User } from "@/utils";
 import { Edit, Delete, Warning } from '@element-plus/icons-vue';
 import { GetArticleListAjax, GetArticleDetailAjax, deleteArticleAjax } from "@/api/article";
 import Static, { DataItemType } from "./type";
@@ -91,6 +91,7 @@ const store = useStore();
 
 const { dictionary={} } = store.getters.userInfo;
 
+const username = User.get().username;
 const showAddArticle = ref(false);
 const formData = reactive({
     title: '',
@@ -107,7 +108,7 @@ const btns = [
     { text: '新增文章', type: '1', handleClick: () =>{
         router.push({
             path: `/admin/editor/markdown/${Utils.utoa(JSON.stringify({
-                username: 'niumengfei'
+                username
             }))}`,
         })
         
@@ -137,7 +138,7 @@ const AjaxOperation = (type: string, data: any) => {
 // 表格查询
 const handleSearch = (e: any) => {
     GetArticleListAjax({ 
-        username: 'niumengfei',
+        username,
         page: 1,
         pageSize: 10,
         ...formData,
@@ -159,7 +160,7 @@ const currentChange = (value: number) => {
 // 查询
 const getArticleList = (value: number = 1) => {
     GetArticleListAjax({ 
-        username: 'niumengfei',
+        username,
         page: value,
         pageSize: 10,
     })
@@ -181,7 +182,7 @@ const getArticleDetail = (row: any) => {
             /* params传参 写法一 */
             path: `/admin/editor/markdown/${Utils.utoa(JSON.stringify({
                 ...row,
-                username: 'niumengfei'
+                username
             }))}`,
             /* params传参 写法二 */
             // 对象写法只能和 name 搭配使用，不能和 path 搭配

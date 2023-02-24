@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-04-06 23:49:03
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-13 16:44:32
+ * @LastEditTime: 2023-02-24 16:51:22
 -->
 <template>
     <!-- 背景图片 -->
@@ -86,9 +86,12 @@ import { ElMain, ElCard } from 'element-plus';
 import { GetNewArticleListAjax } from "@/api/article";
 import { DataItemType } from "@/vdmin/article/type";
 import { DictionaryApi } from '@/api';
+import { User } from '@/utils';
 
 const store = useStore();
 const router = useRouter();
+
+const username = User.get().username || 'niumengfei';
 
 const styleObject = reactive({ height: document.body.clientHeight + 'px' });
 const articles: DataItemType[] = reactive([]);
@@ -206,7 +209,7 @@ const viewDetails = (item: any, index: number) => {
 const getArticleList = () => {
     isLoading.value = true;
     GetNewArticleListAjax({ 
-        username: 'niumengfei',
+        username,
         page: page,
         pageSize,
     })

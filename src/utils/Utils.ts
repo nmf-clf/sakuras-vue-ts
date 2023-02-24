@@ -2,9 +2,9 @@
  * @Author: niumengfei
  * @Date: 2022-10-29 14:04:02
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-15 17:17:36
+ * @LastEditTime: 2023-02-24 14:38:46
  */
-import { StaticKey, DynamicKey, RSAKey } from './Const';
+import { StaticKey, DynamicKey, RSAPublicKey } from './Const';
 import  { JSEncrypt }  from 'jsencrypt';
 import moment from "moment";
 var CryptoJS = require("crypto-js");
@@ -30,8 +30,7 @@ class Utils{
         };
         // 加密
         this.encrypt = {
-            // 动态DES
-            DynamicDES: (message: string) => { 
+            DynamicDES: (message: string) => { // 动态DES
                 console.log('DynamicKey::', DynamicKey);
                 var keyHex = CryptoJS.enc.Utf8.parse(DynamicKey);
                 var encrypted = CryptoJS.DES.encrypt(message, keyHex, {
@@ -40,8 +39,7 @@ class Utils{
                 });
                 return encrypted.ciphertext.toString();
             },
-            // 静态DES 
-            StaticDES: (message: string) =>{
+            StaticDES: (message: string) =>{  // 静态DES 
                 var keyHex = CryptoJS.enc.Utf8.parse(StaticKey);
         
                 var encrypted = CryptoJS.DES.encrypt(message, keyHex, {
@@ -50,10 +48,9 @@ class Utils{
                 });
                 return encrypted.ciphertext.toString();
             }, 
-            // RSA
-            RSA(Key24: string) {
+            RSA(Key24: string) { // RSA
                 const encrypt = new JSEncrypt();
-                encrypt.setPublicKey(RSAKey);
+                encrypt.setPublicKey(RSAPublicKey);
                 const encrypted = encrypt.encrypt(Key24);
                 return encrypted;
             }
@@ -61,6 +58,7 @@ class Utils{
         // 解密
         this.decrypt = {
             DynamicDES: (ciphertext: string) => {
+                console.log('DynamicKeyDynamicKeyDynamicKeyDynamicKey', DynamicKey);
                 try{
                     var keyHex = CryptoJS.enc.Utf8.parse(DynamicKey);
         
@@ -90,6 +88,12 @@ class Utils{
                 }catch(err){
                     console.log('decryptByDES2-err=====================>',err)
                 }
+            },
+            RSA(Key24: string) {
+                const decrypt = new JSEncrypt();
+                decrypt.setPrivateKey('RSA-私钥');
+                const decrypted = decrypt.decrypt(Key24);
+                return decrypted;
             }
         }
     }
@@ -153,67 +157,6 @@ class Utils{
             pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
         }
         return pwd;
-    }
-    // 动态DES加密
-    DynamicEncryptByDES = (message: string) => {
-        var keyHex = CryptoJS.enc.Utf8.parse(DynamicKey);
-
-        var encrypted = CryptoJS.DES.encrypt(message, keyHex, {
-            mode: CryptoJS.mode.ECB,
-            padding: CryptoJS.pad.Pkcs7
-        });
-        return encrypted.ciphertext.toString();
-    }
-    // 动态DES解密
-    DynamicDecryptByDES = (ciphertext: string) => {
-        try{
-            var keyHex = CryptoJS.enc.Utf8.parse(DynamicKey);
-
-            var decrypted = CryptoJS.DES.decrypt({
-                ciphertext: CryptoJS.enc.Hex.parse(ciphertext)
-            }, keyHex, {
-                mode: CryptoJS.mode.ECB,
-                padding: CryptoJS.pad.Pkcs7
-            });
-            var result_value = decrypted.toString(CryptoJS.enc.Utf8);
-            return result_value;
-        }catch(err){
-            console.log('decryptByDES-err====================>',err)
-        }
-    }
-    // DES加密(针对用户信息本地存储固定key加密)
-    StaticEncryptByDES2 = (message: string) => {
-        var keyHex = CryptoJS.enc.Utf8.parse(StaticKey);
-
-        var encrypted = CryptoJS.DES.encrypt(message, keyHex, {
-            mode: CryptoJS.mode.ECB,
-            padding: CryptoJS.pad.Pkcs7
-        });
-        return encrypted.ciphertext.toString();
-    }
-    // DES解密(针对用户信息本地存储固定key解密)
-    StaticDecryptByDES2 = (ciphertext: string) => {
-        try{
-            var keyHex = CryptoJS.enc.Utf8.parse(StaticKey);
-            var decrypted = CryptoJS.DES.decrypt({
-                ciphertext: CryptoJS.enc.Hex.parse(ciphertext)
-            }, keyHex, {
-                mode: CryptoJS.mode.ECB,
-                padding: CryptoJS.pad.Pkcs7
-            });
-            var result_value = decrypted.toString(CryptoJS.enc.Utf8);
-            return result_value;
-        }catch(err){
-            console.log('decryptByDES2-err=====================>',err)
-        }
-    }
-    // RSA加密 
-    encryptByRSA(Key24: string) {
-        // console.log('随机Key24==>',Key24)
-        const encrypt = new JSEncrypt();
-        encrypt.setPublicKey(RSAKey);
-        const encrypted = encrypt.encrypt(Key24);
-        return encrypted;
     }
     // 防抖
     debounce = (func: ()=>void, wait: number) =>{

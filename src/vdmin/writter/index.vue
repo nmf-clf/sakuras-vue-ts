@@ -2,21 +2,21 @@
  * @Author: niumengfei
  * @Date: 2022-12-13 14:51:55
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-19 21:04:10
+ * @LastEditTime: 2023-02-24 18:28:13
 -->
 <template>
     <div class="writter">
         <div class="category">
-            <el-button class="back-home">回首页</el-button>
-            <div class="new-category" @click="showNewCateName = !showNewCateName">
+            <el-button class="back-home" @click="router.push('/home')">回首页</el-button>
+            <div class="new-category" @click="showNewCatebox = !showNewCatebox">
                 <svg t="1676271816247" class="icon-add" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2810" width="0.9rem" height="0.9rem"><path d="M925.696 384q19.456 0 37.376 7.68t30.72 20.48 20.48 30.72 7.68 37.376q0 20.48-7.68 37.888t-20.48 30.208-30.72 20.48-37.376 7.68l-287.744 0 0 287.744q0 20.48-7.68 37.888t-20.48 30.208-30.72 20.48-37.376 7.68q-20.48 0-37.888-7.68t-30.208-20.48-20.48-30.208-7.68-37.888l0-287.744-287.744 0q-20.48 0-37.888-7.68t-30.208-20.48-20.48-30.208-7.68-37.888q0-19.456 7.68-37.376t20.48-30.72 30.208-20.48 37.888-7.68l287.744 0 0-287.744q0-19.456 7.68-37.376t20.48-30.72 30.208-20.48 37.888-7.68q39.936 0 68.096 28.16t28.16 68.096l0 287.744 287.744 0z" p-id="2811" fill="#ffffff"></path></svg>
                 新建文集
             </div>
             <!-- <transition> -->
-                <div v-if='showNewCateName' class="new-cate-name">
+                <div class="new-cate-name" :class="showNewCatebox?'new-cate-name-active': ''">
                     <el-input class="cate-name" v-model="newCateName" placeholder="请输入文集名" />
-                    <el-button class="cn-submit">提交</el-button>
-                    <el-button class="cn-cancel" @click="showNewCateName = !showNewCateName">取消</el-button>
+                    <el-button class="cn-submit" @click="cateSubmit">提交</el-button>
+                    <el-button class="cn-cancel" @click="showNewCatebox = !showNewCatebox">取消</el-button>
                 </div>
             <!-- </transition> -->
             <transition-group>
@@ -32,6 +32,26 @@
                 <template #item="{ element, index }">
                     <li :key="element.name" :class="cateIndex == index ? 'active' : ''" @click="switchCateItem(element, index)">
                         {{ element.name }}
+                        <el-popover
+                            popper-class="writter-popover"
+                            :width="100"
+                            placement="bottom"
+                            trigger="click"
+                        >
+                            <template #reference>
+                                <svg v-show="cateIndex == index" t="1677040591896" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3220" width="16" height="16"><path d="M940 596l-76-57.6c0.8-8 1.6-16.8 1.6-26.4s-0.8-18.4-1.6-26.4l76-57.6c20.8-16 26.4-44 12.8-68l-84.8-143.2c-9.6-16.8-28-27.2-47.2-27.2-6.4 0-12 0.8-18.4 3.2L712 228c-15.2-10.4-31.2-19.2-47.2-26.4l-13.6-92c-4-26.4-26.4-45.6-53.6-45.6H426.4c-27.2 0-49.6 19.2-53.6 44.8L360 201.6c-16 7.2-31.2 16-47.2 26.4l-90.4-35.2c-6.4-2.4-12.8-3.2-19.2-3.2-19.2 0-37.6 9.6-46.4 26.4L71.2 360c-13.6 22.4-8 52 12.8 68l76 57.6c-0.8 9.6-1.6 18.4-1.6 26.4s0 16.8 1.6 26.4l-76 57.6c-20.8 16-26.4 44-12.8 68l84.8 143.2c9.6 16.8 28 27.2 47.2 27.2 6.4 0 12-0.8 18.4-3.2L312 796c15.2 10.4 31.2 19.2 47.2 26.4l13.6 92c3.2 25.6 26.4 45.6 53.6 45.6h171.2c27.2 0 49.6-19.2 53.6-44.8l13.6-92.8c16-7.2 31.2-16 47.2-26.4l90.4 35.2c6.4 2.4 12.8 3.2 19.2 3.2 19.2 0 37.6-9.6 46.4-26.4l85.6-144.8c12.8-23.2 7.2-51.2-13.6-67.2zM704 512c0 105.6-86.4 192-192 192S320 617.6 320 512s86.4-192 192-192 192 86.4 192 192z" p-id="3221" fill="#ffffff"></path></svg>
+                            </template>
+                            <ul class="writter-popover-ul">
+                                <li>
+                                    <span><el-icon><Edit /></el-icon></span>
+                                    <span>修改文集</span>
+                                </li>
+                                <li @click="deleteDictionary(element._id, index)">
+                                    <span><el-icon><Delete /></el-icon></span>
+                                    <span>删除文集</span>
+                                </li>
+                            </ul>
+                        </el-popover>
                     </li>
                 </template>
                 </draggable>
@@ -54,13 +74,30 @@
                 >
                     <template #item="{ element, index }">
                         <li :key="index" :class="noteIndex == index ? 'active' : ''" @click="switchNoteItem(element, index)">
-                            <img class="book" />
+                            <img class="book" :class="element.status == '已发布' ? 'book-sent' : ''"/>
                             <div class="desc">
                                 <div class="title">
                                     {{ element?.title }}
                                 </div>
                                 <div class="brief"></div>
                             </div>
+                            <el-popover
+                                popper-class="writter-popover"
+                                :width="100"
+                                placement="bottom"
+                                trigger="click"
+                            >
+                                <template #reference>
+                                    <svg v-show="noteIndex == index" t="1677040887069" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3722" width="16" height="16"><path d="M940 596l-76-57.6c0.8-8 1.6-16.8 1.6-26.4s-0.8-18.4-1.6-26.4l76-57.6c20.8-16 26.4-44 12.8-68l-84.8-143.2c-9.6-16.8-28-27.2-47.2-27.2-6.4 0-12 0.8-18.4 3.2L712 228c-15.2-10.4-31.2-19.2-47.2-26.4l-13.6-92c-4-26.4-26.4-45.6-53.6-45.6H426.4c-27.2 0-49.6 19.2-53.6 44.8L360 201.6c-16 7.2-31.2 16-47.2 26.4l-90.4-35.2c-6.4-2.4-12.8-3.2-19.2-3.2-19.2 0-37.6 9.6-46.4 26.4L71.2 360c-13.6 22.4-8 52 12.8 68l76 57.6c-0.8 9.6-1.6 18.4-1.6 26.4s0 16.8 1.6 26.4l-76 57.6c-20.8 16-26.4 44-12.8 68l84.8 143.2c9.6 16.8 28 27.2 47.2 27.2 6.4 0 12-0.8 18.4-3.2L312 796c15.2 10.4 31.2 19.2 47.2 26.4l13.6 92c3.2 25.6 26.4 45.6 53.6 45.6h171.2c27.2 0 49.6-19.2 53.6-44.8l13.6-92.8c16-7.2 31.2-16 47.2-26.4l90.4 35.2c6.4 2.4 12.8 3.2 19.2 3.2 19.2 0 37.6-9.6 46.4-26.4l85.6-144.8c12.8-23.2 7.2-51.2-13.6-67.2zM704 512c0 105.6-86.4 192-192 192S320 617.6 320 512s86.4-192 192-192 192 86.4 192 192z" p-id="3723"></path></svg>
+                                </template>
+                                <ul class="writter-popover-ul">
+                                    <li v-if="element.status == '已发布'" @click="noteItemOperation('取消发布', element)"> <span><el-icon><Failed /></el-icon></span> <span>取消发布</span> </li>
+                                    <li v-else @click="noteItemOperation('直接发布', element)"> <span><el-icon><Promotion /></el-icon></span> <span>直接发布</span> </li>
+                                    <li @click="noteItemOperation('删除文章', element)"> <span><el-icon><Delete /></el-icon></span> <span>删除文章</span> </li>
+                                    <li @click="noteItemOperation('移动文章', element)"> <span><el-icon><List /></el-icon></span> <span>移动文章</span> </li>
+                                    <li @click="noteItemOperation('禁止转载', element)"> <span><el-icon><Flag /></el-icon></span> <span>禁止转载</span> </li>
+                                </ul>
+                            </el-popover>
                         </li>
                     </template>
                 </draggable>
@@ -80,20 +117,28 @@
     </div>
 </template>
 <script lang="ts" setup>
-import draggable from 'vuedraggable';
-import { onMounted, ref, reactive } from 'vue';
+import { onMounted, ref, reactive, onBeforeUpdate } from 'vue';
+import { useRouter } from 'vue-router';
 import { DictionaryApi, ArticleApi } from "@/api";
-import { ElMessage } from 'element-plus';
+import { ElMessage, ElMessageBox } from 'element-plus';
+import type { Action } from 'element-plus'
+import draggable from 'vuedraggable';
 import MdWritter from "./MdWritter.vue";
-import { Utils } from "@/utils";
+import { Utils, User } from "@/utils";
+import { auto } from '@popperjs/core';
 
-const showNewCateName = ref(false);
+const router = useRouter();
+
+const username = User.get().username;
+
+let _id: string = '';
+const showNewCatebox = ref(false);
 const newCateName = ref('');
 const dragOptions = ref({
-  animation: 200,
-  group: 'description',
-  disabled: false,
-  ghostClass: 'ghost',
+    animation: 200,
+    group: 'description',
+    disabled: false,
+    ghostClass: 'ghost',
 });
 const drag = ref(false);
 const categoryList = <any>reactive([]); // 分类列表
@@ -102,34 +147,48 @@ const noteList = <any>reactive([]); // 笔记列表
 const noteIndex = ref(0); // 笔记下标
 let currentCate: any; // 当前选中的分类对象
 let currentNote: any; // 当前选中的笔记对象
+let lsCurCateList: any; // 临时当前分类列表
+let lsCurNoteList: any; // 临时当前文章列表
 const noteDetail = ref({ 
     title: '', // Y
     content: '', // Y
 }); // 标题内容
-  
+onBeforeUpdate(()=>{
+    console.log('更新了');
+    
+})
 onMounted(() => {
+    getDictionaryList();
+})
+// 查询字典值
+const getDictionaryList = (index: number = 0) => {
     DictionaryApi.GetDictionaryListAjax({})
-    .then(res=> {
+    .then(res => {
         let list = res.data || {};
-        let cates = list.filter(v => v.type === 'articleType')[0].children;
-        cates?.map((item, index) => {
+        _id = list[0]._id as string;
+        let cates = list.filter(v => v.type === 'articleType')[0].children?.filter(v => v.label !== '全部');
+        categoryList.length = 0
+        cates?.map((v, i) => {
             categoryList.push({
-                ...item,
-                name: item.label,
-                order: index + 1
+                ...v,
+                name: v.label,
+                order: i + 1
             })
         })
+        cateIndex.value = index; // 重置分类下标
+        showNewCatebox.value = false; // 重置新增分类节点
+        newCateName.value = ''; // 重置输入框的值
         getNoteList({
-            type: cates![0].label, // 默认查询第一个分类的笔记
+            type: cates![index].label, // 默认查询第一个分类的笔记
             sortByIndex: true,
             loading: '.note', 
         });
     })
-})
+}
 // 获取分类对应的文章
 const getNoteList = (params: any, noteIndex?: number) => {
     ArticleApi.GetNewArticleListAjax({
-        username: 'niumengfei',
+        username,
         page: 1,
         pageSize: 999,
         ...params,
@@ -146,13 +205,38 @@ const getNoteList = (params: any, noteIndex?: number) => {
         noteDetail.value = noteList[noteIndex || 0] || {}; // 默认获取第一个笔记
     })
 }
+// 新增分类
+const cateSubmit = () => {
+    DictionaryApi.AddDictionaryAjax({
+        pid: _id,
+        label: newCateName.value, // 分类名
+        value: newCateName.value, // 分类值
+    })
+    .then(res =>{
+        const ln = categoryList.length;
+        getDictionaryList(ln);
+    })
+}
+// 删除分类
+const deleteDictionary = (cateId: string, index: number) => {
+    DictionaryApi.DeleteDictionaryAjax({
+        _id: cateId
+    })
+    .then(res =>{
+        // 如果删除的是最后一个元素，则应该查询上一个元素的，如果删除的是第一个则应该查询下标为0的分类的数据
+        let _index =  index == categoryList.length - 1 ? categoryList.length - 2 : cateIndex.value;
+        getDictionaryList(_index);
+    })
+}
 // 编辑列表顺序
 const cateDragOpeartion = (start: number) => {
     if(start){
         drag.value = true;
         currentCate = categoryList[cateIndex.value]; // 1. 找出当前ref下标对应的分类
+        lsCurCateList = JSON.stringify(categoryList); // 暂存临时列表
     }else{
         drag.value = false;
+        if(JSON.stringify(noteList) == lsCurCateList) return; // 如果当前拖拽的元素 位置没有发生变化，则直接return;
         let newIndex = 0;
         categoryList.map((v: any, i: number) =>{ // 2. 并且获取此分类的新的index，
             if(v.label == currentCate.label){
@@ -169,8 +253,10 @@ const noteDragOpeartion = (start: number) => {
     if(start){
         drag.value = true;
         currentNote = noteList[noteIndex.value]; // 1. 找出当前ref下标对应的文章
+        lsCurNoteList = JSON.stringify(noteList); // 暂存临时列表
     }else{
         drag.value = false;
+        if(JSON.stringify(noteList) == lsCurNoteList) return; // 如果当前拖拽的元素 位置没有发生变化，则直接return;
         let newIndex = 0;
         noteList.map((v: any, i: number) =>{ // 2. 并且获取此文章的新的index
             if(v.title == currentNote.title){
@@ -184,13 +270,14 @@ const noteDragOpeartion = (start: number) => {
 }
 // 切换分类
 const switchCateItem = (element: any, index: number) => {
+    if(cateIndex.value == index) return;
     cateIndex.value = index;
     noteIndex.value = 0; // 重置笔记下标
     getNoteList({
         type: categoryList![index].label, // 默认获取一级分类的文章
         sortByIndex: true,
         loading: '.note', 
-    });
+    })
 }
 // 切换文章
 const switchNoteItem = (element: any, index: number) => {
@@ -204,23 +291,26 @@ const addArticle = (type: string) => {
         title: Utils.moment().currentDate(),
         content: '',
         type: categoryList[cateIndex.value].value,
-        username: 'niumengfei',
-        status: '已发布',
+        username,
+        status: '未发布',
     }
-    if(type == 'top'){
-        params['index'] = Number(noteList[0].index) - 1, 
-        noteList.unshift(params)
-        noteIndex.value = 0;
-        noteDetail.value = params;
-    }
-    if(type == 'bottom'){
-        params['index'] = Number(noteList[noteList.length-1].index) + 1, 
-        noteList.push(params)
-        noteIndex.value = noteList.length - 1;
-        noteDetail.value = params;
+    switch (type) {
+        case 'top':
+            params['index'] = Number(noteList[0]?.index) - 1, 
+            noteList.unshift(params)
+            noteIndex.value = 0;
+            noteDetail.value = params;
+            break;
+        case 'bottom':
+            params['index'] = Number(noteList[noteList.length-1]?.index) + 1, 
+            noteList.push(params)
+            noteIndex.value = noteList.length - 1;
+            noteDetail.value = params;
+            break;
     }
     addArticleRequest(params);
 }
+// 新增文章请求
 const addArticleRequest = (params: any) => { 
     ArticleApi.AddNewArticleAjax({
         ...params
@@ -234,12 +324,63 @@ const addArticleRequest = (params: any) => {
         }, noteIndex.value);
     })
 }
+// 
+const noteItemOperation = (type: string, element: any) => {
+    switch (type) {
+        case '直接发布':
+            ArticleApi.AddArticleAjax({
+                _id: element._id,
+                status: '已发布'
+            })
+            .then(res => {
+                element.status = '已发布';
+                ElMessage.success('发布成功');
+            })
+            break;
+        case '取消发布':
+            ArticleApi.AddArticleAjax({
+                _id: element._id,
+                status: '未发布'
+            })
+            .then(res => {
+                element.status = '未发布';
+                ElMessage.success('取消发布成功');
+            })
+            break;
+        case '删除文章':
+            ElMessageBox.confirm(
+                `是否确认删除文章《${noteDetail.value.title}》?`,
+                '温馨提示',
+                {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning',
+                }
+            )
+            .then(() => {
+                ArticleApi.deleteArticleAjax({
+                    _id: element._id,
+                })
+                .then(res => {
+                    ElMessage.success('文章删除成功');
+                    getNoteList({
+                        type: categoryList[cateIndex.value].label, // 默认查询第一个分类的笔记
+                        sortByIndex: true,
+                        loading: '.note', 
+                    });
+                })
+            })
+            break;
+        default:
+            break;
+    }
+}
 </script>
 
 <style lang="less" scoped>
 .writter{
-     font-family:"Times New Roman",Times,serif;
-    // font-family: "楷体", "楷体_GB2312", serif;
+    // font-family:"Times New Roman",Times,serif;
+    font-family: "楷体", "楷体_GB2312", serif;
     display: flex;
     flex-direction: row;
     width: 100%;
@@ -282,6 +423,7 @@ const addArticleRequest = (params: any) => {
             color: #fff;
             margin-top: 10px;
             font-size: 1rem;
+            background: #404040;
             cursor: pointer;
             li{
                 padding-left: 10px;
@@ -290,10 +432,15 @@ const addArticleRequest = (params: any) => {
                 align-items: center;
                 list-style: none;
                 border-left: 5px solid rgba(255, 255, 255, 0);
+               
             }
             .active{
                 background: #666;
                 border-left: 5px solid #ec7259;
+                justify-content: space-between;
+                svg{
+                    margin-right: 15px;
+                }
             }
             li:hover{
                 background: #666;
@@ -305,8 +452,10 @@ const addArticleRequest = (params: any) => {
         }
         .new-cate-name{
             width: 80%;
-            margin: 15px auto;
-            z-index: 2;
+            height: 0px;
+            opacity: 0;
+            overflow: hidden;
+            transition: all 0.3s ease-out;
             :deep(.cate-name){
                 .el-input__wrapper{
                     background: #666;
@@ -335,16 +484,10 @@ const addArticleRequest = (params: any) => {
                 border: none;
             }
         }
-        .v-enter-active,
-        .v-leave-active {
-            transition: transform 0.5s ease;
-        }
-
-        .v-enter-from{
-            transform: translateY(-100%);
-        }
-        .v-leave-to {
-            transform: translateY(0%);
+        .new-cate-name-active{
+            height: 80px;
+            opacity: 1;
+            margin-top: 15px;
         }
     }
     .note{
@@ -399,6 +542,10 @@ const addArticleRequest = (params: any) => {
                     background: url('@/assets/imgs/sprite.png') no-repeat 0 -25px;
                     background-size: 250px;
                 }
+                .book-sent{
+                    background: url('@/assets/imgs/sprite.png') no-repeat -50px -25px;
+                    background-size: 250px;
+                }
                 .desc{
 
                 }
@@ -406,6 +553,10 @@ const addArticleRequest = (params: any) => {
             .active{
                 background: #E6E6E6;
                 border-left: 5px solid #ec7259;
+                justify-content: space-between;
+                svg{
+                    margin-right: 15px;
+                }
             }
             li:hover{
                 background: #E6E6E6;
@@ -434,6 +585,35 @@ const addArticleRequest = (params: any) => {
                 outline: none;
                 box-shadow: none;
             }
+        }
+    }
+}
+.writter-popover{
+    .writter-popover-ul{
+        list-style: none;
+        border-radius: 4px;
+        overflow: hidden;
+        li{
+            text-align: center;
+            border-bottom: 1px solid #d9d9d9;
+            padding: 10px 0;
+            svg{
+                margin-right: 5px;
+                position: relative;
+                top: 3px;
+            }
+            span{
+                i{
+                    font-size: 1rem;
+                }
+            }
+        }
+        li:last-child{
+            border: none;
+        }
+        li:hover{
+            background: #666;
+            color: #fff;
         }
     }
 }

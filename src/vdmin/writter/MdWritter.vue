@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2023-01-31 14:31:26
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-17 12:26:38
+ * @LastEditTime: 2023-02-24 18:31:15
 -->
 <template>
     <md-editor
@@ -58,6 +58,7 @@ import 'md-editor-v3/lib/style.css';
 import { DocumentRemove } from '@element-plus/icons-vue';
 import { ArticleApi } from '@/api';
 import { ElMessage } from 'element-plus';
+import { Utils } from '@/utils';
 
 const NormalToolbar = MdEditor.NormalToolbar;
 
@@ -71,7 +72,7 @@ let { content, noteDetail } = toRefs(props);
 const centerDialogVisible = ref(false); // 弹框
 const saveVal = ref('已保存'); // 是否保存
 const state = reactive({
-    id: 'my-editor',
+    id: 'my-editor' + Utils.randomString(14),
     toolbars: <ToolbarNames[]>[
     '-',
     'image',
@@ -103,7 +104,6 @@ const state = reactive({
 watch(content, (newValue, oldValue) => {
     state.content = newValue;
     console.log('xxxxxxxxxxxxxxxxxxsssssssssss', props.noteDetail);
-    
 },{ immediate:true })
 
 const onChange = (value: string) => {
@@ -119,7 +119,7 @@ const onSave = (value: string) => {
         type: props.noteDetail?.type,
         index: props.noteDetail?.index,
         content: value,
-        status: '已发布',
+        status: '未发布',
         // loading: '.editor',
     })
     .then(res => {

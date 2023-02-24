@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-04-20 23:25:34
  * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-13 16:15:17
+ * @LastEditTime: 2023-02-23 15:04:14
  */
 /* 配置全局使用Icon图标 */
 import { 
@@ -11,6 +11,13 @@ import {
     Expand,
     User,
     Lock,
+    Delete,
+    Edit,
+    Setting,
+    Promotion,
+    Failed,
+    List,
+    Flag,
 } from '@element-plus/icons-vue'
 
 export default [
@@ -19,4 +26,11 @@ export default [
     Expand,
     User,
     Lock,
+    Delete,
+    Edit,
+    Setting,
+    Promotion,
+    Failed,
+    List,
+    Flag,
 ]

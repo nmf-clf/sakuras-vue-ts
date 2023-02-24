@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-10-29 14:36:35
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-01-16 17:42:17
+ * @LastEditTime: 2023-02-23 19:09:43
  */
 import axios, { AxiosResponse, AxiosRequestConfig } from "axios";
 import { ElMessage, ElLoading } from 'element-plus'
@@ -49,7 +49,7 @@ const service = async<T = any> (config: AxiosRequestConfig, loading: LoadingType
         ...config, //无法重新设置config的值
         headers: {
             Authorization: '',
-            Sid: DynamicKey.split("").reverse().join("") || Utils.encryptByRSA(DynamicKey),
+            Sid: Utils.encrypt.RSA(JSON.stringify(DynamicKey)),
         }
     }
     try{

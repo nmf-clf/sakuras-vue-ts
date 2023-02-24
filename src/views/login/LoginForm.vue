@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-12-09 16:14:27
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-02 17:08:07
+ * @LastEditTime: 2023-02-24 14:44:45
 -->
 <template>
     <el-form
@@ -85,10 +85,12 @@ const handleLogin = () => {
       	params: Utils.encrypt.DynamicDES(JSON.stringify(ruleForm))
     })
     .then(res =>{
-        console.log('login-post::',res);
+        let data = res.data;
+        let _data = JSON.parse(Utils.decrypt.DynamicDES(data)); // 先动态 DES 解密
+        // data = Utils.encrypt.StaticDES(data); // 再静态 DES 加密 
         isLoading.value = false;
-        store.dispatch('user/saveUserInfo', { // 暂时这样存 需要整体加密
-            ...res.data
+        store.dispatch('user/saveUserInfo', {
+            ..._data        
         });
         router.push({ path: '/' });
         ElMessage.success(res.message);
