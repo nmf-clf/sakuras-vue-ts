@@ -2,45 +2,56 @@
  * @Author: niumengfei
  * @Date: 2022-04-27 17:25:41
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-17 10:41:14
+ * @LastEditTime: 2023-02-27 15:57:48
 -->
 <template>
-  <div :class="'rg-options' + (' rg-options-' + deviceType())">
-    <!-- 首页 -->
-    <div class="hidden-dropdown">
-      <span class="el-dropdown-link animate__fadeInRight" @click="turnPage('/')">首页</span>
-    </div>
-    <!-- 分类 -->
-    <el-dropdown class="hidden-dropdown">
-      <span class="el-dropdown-link" @click="turnPage('/category')">分类</span>
-    </el-dropdown>
-    <!-- 学习笔记 -->
-    <el-dropdown class="hidden-dropdown">
-      <span class="el-dropdown-link" @click="openPage('https://sakuras.group/sakuras-docs/')">笔记</span>
-    </el-dropdown>
-    <!-- 发布 -->
-    <el-dropdown class="hidden-dropdown">
-        <span class="el-dropdown-link" @click="openWritterPage()">发布</span>
-    </el-dropdown>
-    <!-- 关于 -->
-    <el-dropdown class="hidden-dropdown">
-        <span class="el-dropdown-link" @click="turnPage('/category')">关于我</span>
-    </el-dropdown>
+	<div :class="'rg-options' + (' rg-options-' + deviceType())">
+		<!-- 首页 -->
+		<el-dropdown class="hidden-dropdown">
+			<span class="el-dropdown-link" @click="turnPage('/')">首页
+				<span class="break-line"></span>
+			</span>
+		</el-dropdown>
+		<!-- 分类 -->
+		<el-dropdown class="hidden-dropdown">
+			<span class="el-dropdown-link" @click="turnPage('/category')">分类
+				<span class="break-line"></span>
+			</span>
+		</el-dropdown>
+		<!-- 学习笔记 -->
+		<el-dropdown class="hidden-dropdown">
+			<span class="el-dropdown-link" @click="openPage('https://sakuras.group/sakuras-docs/')">笔记
+				<span class="break-line"></span>
+			</span>
+		</el-dropdown>
+		<!-- 发布 -->
+		<el-dropdown class="hidden-dropdown">
+			<span class="el-dropdown-link" @click="openWritterPage()">发布
+				<span class="break-line"></span>
+			</span>
+		</el-dropdown>
+		<!-- 关于 -->
+		<el-dropdown class="hidden-dropdown">
+			<span class="el-dropdown-link" @click="turnPage('/category')">关于我
+				<span class="break-line"></span>
+			</span>
+		</el-dropdown>
 
-    <!-- 个人中心 trigger="click"-->
-    <el-dropdown class="hidden-dropdown">
-      <span class="el-dropdown-link">个人中心
-        <el-icon class="el-icon--right"><arrow-down /></el-icon>
-      </span>
-      <template #dropdown>
-        <el-dropdown-menu>
-          <el-dropdown-item v-if="userInfo.username"><el-icon><user /></el-icon>{{userInfo.nickname || userInfo.username}}</el-dropdown-item>
-          <el-dropdown-item :divided="userInfo.username ? true : false" @click="loginOrOut('/login')">{{userInfo.username ? '注销' : '登录'}}</el-dropdown-item>
-          <el-dropdown-item divided @click="toAdmin('/admin/index')">进入后台</el-dropdown-item>
-        </el-dropdown-menu>
-      </template>
-    </el-dropdown>
-  </div>
+		<!-- 个人中心 trigger="click"-->
+		<el-dropdown class="hidden-dropdown">
+			<span class="el-dropdown-link">个人中心
+				<el-icon class="el-icon--right"><arrow-down /></el-icon>
+				<span class="break-line"></span>
+			</span>
+			<template #dropdown>
+				<el-dropdown-menu>
+				<el-dropdown-item v-if="userInfo.username"><el-icon><user /></el-icon>{{userInfo.nickname || userInfo.username}}</el-dropdown-item>
+				<el-dropdown-item :divided="userInfo.username ? true : false" @click="loginOrOut('/login')">{{userInfo.username ? '注销' : '登录'}}</el-dropdown-item>
+				<el-dropdown-item divided @click="toAdmin('/admin/index')">进入后台</el-dropdown-item>
+				</el-dropdown-menu>
+			</template>
+		</el-dropdown>
+	</div>
 </template>
 
 <script lang="ts" setup>
@@ -89,42 +100,63 @@ const toAdmin = (path: string) =>{
 
 <style lang="less" scope>
 .rg-options{
-  display: flex;
-  .search{
-    .search-input{
-      // ::v-deep input{
-      :deep(input){
-        border-radius: 14px !important;
-      }
-    }
-  }
-  .el-dropdown-link {
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    font-size: 1rem;
-    text-align: center;
-    // color: var(--el-color-primary);
-  }
- 
+	display: flex;
+	.search{
+		.search-input{
+			// ::v-deep input{
+			:deep(input){
+				border-radius: 14px !important;
+			}
+		}
+	}
+	.hidden-dropdown{
+		.el-dropdown-link{
+			position: relative;
+			cursor: pointer;
+			display: flex;
+			align-items: center;
+			font-size: 1rem;
+			text-align: center;
+			// color: var(--el-color-primary);
+			padding-bottom: 2px;
+			transition: all .5s ease-in-out;
+		}
+		.break-line{
+			position: absolute;
+			bottom: -7px;
+			display: inline-block;
+			height: 3px;
+			background: #FE9600;
+			width: 0%;
+			border-radius: 10px;
+			transition: all .5s ease-in-out;
+		}
+		.el-dropdown-link:hover{
+			color: #FE9600;
+		}
+		.el-dropdown-link:hover .break-line{
+			width: 100%;
+		}
+	}
+	
 }
 .el-dropdown-menu__item{
-  justify-content: center !important;
+  	justify-content: center !important;
 }
 .rg-options-pc{
-  align-items: center;
-  .el-dropdown-link {
-    margin-left: 25px;
-  }
+	align-items: center;
+	.el-dropdown-link {
+		margin-left: 25px;
+	}
 }
 .rg-options-mobile{
-  flex-direction: column;
-  padding: 10px 0px 10px 20px;
-  .hidden-dropdown{
-    padding: 15px 0px;
-    .el-dropdown-link {
-      font-weight: bold;
-    }
-  }
+	flex-direction: column;
+	padding: 10px 0px 10px 20px;
+	.hidden-dropdown{
+		padding: 15px 0px;
+		.el-dropdown-link {
+			font-weight: bold;
+		}
+	}
 }
 </style>

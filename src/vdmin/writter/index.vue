@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-12-13 14:51:55
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-24 18:28:13
+ * @LastEditTime: 2023-02-28 16:05:06
 -->
 <template>
     <div class="writter">
@@ -109,9 +109,36 @@
         </div>
         <div class="editor">
             <el-input class="title" v-model="noteDetail.title" placeholder="请输入文章标题" />
+            <div class="tags">
+                <el-tag
+                    v-for="tag in noteDetail.tag"
+                    :key="tag"
+                    class="mx-1"
+                    closable
+                    :disable-transitions="false"
+                    @close="handleSave('DeleteTag', { label: tag })"
+                >
+                    {{ tag }}
+                </el-tag>
+                <el-dropdown class="slc">
+                    <span class="el-dropdown-link">
+                        添加标签
+                        <el-icon class="el-icon--right">
+                            <arrow-down />
+                        </el-icon>
+                    </span>
+                    <template #dropdown>
+                    <el-dropdown-menu>
+                        <el-dropdown-item v-for="v in tagsList"  :disabled="noteDetail.tag?.includes(v.label)" @click="handleSave('AddTag', v)">{{ v.label }}</el-dropdown-item>
+                    </el-dropdown-menu>
+                    </template>
+                </el-dropdown>
+            </div>
+         
             <MdWritter
                 :noteDetail="noteDetail"
-                :content="noteDetail.content"
+                :content="noteDetail.content || ''"
+                :handleSave="handleSave"
             />
         </div>
     </div>
@@ -129,7 +156,7 @@ import { auto } from '@popperjs/core';
 
 const router = useRouter();
 
-const username = User.get().username;
+const { username, userId } = User.get();
 
 let _id: string = '';
 const showNewCatebox = ref(false);
@@ -149,24 +176,35 @@ let currentCate: any; // 当前选中的分类对象
 let currentNote: any; // 当前选中的笔记对象
 let lsCurCateList: any; // 临时当前分类列表
 let lsCurNoteList: any; // 临时当前文章列表
-const noteDetail = ref({ 
+let tagsList: any = ref([]); // 标签下拉列表
+let hasCates: boolean = false; // 是否存在文章列表
+const noteDetail = <any>ref({ 
+    // _id: null,
     title: '', // Y
     content: '', // Y
+    tag: [],
+    // username: '',
+    // index: null,
+    // type: '',
+    // status: '',
 }); // 标题内容
-onBeforeUpdate(()=>{
-    console.log('更新了');
-    
-})
+
 onMounted(() => {
     getDictionaryList();
 })
 // 查询字典值
 const getDictionaryList = (index: number = 0) => {
-    DictionaryApi.GetDictionaryListAjax({})
+    DictionaryApi.GetDictionaryListAjax({
+        userId,
+    })
     .then(res => {
         let list = res.data || {};
         _id = list[0]._id as string;
-        let cates = list.filter(v => v.type === 'articleType')[0].children?.filter(v => v.label !== '全部');
+        hasCates = list.filter(v => v.type === 'articleType').length > 0; // 判断当前用户是否存在文章分类
+        let cates = list.filter(v => v.type === 'articleType')[0]?.children?.filter(v => v.label !== '全部') || [];
+        let tags = list.filter(v => v.type === 'articleTag')[0]?.children?.filter(v => v.label !== '全部') || [];
+        tagsList.value = tags;
+        
         categoryList.length = 0
         cates?.map((v, i) => {
             categoryList.push({
@@ -181,7 +219,7 @@ const getDictionaryList = (index: number = 0) => {
         getNoteList({
             type: cates![index].label, // 默认查询第一个分类的笔记
             sortByIndex: true,
-            loading: '.note', 
+            loading: '.note',
         });
     })
 }
@@ -202,20 +240,38 @@ const getNoteList = (params: any, noteIndex?: number) => {
                 order: index + 1
             })
         })
-        noteDetail.value = noteList[noteIndex || 0] || {}; // 默认获取第一个笔记
+        noteDetail.value = noteList[noteIndex || 0]  || {}; // 默认获取第一个笔记 由于此处是响应式数据赋值给了 noteDetail，因此noteDetail变化将会影响 notelist。这是合理的
     })
 }
 // 新增分类
 const cateSubmit = () => {
-    DictionaryApi.AddDictionaryAjax({
-        pid: _id,
-        label: newCateName.value, // 分类名
-        value: newCateName.value, // 分类值
-    })
-    .then(res =>{
-        const ln = categoryList.length;
-        getDictionaryList(ln);
-    })
+    if(!hasCates){ // 如果当前用户不存在分类，则需要在字典表中新增一条属于他的 articleType 分类信息
+        DictionaryApi.AddDictionaryAjax({
+            pid: null,
+            userId,
+            type: 'articleType',
+            label: '文章类型', 
+            value: 'articleType',
+        })
+        .then(res =>{
+            let { _id } = res.data;
+            addTrue({ resId: _id });
+        })
+    }else{
+        addTrue({});
+    }
+    function addTrue({ resId }: any){
+        DictionaryApi.AddDictionaryAjax({
+            pid: resId ? resId : _id, 
+            userId,
+            label: newCateName.value, // 分类名
+            value: newCateName.value, // 分类值
+        })
+        .then(res =>{
+            const ln = categoryList.length;
+            getDictionaryList(ln);
+        })
+    }
 }
 // 删除分类
 const deleteDictionary = (cateId: string, index: number) => {
@@ -282,17 +338,19 @@ const switchCateItem = (element: any, index: number) => {
 // 切换文章
 const switchNoteItem = (element: any, index: number) => {
     noteIndex.value = index;
-    noteDetail.value = noteList[index] || {};
+    noteDetail.value =  noteList[index]  || {}; // 利用响应式共享内存同步更改 notelist 数据
 };
 // 新建文章
 const addArticle = (type: string) => {
-    let params = {
+    let params: any = {
         _id: null,
+        userId,
         title: Utils.moment().currentDate(),
         content: '',
         type: categoryList[cateIndex.value].value,
         username,
         status: '未发布',
+        tag: [],
     }
     switch (type) {
         case 'top':
@@ -375,6 +433,36 @@ const noteItemOperation = (type: string, element: any) => {
             break;
     }
 }
+// 保存文章
+const handleSave = (type: string, params: any) => {
+    switch (type) {
+        case 'DeleteTag':
+            noteDetail.value.tag = noteDetail.value.tag.filter((v: string) => v !== params.label);
+            break;
+        case 'AddTag': 
+            if(!noteDetail.value.title) return ElMessage.warning('请先保存文章后再选择标签~')
+            noteDetail.value.tag.push(params.label);
+        default:
+            break;
+    }
+    return ArticleApi.AddNewArticleAjax({
+        _id: noteDetail.value._id,
+        title: noteDetail.value.title,
+        username: noteDetail.value.username,
+        type: noteDetail.value.type,
+        index: noteDetail.value.index,
+        content: params.content || noteDetail.value.content,
+        status: noteDetail.value.status || '未发布',
+        tag: noteDetail.value.tag
+    })
+    .then(res => {
+        type == 'SaveContent' ? noteDetail.value.content = params.content : null;
+        return true;
+    })
+    .catch(res => {
+        return false;
+    })
+}
 </script>
 
 <style lang="less" scoped>
@@ -385,8 +473,9 @@ const noteItemOperation = (type: string, element: any) => {
     flex-direction: row;
     width: 100%;
     height: 100vh;
+    overflow: hidden;
     .category{
-        width: 16.6%;
+        width: 17%;
         background: #404040;
         display: flex;
         flex-direction: column;
@@ -489,6 +578,7 @@ const noteItemOperation = (type: string, element: any) => {
             opacity: 1;
             margin-top: 15px;
         }
+       
     }
     .note{
         width: 25%;
@@ -564,8 +654,7 @@ const noteItemOperation = (type: string, element: any) => {
         }
     }
     .editor{
-        flex: 1;
-        width: 100%;
+        width: 58%;
         display: flex;
         flex-direction: column;
         .title{
@@ -586,6 +675,30 @@ const noteItemOperation = (type: string, element: any) => {
                 box-shadow: none;
             }
         }
+        .tags{
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            flex-direction: row;
+            flex-wrap: wrap;
+            .el-tag{
+                margin-left: 10px;
+            }
+        }
+        .slc{
+            margin-left: 20px;
+            width: 85px;
+        }
+    }
+    :deep(.category::-webkit-scrollbar){
+        display: none;
+    }
+    :deep(.note::-webkit-scrollbar){
+        width: 10px;
+        background: #F1F1F1;
+    }
+    :deep(.note::-webkit-scrollbar-thumb){
+        background: #C1C1C1;
     }
 }
 .writter-popover{

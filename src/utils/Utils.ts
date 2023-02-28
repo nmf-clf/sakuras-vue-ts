@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-10-29 14:04:02
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-24 14:38:46
+ * @LastEditTime: 2023-02-28 17:30:48
  */
 import { StaticKey, DynamicKey, RSAPublicKey } from './Const';
 import  { JSEncrypt }  from 'jsencrypt';
@@ -147,16 +147,22 @@ class Utils{
         });
         Object.assign(formData, obj);
     }
-    // 生成随机数
-    randomString = (len: number) => {
+    // 生成随机数 
+    randomString = (len: number, type?: string) => {
         len = len || 32;
-        var $chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz';    /****默认去掉了容易混淆的字符oOLl,9gq,Vv,Uu,I1****/
-        var maxPos = $chars.length;
-        var pwd = '';
-        for (var i = 0; i < len; i++) {
+        let $chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz';    /****默认去掉了容易混淆的字符oOLl,9gq,Vv,Uu,I1****/
+        type == 'number' ? $chars = '1234567890' : null;
+        let maxPos = $chars.length;
+        let pwd = '';
+        for (let i = 0; i < len; i++) {
             pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
         }
         return pwd;
+    }
+    // 生成包含时间的随机数
+    randomByDate = () => {
+        let res = this.randomString(4, 'number')
+        return res;
     }
     // 防抖
     debounce = (func: ()=>void, wait: number) =>{

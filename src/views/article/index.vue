@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-04-06 23:49:03
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-03 18:20:36
+ * @LastEditTime: 2023-02-27 10:29:23
 -->
 <template>
     <div class="detail-top">
@@ -24,7 +24,7 @@
     <el-skeleton  v-if="isLoading" :rows="5" animated class="detail-loading"/>
     <div class="content">
         <MdPreview 
-            :content="formData.mdData.content"
+            :content="formData.mdData.content || ''"
         />
     </div>
 </template>

@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-12-13 14:51:55
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-10 18:00:56
+ * @LastEditTime: 2023-02-28 17:28:29
 -->
 <template>
     <!-- 
@@ -74,7 +74,9 @@ import type {
 import { DictionaryApi } from '@/api';
 import { Tree } from "@/api/model/dictionaryModel";
 import { useStore } from 'vuex';
+import { User, Utils } from '@/utils';
 
+const { userId } = User.get();
 const treeRef = ref<InstanceType<typeof ElTree>>();
 const filterText = ref('');
 const nodeType = ref('');
@@ -82,6 +84,8 @@ const nodeLabel = ref('');
 const nodeValue = ref('');
 const dataSource = ref<Tree[]>([]);
 const dialogVisible = ref(false);
+
+console.log('xxxxxxxxxxxxxxxxxxs', Utils.randomByDate()); // 
 
 const store = useStore();
 
@@ -171,7 +175,9 @@ const filterNode = (value: string, data: Tree) => {
 }
 // 获取数据列表 
 const getDictionaryList = () => {
-    DictionaryApi.GetDictionaryListAjax({})
+    DictionaryApi.GetDictionaryListAjax({
+        userId
+    })
     .then(res =>{
         dataSource.value = res.data;
         let list = res.data;
@@ -185,6 +191,7 @@ const getDictionaryList = () => {
 const addRootNode = () => {
     DictionaryApi.AddDictionaryAjax({
         pid: null,
+        userId,
         type: nodeType.value,
         label: nodeLabel.value, 
         value: nodeValue.value,
@@ -205,6 +212,7 @@ const addChildrenNode = (data: Tree) => {
         if(!value) return;
         DictionaryApi.AddDictionaryAjax({
             pid: data._id,
+            userId,
             label: value, // 类型
             value: value, // 值
         })

@@ -4,7 +4,7 @@ import { Utils } from "@/utils";
  * @Author: niumengfei
  * @Date: 2022-12-12 12:55:25
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-08 17:34:50
+ * @LastEditTime: 2023-02-28 10:34:31
  */
 interface StateType {
     screenWidth: number;
@@ -42,11 +42,14 @@ export default {
             state.screenHeight = value[1]
         },
         SAVE_USER_INFO(state: any, value: any){
-            if(Utils.isEmptyObj(value)){
+            if(Utils.isEmptyObj(value)){ // 注销
                 state.username = '';
+                state.nickname = '';
+                state.userId = '';
             }else{
                 state.username = value.username;
                 state.nickname = value.nickname;
+                state.userId = value._id;
             }
         },
         SAVE_DICTIONARY(state: any, value: any){

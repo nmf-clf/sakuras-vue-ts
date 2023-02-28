@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-12-09 16:14:27
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-24 14:44:45
+ * @LastEditTime: 2023-02-28 16:36:00
 -->
 <template>
     <el-form
@@ -29,8 +29,9 @@
                     </template>
                 </el-input>
         </el-form-item>
+        <p @click="test">点击使用测试账号</p>
         <el-form-item label-width="'auto'">
-        <el-button class="form-btn"  @click="submitForm(ruleFormRef)">登录</el-button>
+            <el-button class="form-btn"  @click="submitForm(ruleFormRef)">登录</el-button>
         </el-form-item>
         <!-- 社交平台 -->
         <SoftWareForm  type="登录" />
@@ -38,7 +39,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { ref, reactive, watch } from 'vue'
 import type { FormInstance, FormRules } from 'element-plus';
 import { useStore } from "vuex";
 import { useRouter } from 'vue-router'
@@ -59,9 +60,14 @@ const store = useStore();
 const ruleFormRef = ref<FormInstance>();
 
 const ruleForm = reactive<LoginParamsType>({ //表单内容
-    username: 'niumengfei',
-    password: '7758521nmf@CLF',
+    username: '',
+    password: '',
 })
+
+watch(() => ruleForm.username, (newValue, oldValue) => {
+    newValue == 'niumengfei' ? ruleForm.password = '7758521nmf@CLF' : null;
+    newValue == 'test' ? ruleForm.password = 'test@A123' : null;
+},{ immediate:true })
 
 const rules: FormRules = reactive({ // 表单校验规则
     username: Validator.VerifyUserName(),
@@ -98,6 +104,11 @@ const handleLogin = () => {
     .catch(()=>{
       	isLoading.value = false;
     })
+}
+
+const test = () => {
+    ruleForm.username = 'test';
+    ruleForm.password = 'test@A123'
 }
 </script>
 

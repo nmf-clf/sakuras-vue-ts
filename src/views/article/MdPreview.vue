@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2023-01-31 14:31:26
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-15 15:14:19
+ * @LastEditTime: 2023-02-27 14:15:04
 -->
 <template>
     <md-editor
@@ -49,13 +49,13 @@ const scrollElement = document.documentElement;
 let htmlSize = document.documentElement.style.fontSize;
 let scrollElementOffsetTop: number = 0;
 if(htmlSize){
-    scrollElementOffsetTop = Number(document.documentElement.style.fontSize.replace('px', '')) * 4;
+    scrollElementOffsetTop = Number(document.documentElement.style.fontSize.replace('px', '')) * 5.4;
 }
 
 
 </script>
 
-<style lang='less'>
+<style lang='less' scoped>
 .md-editor-previewOnly{
     font-family: "My Custom Font";
 }
@@ -73,15 +73,22 @@ if(htmlSize){
     color: #7e7777;
     height: 50vh;
     overflow-y: scroll;
-    .md-editor-catalog-active > span{
+    :deep(.md-editor-catalog-active > span){
         color: #005bb7;
     }
-    .md-editor-catalog-link span:hover{
+    :deep(.md-editor-catalog-link span:hover){
         color: #005bb7;
     }
 }
 .sk-preview-fixed{
     position: fixed;
     top:  calc(4rem + 20px);
+}
+::-webkit-scrollbar{
+    width: 2px;
+    background-color: rgb(234, 232, 232);
+}
+::-webkit-scrollbar-thumb{
+    background: #a7cff7;
 }
 </style>
