@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-11-07 15:18:04
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-28 10:45:44
+ * @LastEditTime: 2023-03-01 17:29:21
  */
 /* 引入路由模块，和vue2.0方式不同 */
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'; //导入
@@ -26,13 +26,12 @@ const routes: Array<RouteRecordRaw> = [
               component: () => import('@/views/home/index.vue'),
               name: 'FrontHome',
               meta: { title: '主页', keepAlive: true }
-            },
-            {
+            },{
                 path: 'article/:_id', // 由于可能查看文章会开启新窗口，所以这里采用 params 参数传递文章唯一id，通过 id 查询文章数据
                 component: () => import('@/views/article/index.vue'),
                 name: 'FrontArticle',
                 meta: { title: '文章', noNeedLogin: true }
-            }, {
+            },{
                 path: 'category',
                 component: () => import('@/views/category/index.vue'),
                 name: 'FrontCategory',

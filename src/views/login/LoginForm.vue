@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-12-09 16:14:27
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-28 16:36:00
+ * @LastEditTime: 2023-03-01 15:30:37
 -->
 <template>
     <el-form
@@ -88,7 +88,10 @@ const submitForm = (formEl: FormInstance | undefined) => {
 const handleLogin = () => {
     isLoading.value = true;
     LoginAjax({
-      	params: Utils.encrypt.DynamicDES(JSON.stringify(ruleForm))
+      	params: Utils.encrypt.DynamicDES(JSON.stringify({
+			...ruleForm,
+			password:  Utils.encrypt.StaticDES(ruleForm.password)
+        }))
     })
     .then(res =>{
         let data = res.data;

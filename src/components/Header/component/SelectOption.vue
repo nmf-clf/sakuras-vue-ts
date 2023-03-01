@@ -2,40 +2,20 @@
  * @Author: niumengfei
  * @Date: 2022-04-27 17:25:41
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-27 15:57:48
+ * @LastEditTime: 2023-03-01 17:41:17
 -->
 <template>
 	<div :class="'rg-options' + (' rg-options-' + deviceType())">
-		<!-- 首页 -->
-		<el-dropdown class="hidden-dropdown">
-			<span class="el-dropdown-link" @click="turnPage('/')">首页
+		<el-dropdown v-for="v in menuList" class="hidden-dropdown">
+			<span class="el-dropdown-link" @click="v.handleClick">{{ v.label }}
 				<span class="break-line"></span>
 			</span>
 		</el-dropdown>
-		<!-- 分类 -->
-		<el-dropdown class="hidden-dropdown">
-			<span class="el-dropdown-link" @click="turnPage('/category')">分类
+		<!-- <el-dropdown class="hidden-dropdown">
+			<span class="el-dropdown-link" @click="turnPage('/category')">关于博客
 				<span class="break-line"></span>
 			</span>
-		</el-dropdown>
-		<!-- 学习笔记 -->
-		<el-dropdown class="hidden-dropdown">
-			<span class="el-dropdown-link" @click="openPage('https://sakuras.group/sakuras-docs/')">笔记
-				<span class="break-line"></span>
-			</span>
-		</el-dropdown>
-		<!-- 发布 -->
-		<el-dropdown class="hidden-dropdown">
-			<span class="el-dropdown-link" @click="openWritterPage()">发布
-				<span class="break-line"></span>
-			</span>
-		</el-dropdown>
-		<!-- 关于 -->
-		<el-dropdown class="hidden-dropdown">
-			<span class="el-dropdown-link" @click="turnPage('/category')">关于我
-				<span class="break-line"></span>
-			</span>
-		</el-dropdown>
+		</el-dropdown> -->
 
 		<!-- 个人中心 trigger="click"-->
 		<el-dropdown class="hidden-dropdown">
@@ -60,13 +40,37 @@ import { useRouter } from 'vue-router'
 import { useStore } from "vuex";
 import { Message, Search } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus';
-import UserStore from "@/store/modules/user";
 
 const router = useRouter();
 const store = useStore();
 const isCollapse = store.state.admin.isCollapse;
 const deviceType = () => store.getters.deviceType;
 const userInfo = store.getters.userInfo;
+
+const menuList = [
+	{
+		label: '首页',
+		handleClick: () => turnPage('/')
+	},{
+		label: '归档',
+		handleClick: () => turnPage('/')
+	},{
+		label: '分类',
+		handleClick: () => turnPage('/category')
+	},{
+		label: '标签',
+		handleClick: () => turnPage('/')
+	},{
+		label: '笔记',
+		handleClick: () => openPage('https://sakuras.group/sakuras-docs/')
+	},{
+		label: '发布',
+		handleClick: () => openWritterPage()
+	},{
+		label: '关于博客',
+		handleClick: () => turnPage('/')
+	}
+]
 
 const openPage = (url: string) => window.open(url);
 

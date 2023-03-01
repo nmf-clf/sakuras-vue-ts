@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-12-13 14:51:55
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-28 17:28:29
+ * @LastEditTime: 2023-03-01 14:44:49
 -->
 <template>
     <!-- 
@@ -46,12 +46,12 @@
             width="30%"
             align-center
         >
-            <span>请输入节点类型</span>
-            <el-input v-model="nodeType" placeholder="请输入节点type (例: articleType)" />
             <span>请输入节点名称</span>
             <el-input v-model="nodeLabel" placeholder="请输入节点label (例: 文章类型)" />
+            <span>请输入节点类型</span>
+            <el-input v-model="nodeType" placeholder="请输入节点type (例: articleType)" />
             <span>请输入节点值</span>
-            <el-input v-model="nodeValue" placeholder="请输入节点value (例: '1')" />
+            <el-input v-model="nodeValue" placeholder="目前节点值由后端自动生成 (例: '71568429')" disabled />
             <template #footer>
                 <span class="dialog-footer">
                     <el-button @click="dialogVisible = false">取消</el-button>
@@ -85,8 +85,6 @@ const nodeValue = ref('');
 const dataSource = ref<Tree[]>([]);
 const dialogVisible = ref(false);
 
-console.log('xxxxxxxxxxxxxxxxxxs', Utils.randomByDate()); // 
-
 const store = useStore();
 
 onMounted(() => {
@@ -94,6 +92,10 @@ onMounted(() => {
 });
 
 watch(filterText, (val) => { treeRef.value!.filter(val) })
+watch(nodeLabel, (val) => {
+    if(val == '文章类型') nodeType.value = 'articleType';
+    if(val == '文章标签') nodeType.value = 'articleTag';
+})
 
 const handleDragStart = (node: Node, ev: DragEvents) => {
   console.log('drag start', node)
@@ -194,7 +196,7 @@ const addRootNode = () => {
         userId,
         type: nodeType.value,
         label: nodeLabel.value, 
-        value: nodeValue.value,
+        // value: nodeValue.value,
     })
     .then(res =>{
         ElMessage({ type: 'success', message: `新增一级节点成功` });
@@ -214,7 +216,7 @@ const addChildrenNode = (data: Tree) => {
             pid: data._id,
             userId,
             label: value, // 类型
-            value: value, // 值
+            // value: value, // 值
         })
         .then(res =>{
             ElMessage({ type: 'success', message: `新增子节点成功` });
@@ -257,7 +259,7 @@ const renameNode = (node: Node) => {
         DictionaryApi.AddDictionaryAjax({
             _id: node.data._id,
             label: value,
-            value,
+            // value,
             rename: true,
         })
         .then(res =>{

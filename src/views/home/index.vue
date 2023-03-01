@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-04-06 23:49:03
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-28 16:49:01
+ * @LastEditTime: 2023-03-01 19:22:21
 -->
 <template>
     <!-- 背景图片 -->
@@ -54,7 +54,7 @@
                             </div>
                             <div class="meta-item">
                                 <svg t="1674960719306" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="9858" width="0.8rem" height="0.8rem"><path d="M81.16 412.073333L0 709.653333V138.666667a53.393333 53.393333 0 0 1 53.333333-53.333334h253.413334a52.986667 52.986667 0 0 1 37.713333 15.62l109.253333 109.253334a10.573333 10.573333 0 0 0 7.54 3.126666H842.666667a53.393333 53.393333 0 0 1 53.333333 53.333334v74.666666H173.773333a96.2 96.2 0 0 0-92.613333 70.74z m922-7.113333a52.933333 52.933333 0 0 0-42.386667-20.96H173.773333a53.453333 53.453333 0 0 0-51.453333 39.333333L11.773333 828.666667a53.333333 53.333333 0 0 0 51.453334 67.333333h787a53.453333 53.453333 0 0 0 51.453333-39.333333l110.546667-405.333334a52.953333 52.953333 0 0 0-9.073334-46.373333z" fill="#cdcdcd" p-id="9859"></path></svg>
-                                {{ item.type }}
+                                {{ item.typeName }}
                             </div>
                             
                         </div>
@@ -72,8 +72,8 @@
                 </el-card>
                 <el-skeleton  v-if="isLoading" :rows="5" animated />
             </div>
-            <p  v-if="hasMoreArticle" class="unarticle" @click="getArticleList">加载更多</p>
-            <p  v-else class="unarticle">没有更多数据啦</p>
+            <p  v-if="hasMoreArticle" class="article-bt load-more" @click="getArticleList"><div>加载更多</div></p>
+            <p  v-else class="article-bt un-article">没有更多数据啦</p>
         </div>
     </el-main>
 </template>
@@ -97,7 +97,7 @@ const styleObject = reactive({ height: document.body.clientHeight + 'px' });
 const articles: DataItemType[] = reactive([]);
 const hasMoreArticle = ref(true);
 const isLoading = ref(false);
-const copyTextArr = ['欢迎来到我的小窝', '读很多的书，走很远的路，见很多的人'];
+const copyTextArr = ['欢迎来到我的个人网站', '静夜听雨声，飞花入清梦'];
 const homeMiddleText = ref('');
 let textIndex = 0;
 let page = 1;
@@ -255,15 +255,18 @@ const getArticleList = () => {
     }
 }
 .home-bg{
+    width: 100%;
     position: fixed;
     margin: 0;
     padding: 0;
     z-index: -1;
     height: 100%;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-size: cover;
-    background-position: center center;
+    // background-repeat: no-repeat;
+    // background-attachment: fixed;
+    // background-size: cover;
+    // background-position: center center;
+    object-fit: cover;
+    pointer-events: none;
 }
 .home-middle-text{
     width: 500px;
@@ -404,14 +407,34 @@ const getArticleList = () => {
                 transform: translateY(0px);
             }
         }
-        .unarticle{
+        .article-bt{
             text-align: center;
             margin-top: 30px;
             font-size: 15px;
             color: #989898;
             transition: all 0.6s;
+           
         }
-        .unarticle:hover{
+        .load-more{
+            div{
+                text-decoration: none;
+                display: inline-block;
+                padding: 0.6rem 1rem;
+                background-size: 250%;
+                transition: all .4s;
+                background-color: transparent;
+                outline: none;
+                border: none;
+                border-radius: 5px;
+            }
+            div:hover{
+                background-image: linear-gradient(120deg,transparent 50%,#FE9600 50%);
+                color: #fff;
+                background-position: 100%;
+                transform: translate(16px)
+            }
+        }
+        .un-article:hover{
             font-size: 16px;
             color: #FE9600;
         }

@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-12-13 14:51:55
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-24 16:48:12
+ * @LastEditTime: 2023-03-01 15:37:19
 -->
 <template>
     <div class="container">
@@ -106,12 +106,12 @@ const resData = reactive({
 const tableData: DataItemType[] = reactive([]); 
 const btns = [
     { text: '新增文章', type: '1', handleClick: () =>{
-        router.push({
-            path: `/admin/editor/markdown/${Utils.utoa(JSON.stringify({
-                username
-            }))}`,
-        })
-        
+        window.open(`${window.location.origin}/#/writter`);
+        // router.push({
+        //     path: `/admin/editor/markdown/${Utils.utoa(JSON.stringify({
+        //         username
+        //     }))}`,
+        // })
     }},
     { text: '批量删除', type: '0', handleClick: () =>{
         

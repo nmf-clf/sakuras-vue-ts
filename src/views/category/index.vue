@@ -2,10 +2,12 @@
  * @Author: niumengfei
  * @Date: 2022-04-06 23:49:03
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-03 17:28:09
+ * @LastEditTime: 2023-03-01 18:28:21
 -->
 <template>
-   <div class="category">111</div>
+   <div class="category">
+        <el-button>测试的</el-button>
+   </div>
 </template>
 
 <script lang="ts" setup>
@@ -17,7 +19,7 @@ import { useStore } from "vuex";
 
 <style lang='less' scoped>
 .category{
-    width: 100%;
     margin-top: 4rem;
+    margin-left: 27%;
 }
 </style>

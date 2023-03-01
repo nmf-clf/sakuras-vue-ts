@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-12-09 16:14:27
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-02 17:32:10
+ * @LastEditTime: 2023-03-01 15:28:33
 -->
 <template>
     <el-form 
@@ -92,8 +92,11 @@ const submitForm = (formEl: FormInstance | undefined) => {
     })
 }
 /* 注册 */
-const handleRegister = () =>{
-    RegisterAjax({ params: Utils.encrypt.DynamicDES(JSON.stringify(ruleForm)) })
+const handleRegister = () => {
+    RegisterAjax({ params: Utils.encrypt.DynamicDES(JSON.stringify({
+        ...ruleForm,
+        password:  Utils.encrypt.StaticDES(ruleForm.password)
+    })) })
     .then(res =>{
         ElMessage({
             message: res.message,

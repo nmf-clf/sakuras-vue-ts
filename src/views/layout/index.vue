@@ -2,11 +2,14 @@
  * @Author: niumengfei
  * @Date: 2022-04-06 23:49:03
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-06 10:44:02
+ * @LastEditTime: 2023-03-01 17:26:20
 -->
 <template>
     <el-container :class="'frontHome-' + deviceType()" class="frontHome">
+        <!-- 公共头部 -->
         <MyHeader :headerClass="headerClass" />
+        <!-- 侧边菜单 -->
+        <!-- <SideMenu /> -->
         <img class="sk-sroll" :class="headerClass ? 'sk-sroll-active' : null" @click="scrollToTop" src="@/assets/imgs/scroll.png" />
         <div class="sk-main">
             <router-view v-slot="{ Component }">
@@ -33,6 +36,7 @@ import { onMounted, ref } from 'vue';
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
 import { MyHeader } from '@/components'
+import SideMenu from "./SideMenu.vue";
 import { ElContainer } from 'element-plus';
 
 const store = useStore();

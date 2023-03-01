@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2023-01-31 14:31:26
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-27 14:15:04
+ * @LastEditTime: 2023-03-01 16:21:25
 -->
 <template>
     <md-editor
@@ -52,7 +52,16 @@ if(htmlSize){
     scrollElementOffsetTop = Number(document.documentElement.style.fontSize.replace('px', '')) * 5.4;
 }
 
-
+MdEditor.config({
+    markedRenderer(renderer) {
+        renderer.link = (href, title, text) => { // 设置链接在新窗口打开
+            return `<a href="${href}" title="${title}" target="_blank">${text}</a>`;
+        };
+        return renderer;
+    },
+    editorExtensions: {
+    }
+});
 </script>
 
 <style lang='less' scoped>

@@ -2,11 +2,12 @@
  * @Author: niumengfei
  * @Date: 2022-12-20 16:59:36
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-02 11:02:42
+ * @LastEditTime: 2023-03-01 15:41:16
  */
 export interface DataItemType {
     title: string,
-    type: string,
+    type: number,
+    typeName: string,
     content: string,
     createDate: string,
     updateDate: string,

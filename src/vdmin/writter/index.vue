@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-12-13 14:51:55
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-28 16:05:06
+ * @LastEditTime: 2023-03-01 18:56:22
 -->
 <template>
     <div class="writter">
@@ -217,7 +217,7 @@ const getDictionaryList = (index: number = 0) => {
         showNewCatebox.value = false; // 重置新增分类节点
         newCateName.value = ''; // 重置输入框的值
         getNoteList({
-            type: cates![index].label, // 默认查询第一个分类的笔记
+            type: cates![index].value, // 默认查询第一个分类的笔记
             sortByIndex: true,
             loading: '.note',
         });
@@ -330,7 +330,7 @@ const switchCateItem = (element: any, index: number) => {
     cateIndex.value = index;
     noteIndex.value = 0; // 重置笔记下标
     getNoteList({
-        type: categoryList![index].label, // 默认获取一级分类的文章
+        type: categoryList![index].value, // 默认获取一级分类的文章
         sortByIndex: true,
         loading: '.note', 
     })
@@ -348,19 +348,20 @@ const addArticle = (type: string) => {
         title: Utils.moment().currentDate(),
         content: '',
         type: categoryList[cateIndex.value].value,
+        typeName: categoryList[cateIndex.value].label,
         username,
         status: '未发布',
         tag: [],
     }
     switch (type) {
         case 'top':
-            params['index'] = Number(noteList[0]?.index) - 1, 
+            params['index'] = Number(noteList[0]?.index || 1) - 1, 
             noteList.unshift(params)
             noteIndex.value = 0;
             noteDetail.value = params;
             break;
         case 'bottom':
-            params['index'] = Number(noteList[noteList.length-1]?.index) + 1, 
+            params['index'] = Number(noteList[noteList.length-1]?.index || 0) + 1, 
             noteList.push(params)
             noteIndex.value = noteList.length - 1;
             noteDetail.value = params;
@@ -377,7 +378,7 @@ const addArticleRequest = (params: any) => {
         let data = res.data;
         // noteDetail.value = data;
         getNoteList({
-            type: categoryList![cateIndex.value].label, // 默认查询第一个分类的笔记
+            type: categoryList![cateIndex.value].value, // 默认查询第一个分类的笔记
             sortByIndex: true,
         }, noteIndex.value);
     })
@@ -422,9 +423,9 @@ const noteItemOperation = (type: string, element: any) => {
                 .then(res => {
                     ElMessage.success('文章删除成功');
                     getNoteList({
-                        type: categoryList[cateIndex.value].label, // 默认查询第一个分类的笔记
+                        type: categoryList[cateIndex.value].value, // 默认查询第一个分类的笔记
                         sortByIndex: true,
-                        loading: '.note', 
+                        loading: '.note',
                     });
                 })
             })
@@ -450,6 +451,7 @@ const handleSave = (type: string, params: any) => {
         title: noteDetail.value.title,
         username: noteDetail.value.username,
         type: noteDetail.value.type,
+        typeName: noteDetail.value.typeName,
         index: noteDetail.value.index,
         content: params.content || noteDetail.value.content,
         status: noteDetail.value.status || '未发布',
