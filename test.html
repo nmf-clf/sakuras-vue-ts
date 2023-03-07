@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2023-01-29 14:21:32
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-27 16:01:44
+ * @LastEditTime: 2023-03-07 16:40:57
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -12,26 +12,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
-        .box{
-            width: 600px;
+        div{
+            width: 100px;
             height: 200px;
-            border: 1px solid red;
-            transition: all 2s;
-        }
-        .img{
-            width: 400px;
-            margin: auto;
-            overflow: hidden;
-        }
-        .box:hover img{
-            transform: scale(2);
+            background: yellowgreen;
+            margin-left: 15px;
+            display: inline-block;
+            word-break: break-all;
         }
     </style>
 </head>
 <body>
-    <canvas id="myCanvas"></canvas>
 </body>
 <script>
-    console.log(Number(undefined)); 
+let arr = [
+    {
+        name: ['js', 'react']
+    },    {
+        name: ['js', 'react', 'vue']
+    },    {
+        name: ['react', 'angluar']
+    },    {
+        name: ['react', 'angluar']
+    },    {
+        name: ['react', 'vue']
+    }
+]
+/* 
+    输出: [
+        { 
+            type: 'js',
+            num: 2
+        }, { 
+            type: 'react',
+            num: 5
+        }, { 
+            type: 'vue',
+            num: 2
+        }, { 
+            type: 'angluar',
+            num: 2
+        }
+    ]
+*/
 </script>
 </html>

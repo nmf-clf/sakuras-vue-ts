@@ -4,7 +4,7 @@ import { Utils } from "@/utils";
  * @Author: niumengfei
  * @Date: 2022-12-12 12:55:25
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-28 10:34:31
+ * @LastEditTime: 2023-03-07 18:13:52
  */
 interface StateType {
     screenWidth: number;
@@ -34,7 +34,10 @@ export default {
         },
         saveDictionary({ commit }: any, value: any){
             commit('SAVE_DICTIONARY', value)
-        }
+        },
+        saveUserInfoNew({ commit }: any, value: any){
+            commit('SAVE_USER_INFO_NEW', value)
+        },
     },
     mutations: {
         SET_WIDTH_AND_Height(state: any, value: number[]){
@@ -43,17 +46,22 @@ export default {
         },
         SAVE_USER_INFO(state: any, value: any){
             if(Utils.isEmptyObj(value)){ // 注销
-                state.username = '';
-                state.nickname = '';
-                state.userId = '';
+                Object.assign(state, {
+                    username: '',
+                    nickname: '',
+                    userId: '',
+                });
             }else{
-                state.username = value.username;
-                state.nickname = value.nickname;
-                state.userId = value._id;
+                Object.assign(state, {
+                   ...value
+                });
             }
         },
         SAVE_DICTIONARY(state: any, value: any){
-            state.dictionary = value;
+            // 为了防止添加了不必要的 state 属性，需要做个判断，未完成
+            Object.assign(state, {
+                ...value
+            });
         },
     },
 }

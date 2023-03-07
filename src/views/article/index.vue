@@ -2,30 +2,32 @@
  * @Author: niumengfei
  * @Date: 2022-04-06 23:49:03
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-27 10:29:23
+ * @LastEditTime: 2023-03-02 15:22:02
 -->
 <template>
-    <div class="detail-top">
-        <img
-            class="img"
-            :src="require('@/assets/imgs/home_bg.jpg')" 
-        />
-        <div class="desc">
-            <div class="title">{{ formData.mdData.title }}</div>
-            <div class="btm">
-                <img :src="require('@/assets/imgs/photo.jpg')" />
-                <span>{{ formData.mdData.nickname || formData.mdData.username }}</span> ·
-                <span>发布于 {{ formData.mdData.createDate }}</span> ·
-                <span>最后编辑于 {{ formData.mdData.updateDate }}</span> ·
-                <span>{{ formData.mdData.readNum || 24 }}次阅读</span>
+    <div class="article">
+        <div class="detail-top">
+            <img
+                class="img"
+                :src="require('@/assets/imgs/home_bg.jpg')" 
+            />
+            <div class="desc">
+                <div class="title">{{ formData.mdData.title }}</div>
+                <div class="btm">
+                    <img :src="require('@/assets/imgs/photo.jpg')" />
+                    <span>{{ formData.mdData.nickname || formData.mdData.username }}</span> ·
+                    <span>发布于 {{ formData.mdData.createDate }}</span> ·
+                    <span>最后编辑于 {{ formData.mdData.updateDate }}</span> ·
+                    <span>{{ formData.mdData.readNum || 24 }}次阅读</span>
+                </div>
             </div>
         </div>
-    </div>
-    <el-skeleton  v-if="isLoading" :rows="5" animated class="detail-loading"/>
-    <div class="content">
-        <MdPreview 
-            :content="formData.mdData.content || ''"
-        />
+        <el-skeleton  v-if="isLoading" :rows="5" animated class="detail-loading"/>
+        <div class="content">
+            <MdPreview 
+                :content="formData.mdData.content || ''"
+            />
+        </div>
     </div>
 </template>
 
@@ -72,57 +74,62 @@ onMounted(() => {
 </script>
 
 <style lang='less' scoped>
-.detail-top{
-    width: 100%;
-    height: 400px;
-    position: relative;
-    margin-top: 4rem;
-    .img{
+.article{
+    flex: 1;
+    .detail-top{
         width: 100%;
-        height: 100%;
-        -o-object-fit: cover;
-        object-fit: cover;
-        pointer-events: none;    
-    }
-    .desc{
-        position: absolute;
-        bottom: 0;
-        color: #fff;
-        max-width: 50%;
-        display: flex;
-        flex-direction: column;
-        // justify-content: center;
-        align-items: center;
-        padding-bottom: 30px;
-        margin-left: 27%;
-        .title{
+        // height: 400px;
+        height: 19rem;
+        position: relative;
+        margin-top: 4rem;
+        .img{
             width: 100%;
-            font-size: 1.8rem;
+            height: 100%;
+            -o-object-fit: cover;
+            object-fit: cover;
+            pointer-events: none;    
         }
-        .btm{
-            font-size: 0.9rem;
-            margin-top: 25px;
+        .desc{
+            position: absolute;
+            bottom: 0;
+            color: #fff;
+            max-width: 50%;
             display: flex;
+            flex-direction: column;
+            // justify-content: center;
             align-items: center;
-            img{
-                width: 1.5rem;
-                border-radius: 50%;
+            padding-bottom: 30px;
+            margin-left: 27%;
+            .title{
+                width: 100%;
+                font-size: 1.8rem;
             }
-            span{
-                margin: 0 5px;
+            .btm{
+                font-size: 0.9rem;
+                margin-top: 25px;
+                display: flex;
+                align-items: center;
+                img{
+                    width: 1.5rem;
+                    border-radius: 50%;
+                }
+                span{
+                    margin: 0 5px;
+                }
             }
         }
     }
+    .detail-loading{
+        width: 50%;
+        margin: 50px auto;
+    }
+    .content{
+        margin-left: 27%;
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        padding-right: 300px;
+    }
 }
-.detail-loading{
-    width: 50%;
-    margin: 50px auto;
-}
-.content{
-    margin-left: 27%;
-    position: relative;
-    display: flex;
-    flex-direction: row;
-    padding-right: 300px;
-}
+
 </style>

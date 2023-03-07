@@ -2,11 +2,11 @@
  * @Author: niumengfei
  * @Date: 2022-04-27 17:25:41
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-03-01 17:41:17
+ * @LastEditTime: 2023-03-06 14:18:01
 -->
 <template>
 	<div :class="'rg-options' + (' rg-options-' + deviceType())">
-		<el-dropdown v-for="v in menuList" class="hidden-dropdown">
+		<el-dropdown v-for="v in menuList" class="hidden-dropdown" v-show="!v.disabled">
 			<span class="el-dropdown-link" @click="v.handleClick">{{ v.label }}
 				<span class="break-line"></span>
 			</span>
@@ -35,7 +35,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive } from 'vue'
+import { ref, reactive, watch, onUpdated } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from "vuex";
 import { Message, Search } from '@element-plus/icons-vue'
@@ -47,7 +47,7 @@ const isCollapse = store.state.admin.isCollapse;
 const deviceType = () => store.getters.deviceType;
 const userInfo = store.getters.userInfo;
 
-const menuList = [
+const menuList = reactive([
 	{
 		label: '首页',
 		handleClick: () => turnPage('/')
@@ -59,19 +59,30 @@ const menuList = [
 		handleClick: () => turnPage('/category')
 	},{
 		label: '标签',
-		handleClick: () => turnPage('/')
+		handleClick: () => turnPage('/tag')
 	},{
 		label: '笔记',
 		handleClick: () => openPage('https://sakuras.group/sakuras-docs/')
 	},{
 		label: '发布',
-		handleClick: () => openWritterPage()
+		disabled: !userInfo.username,
+		handleClick: () => openPage(`${window.location.origin}/#/writter`)
 	},{
 		label: '关于博客',
-		handleClick: () => turnPage('/')
+		handleClick: () => turnPage('/about')
 	}
-]
+])
 
+// watch(() => userInfo.username, (val) => {
+// 	console.log('xxxxxxxxsss', val);
+// 	if(val == '1'){
+// 		menuList[5].disabled = true;
+// 	}
+// })
+onUpdated(() => {
+	console.log('x更新了>>>');
+	
+})
 const openPage = (url: string) => window.open(url);
 
 const turnPage = (path: string) =>{
@@ -83,12 +94,9 @@ const turnPage = (path: string) =>{
     router.push(datas);
 }
 
-const openWritterPage = () => {
-   window.open(`${window.location.origin}/#/writter`);
-}
-
 const loginOrOut = (e: string) =>{
     if(userInfo.username){ //退出登录
+		menuList[5].disabled = true;
         store.dispatch('user/saveUserInfo', {});
         ElMessage.success('注销成功');
     }else{

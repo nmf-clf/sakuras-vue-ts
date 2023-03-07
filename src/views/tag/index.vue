@@ -2,12 +2,12 @@
  * @Author: niumengfei
  * @Date: 2022-04-06 23:49:03
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-03-06 11:26:38
+ * @LastEditTime: 2023-03-06 11:32:24
 -->
 <template>
-   <div class="category">
+   <div class="tag">
         <div class="top-bg">
-            <h2 class="catename">分类<sup class="catenum">8</sup></h2>
+            <h2 class="catename">标签<sup class="catenum">8</sup></h2>
         </div>
         <div class="content">
             <el-badge v-for="v in cateList" :value="12" class="badge">
@@ -42,7 +42,7 @@ const cateList = [{
 </script>
 
 <style lang='less' scoped>
-.category{
+.tag{
     flex: 1;
     display: flex;
     flex-direction: column;

@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2023-01-31 14:31:26
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-28 15:39:40
+ * @LastEditTime: 2023-03-07 15:43:04
 -->
 <template>
     <div class="md-writter-view">
@@ -115,7 +115,6 @@ const state = reactive({
 */
 
 watch(content, (newValue, oldValue) => {
-    console.log('watch............', newValue);
     state.content = newValue;
 },{ immediate:true })
 
@@ -132,7 +131,6 @@ async function onSave() {
 }
 const onSave2 = (value: string) => {
     saveVal.value = '保存中...';
-    console.log('save', value);
     ArticleApi.AddNewArticleAjax({
         _id: props.noteDetail?._id,
         title: props.noteDetail?.title,

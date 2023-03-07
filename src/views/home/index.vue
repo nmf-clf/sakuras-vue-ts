@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-04-06 23:49:03
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-03-01 19:22:21
+ * @LastEditTime: 2023-03-07 18:12:06
 -->
 <template>
     <!-- 背景图片 -->
@@ -134,13 +134,19 @@ onMounted(() => {
 });
 // 获取数据列表 
 const getDictionaryList = () => {
-    DictionaryApi.GetDictionaryListAjax({})
+    DictionaryApi.GetDictionaryGroupAjax({
+        userId: User.get().userId
+    })
     .then(res =>{
-        let list = res.data;
-        let dictironary = {};
-        list.map(item => { dictironary[item.type] = item.children || [] })
-        console.log('获取字典值>>>', dictironary);
-        store.dispatch('user/saveDictionary', dictironary)
+        let { dictionList, cateNumInfo, tagNumInfo } = res.data;
+        let dictionary = {};
+        dictionList.map(item => { dictionary[item.type] = item.children || [] })
+        console.log('获取字典值>>>', dictionary);
+        store.dispatch('user/saveDictionary', {
+            dictionary,
+            cateNumInfo, 
+            tagNumInfo,
+        });
     })
 }
 // 点击 ↓ 滚动 1个 vh 高度

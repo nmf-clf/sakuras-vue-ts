@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-11-07 15:18:04
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-03-01 17:29:21
+ * @LastEditTime: 2023-03-06 11:29:32
  */
 /* 引入路由模块，和vue2.0方式不同 */
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'; //导入
@@ -36,6 +36,11 @@ const routes: Array<RouteRecordRaw> = [
                 component: () => import('@/views/category/index.vue'),
                 name: 'FrontCategory',
                 meta: {  title: '分类', noNeedLogin: true }
+            },{
+                path: 'tag',
+                component: () => import('@/views/tag/index.vue'),
+                name: 'FrontTag',
+                meta: {  title: '标签', noNeedLogin: true }
             }
         ]
     },
