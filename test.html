@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2023-01-29 14:21:32
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-03-07 16:40:57
+ * @LastEditTime: 2023-03-10 15:08:52
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -27,33 +27,15 @@
 <script>
 let arr = [
     {
-        name: ['js', 'react']
-    },    {
-        name: ['js', 'react', 'vue']
-    },    {
-        name: ['react', 'angluar']
-    },    {
-        name: ['react', 'angluar']
-    },    {
-        name: ['react', 'vue']
+        name:'nmf',
+        id: 1
+    },{
+        name: 'ee',
+        id: 2
     }
 ]
-/* 
-    输出: [
-        { 
-            type: 'js',
-            num: 2
-        }, { 
-            type: 'react',
-            num: 5
-        }, { 
-            type: 'vue',
-            num: 2
-        }, { 
-            type: 'angluar',
-            num: 2
-        }
-    ]
-*/
+let res = arr.some((item)=> item.name == 'nmf' && item.id == 1);
+
+console.log(res);
 </script>
 </html>

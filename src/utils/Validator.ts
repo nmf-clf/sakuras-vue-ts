@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-12-09 13:23:17
  * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-12 13:45:06
+ * @LastEditTime: 2023-03-08 11:27:07
  */
 /* 校验表单数据 */
 interface ParamsType {
@@ -54,11 +54,15 @@ export default {
     VerifyPassWord: (params: ParamsType = {}) =>{
         return [{ 
             validator: (rule: any, value: any, callback: any) => {
-                var pPattern = /^.*(?=.{6,})(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*? ]).*$/;
+                // var pPattern = /^.*(?=.{6,})(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*? ]).*$/;
+                var pPattern = /^.*(?=.{6,})(?=.*[a-z])(?=.*\d).*$/;
+                // var pPattern = /^(\w){6,20}$/;
                 console.log(pPattern.test("iFat3"));
                 value === '' ? callback(new Error('请填写密码!'))
                 : value === '111' ?  callback()
-                : !pPattern.test(value) ? callback(new Error('密码仅支持 至少6位 且包括1个大写字母，1个小写字母，1个数字 和 1个特殊字符'))
+                // : !pPattern.test(value) ? callback(new Error('密码仅支持 至少6位 且包括1个大写字母，1个小写字母，1个数字 和 1个特殊字符'))
+                : !pPattern.test(value) ? callback(new Error('密码仅支持 至少6位 且包括1个小写字母、1个数字'))
+                // : !pPattern.test(value) ? callback(new Error('密码仅支持 6-20位 的字母、数字、下划线'))
                 : callback();
             },
         }]

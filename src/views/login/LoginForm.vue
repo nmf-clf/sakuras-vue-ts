@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-12-09 16:14:27
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-03-01 15:30:37
+ * @LastEditTime: 2023-03-08 11:23:27
 -->
 <template>
     <el-form
@@ -66,7 +66,7 @@ const ruleForm = reactive<LoginParamsType>({ //表单内容
 
 watch(() => ruleForm.username, (newValue, oldValue) => {
     newValue == 'niumengfei' ? ruleForm.password = '7758521nmf@CLF' : null;
-    newValue == 'test' ? ruleForm.password = 'test@A123' : null;
+    newValue == 'test' ? ruleForm.password = 'test123' : null;
 },{ immediate:true })
 
 const rules: FormRules = reactive({ // 表单校验规则
@@ -111,7 +111,7 @@ const handleLogin = () => {
 
 const test = () => {
     ruleForm.username = 'test';
-    ruleForm.password = 'test@A123'
+    ruleForm.password = 'test123'
 }
 </script>
 

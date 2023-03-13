@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-12-13 14:51:55
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-03-01 14:44:49
+ * @LastEditTime: 2023-03-13 16:58:38
 -->
 <template>
     <!-- 
@@ -185,8 +185,7 @@ const getDictionaryList = () => {
         let list = res.data;
         let dictironary = {};
         list.map(item => { dictironary[item.type] = item.children || [] })
-        console.log('获取字典值>>>', dictironary);
-        store.dispatch('user/saveDictionary', dictironary)
+        store.dispatch('user/changeDictionary', { dictironary })
     })
 }
 // 新增一级节点

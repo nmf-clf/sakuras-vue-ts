@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-04-06 23:49:03
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-03-07 18:12:06
+ * @LastEditTime: 2023-03-08 11:43:58
 -->
 <template>
     <!-- 背景图片 -->
@@ -134,6 +134,8 @@ onMounted(() => {
 });
 // 获取数据列表 
 const getDictionaryList = () => {
+    store.dispatch('user/saveDictionary');
+    return;
     DictionaryApi.GetDictionaryGroupAjax({
         userId: User.get().userId
     })

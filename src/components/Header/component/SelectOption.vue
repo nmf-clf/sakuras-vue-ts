@@ -2,20 +2,15 @@
  * @Author: niumengfei
  * @Date: 2022-04-27 17:25:41
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-03-06 14:18:01
+ * @LastEditTime: 2023-03-13 18:06:43
 -->
 <template>
 	<div :class="'rg-options' + (' rg-options-' + deviceType())">
-		<el-dropdown v-for="v in menuList" class="hidden-dropdown" v-show="!v.disabled">
-			<span class="el-dropdown-link" @click="v.handleClick">{{ v.label }}
-				<span class="break-line"></span>
+		<el-dropdown v-for="(v, i) in menuList" class="hidden-dropdown" :class="activeKey == i ? 'active' : null" v-show="!v.disabled">
+			<span class="el-dropdown-link" @click="handleClick(v, i)">{{ v.label }}
+				<span class="break-line line-active"></span>
 			</span>
 		</el-dropdown>
-		<!-- <el-dropdown class="hidden-dropdown">
-			<span class="el-dropdown-link" @click="turnPage('/category')">关于博客
-				<span class="break-line"></span>
-			</span>
-		</el-dropdown> -->
 
 		<!-- 个人中心 trigger="click"-->
 		<el-dropdown class="hidden-dropdown">
@@ -36,54 +31,62 @@
 
 <script lang="ts" setup>
 import { ref, reactive, watch, onUpdated } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { useStore } from "vuex";
 import { Message, Search } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus';
 
+const route = useRoute();
 const router = useRouter();
 const store = useStore();
 const isCollapse = store.state.admin.isCollapse;
 const deviceType = () => store.getters.deviceType;
 const userInfo = store.getters.userInfo;
+const activeKey = ref(0);
+console.log('router', router, route.meta.title);
 
 const menuList = reactive([
 	{
 		label: '首页',
-		handleClick: () => turnPage('/')
+		active: false,
+		url: '/',
 	},{
 		label: '归档',
-		handleClick: () => turnPage('/')
+		url: '/',
 	},{
 		label: '分类',
-		handleClick: () => turnPage('/category')
+		url: '/category',
 	},{
 		label: '标签',
-		handleClick: () => turnPage('/tag')
+		url: '/tag',
 	},{
 		label: '笔记',
-		handleClick: () => openPage('https://sakuras.group/sakuras-docs/')
+		url: 'https://sakuras.group/sakuras-docs/',
+		outPage: true,
 	},{
 		label: '发布',
 		disabled: !userInfo.username,
-		handleClick: () => openPage(`${window.location.origin}/#/writter`)
+		url: `${window.location.origin}/#/writter`,
+		outPage: true,
 	},{
 		label: '关于博客',
-		handleClick: () => turnPage('/about')
+		url: `about`,
 	}
 ])
 
-// watch(() => userInfo.username, (val) => {
-// 	console.log('xxxxxxxxsss', val);
-// 	if(val == '1'){
-// 		menuList[5].disabled = true;
-// 	}
-// })
-onUpdated(() => {
-	console.log('x更新了>>>');
+const handleClick = (v: any, i: number) => {
+	switch (v.outPage) {
+		case true:
+			window.open(v.url)
+			break;
 	
-})
-const openPage = (url: string) => window.open(url);
+		default:
+			activeKey.value = i;
+			turnPage(v.url);
+			break;
+	}
+}
+
 
 const turnPage = (path: string) =>{
     const datas = { 
@@ -99,6 +102,7 @@ const loginOrOut = (e: string) =>{
 		menuList[5].disabled = true;
         store.dispatch('user/saveUserInfo', {});
         ElMessage.success('注销成功');
+		
     }else{
         turnPage(e);
     }
@@ -150,7 +154,14 @@ const toAdmin = (path: string) =>{
 			width: 100%;
 		}
 	}
-	
+	.active{
+		.el-dropdown-link{
+			color: #FE9600;
+		}
+		.break-line{
+			width: 100%;
+		}
+	}
 }
 .el-dropdown-menu__item{
   	justify-content: center !important;

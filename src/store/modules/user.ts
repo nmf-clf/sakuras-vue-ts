@@ -1,10 +1,12 @@
 import { Utils } from "@/utils";
+import { DictionaryApi } from '@/api';
+import { User } from '@/utils';
 
 /*
  * @Author: niumengfei
  * @Date: 2022-12-12 12:55:25
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-03-07 18:13:52
+ * @LastEditTime: 2023-03-13 16:58:22
  */
 interface StateType {
     screenWidth: number;
@@ -32,11 +34,23 @@ export default {
         saveUserInfo({ commit }: any, value: any){
             commit('SAVE_USER_INFO', value)
         },
-        saveDictionary({ commit }: any, value: any){
+        changeDictionary({ commit }: any, value: any){ // 单纯修改字典值时候
             commit('SAVE_DICTIONARY', value)
         },
-        saveUserInfoNew({ commit }: any, value: any){
-            commit('SAVE_USER_INFO_NEW', value)
+        saveDictionary({ commit }: any, value: any){
+            DictionaryApi.GetDictionaryGroupAjax({
+                userId: User.get().userId
+            })
+            .then(res =>{
+                let { dictionList, cateNumInfo, tagNumInfo } = res.data;
+                let dictionary = {};
+                dictionList.map(item => { dictionary[item.type] = item.children || [] })
+                commit('SAVE_DICTIONARY', {
+                    dictionary,
+                    cateNumInfo, 
+                    tagNumInfo,
+                })
+            })
         },
     },
     mutations: {
@@ -46,19 +60,20 @@ export default {
         },
         SAVE_USER_INFO(state: any, value: any){
             if(Utils.isEmptyObj(value)){ // 注销
+                Object.keys(state).map(v => {
+                    if(!['screenWidth', 'screenHeight', 'fontSize'].includes(v)){ // 注销删除用户信息，但不包含自适应配置
+                        delete state[v]
+                    }
+                })
+            }else{ // 登录/更新
                 Object.assign(state, {
-                    username: '',
-                    nickname: '',
-                    userId: '',
-                });
-            }else{
-                Object.assign(state, {
-                   ...value
+                   ...value,
+                   userId: value._id
                 });
             }
         },
         SAVE_DICTIONARY(state: any, value: any){
-            // 为了防止添加了不必要的 state 属性，需要做个判断，未完成
+            // 为了防止添加了不必要的 state 属性，可以做个判断
             Object.assign(state, {
                 ...value
             });
