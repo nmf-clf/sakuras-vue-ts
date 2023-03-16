@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-04-06 23:49:03
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-03-02 15:10:11
+ * @LastEditTime: 2023-03-14 10:49:19
 -->
 <template>
     <el-container :class="'frontHome-' + deviceType()" class="frontHome">

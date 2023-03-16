@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-11-07 15:18:04
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-03-08 09:56:59
+ * @LastEditTime: 2023-03-14 10:39:06
 -->
 <template>
     <router-view />
@@ -28,7 +28,7 @@ import { Utils } from "@/utils";
 const store = useStore();
 const font_size = () => store.getters.userInfo.fontSize;
 
-console.log(`设备类型:${store.getters.deviceType} | 字号:${store.getters.userInfo.fontSize}`);
+console.log(`设备类型: ${store.getters.deviceType} | 字号: ${store.getters.userInfo.fontSize}`);
 
 onMounted(()=>{
     document.documentElement.style.fontSize = font_size() + 'px'; // 设置文本默认字体

@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-11-07 15:18:04
  * @LastEditors: niumengfei
- * @LastEditTime: 2022-12-14 19:01:49
+ * @LastEditTime: 2023-03-14 10:48:04
  */
 import { createApp } from 'vue'
 import App from './App.vue' //引入跟组件

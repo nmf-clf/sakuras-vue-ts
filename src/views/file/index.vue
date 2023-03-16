@@ -2,18 +2,14 @@
  * @Author: niumengfei
  * @Date: 2022-04-06 23:49:03
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-03-14 17:02:11
+ * @LastEditTime: 2023-03-14 17:22:45
 -->
 <template>
-   <div class="tag">
+   <div class="file">
         <div class="top-bg">
-            <h2 class="catename">标签<sup class="catenum">8</sup></h2>
+            <h2 class="catename">归档</h2>
         </div>
-        <div class="content">
-            <el-badge v-for="v in tagNumInfo" :value="v.num" class="badge">
-                <el-button>{{ v.type }}</el-button>
-            </el-badge>
-        </div>
+        
    </div>
 </template>
 
@@ -23,13 +19,11 @@ import { onMounted, ref, reactive, toRefs } from 'vue';
 import { useRoute } from 'vue-router';
 import { useStore } from "vuex";
 
-const { tagNumInfo = [] } = User.get();
-
 
 </script>
 
 <style lang='less' scoped>
-.tag{
+.file{
     flex: 1;
     display: flex;
     flex-direction: column;

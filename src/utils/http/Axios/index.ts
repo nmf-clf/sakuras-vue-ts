@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-10-29 14:36:35
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-23 19:09:43
+ * @LastEditTime: 2023-03-14 10:44:07
  */
 import axios, { AxiosResponse, AxiosRequestConfig } from "axios";
 import { ElMessage, ElLoading } from 'element-plus'
@@ -44,7 +44,7 @@ const service = async<T = any> (config: AxiosRequestConfig, loading: LoadingType
         })
     }
    
-    RequestLog(`发起['${config.url}]：参数=> ${JSON.stringify(config.data)}`);
+    // RequestLog(`发起['${config.url}]：参数=> ${JSON.stringify(config.data)}`);
     let _config = {
         ...config, //无法重新设置config的值
         headers: {

@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-04-06 23:49:03
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-03-16 18:16:49
+ * @LastEditTime: 2023-03-16 16:32:17
 -->
 <template>
    <div class="category">
@@ -10,68 +10,23 @@
             <h2 class="catename">分类<sup class="catenum">8</sup></h2>
         </div>
         <div class="content">
-            <div class="cates">
-                <!-- <el-badge v-for="v in cateNumInfo" :value="v.num" class="badge">
-                    <el-button size="large" :style="{background: getBgColor()}">{{ v.type }}</el-button>
-                </el-badge> -->
-                <el-button v-for="v in showNumInfo" size="large" :style="{background: getBgColor()}" @click="handleClick(v)"><span class="text">{{ v.type }}</span><span class="num">{{ v.num }}</span></el-button>
-            </div>
+            123
         </div>
    </div>
 </template>
 
 <script lang="ts" setup>
 import { User } from '@/utils';
-import { onMounted, ref, reactive, onBeforeUpdate } from 'vue';
+import { onMounted, ref, reactive, toRefs } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useStore } from "vuex";
 
 const route = useRoute();
 const router = useRouter();
-const { cateNumInfo = [], tagNumInfo = [] } = User.get();
-const showNumInfo = <any>ref([]);
-console.log('route::', route);
-const bgcolors = [
-    'rgb(255, 203, 108)',
-    'rgb(255, 219, 222)',
-    'rgb(255, 248, 50)',
-    'rgb(255, 248, 213)',
-    'rgb(255, 208, 10)',
-    'rgb(255, 194, 30)',
-    'rgb(255, 234, 54)',
-]
-const URLEnum = {
-    '分类': 'FrontCategoryList',
-    '标签': 'FrontTagList',
-}
-onMounted(() => {
-    createNumInfo(route);
-})
-onBeforeUpdate(() => {
-    createNumInfo(route);
-})
-const createNumInfo = (route: any) => {
-    const { title } = route.meta;
-    if(title == '分类'){
-        showNumInfo.value = cateNumInfo;
-    }
-    if(title == '标签'){
-        showNumInfo.value = tagNumInfo;
-    }
-}
-const getBgColor = () => {
-    return  bgcolors[Math.floor( (Math.random() * bgcolors.length) )]
-}
-const handleClick = (v: any) => {
-    const title = route.meta.title as string;
-    router.push({
-        name: URLEnum[title],
-        params: {
-            _type: v.type,
-            _value: v.value,
-        }
-    })
-}
+const { cateNumInfo = [] } = User.get();
+const { _type } = route.params;
+console.log('route2::', _type);
+
 </script>
 
 <style lang='less' scoped>
@@ -109,7 +64,7 @@ const handleClick = (v: any) => {
         display: flex;
         .cates{
             width: 100%;
-            padding: 34px 44px;
+            padding: 44px 44px;
             border-radius: 10px;
             box-shadow: 0 15px 35px rgba(50,50,93,.1), 0 5px 15px rgba(0,0,0,.07);
             .badge{
@@ -130,9 +85,6 @@ const handleClick = (v: any) => {
                     margin-left: 5px;
                     color: #9b8b2a;
                 }
-            }
-            .el-button{
-                margin: 10px;
             }
             .el-button:not(:first-child){
                 margin-left: 25px;

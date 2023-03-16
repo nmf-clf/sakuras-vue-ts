@@ -2,11 +2,11 @@
  * @Author: niumengfei
  * @Date: 2022-04-27 17:25:41
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-03-13 18:06:43
+ * @LastEditTime: 2023-03-14 17:26:39
 -->
 <template>
-	<div :class="'rg-options' + (' rg-options-' + deviceType())">
-		<el-dropdown v-for="(v, i) in menuList" class="hidden-dropdown" :class="activeKey == i ? 'active' : null" v-show="!v.disabled">
+	<div :class="'rg-options' + (' rg-options-' + deviceType())" class="animate__animated animate__fadeInRight">
+		<el-dropdown v-for="(v, i) in menuList" class="hidden-dropdown" :class="routeInfo.routeTitle == v.label ? 'active' : null" v-show="!v.disabled">
 			<span class="el-dropdown-link" @click="handleClick(v, i)">{{ v.label }}
 				<span class="break-line line-active"></span>
 			</span>
@@ -42,8 +42,7 @@ const store = useStore();
 const isCollapse = store.state.admin.isCollapse;
 const deviceType = () => store.getters.deviceType;
 const userInfo = store.getters.userInfo;
-const activeKey = ref(0);
-console.log('router', router, route.meta.title);
+const routeInfo = store.getters.routeInfo;
 
 const menuList = reactive([
 	{
@@ -52,7 +51,7 @@ const menuList = reactive([
 		url: '/',
 	},{
 		label: '归档',
-		url: '/',
+		url: '/file',
 	},{
 		label: '分类',
 		url: '/category',
@@ -81,7 +80,6 @@ const handleClick = (v: any, i: number) => {
 			break;
 	
 		default:
-			activeKey.value = i;
 			turnPage(v.url);
 			break;
 	}

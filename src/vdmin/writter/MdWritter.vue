@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2023-01-31 14:31:26
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-03-07 15:43:04
+ * @LastEditTime: 2023-03-16 18:02:17
 -->
 <template>
     <div class="md-writter-view">
@@ -44,6 +44,7 @@
             <p>```</p>
             <p>代码块</p>
             <p>```</p>
+            <p>居中: {{ `<p style="text-align: center">居中</p></p>` }}</p>
             <template #footer>
                 <span @click="centerDialogVisible = false">我知道啦</span>
             </template>
@@ -129,34 +130,6 @@ async function onSave() {
     })
     res ? saveVal.value = '已保存' : saveVal.value = '保存失败'
 }
-const onSave2 = (value: string) => {
-    saveVal.value = '保存中...';
-    ArticleApi.AddNewArticleAjax({
-        _id: props.noteDetail?._id,
-        title: props.noteDetail?.title,
-        username: props.noteDetail?.username,
-        type: props.noteDetail?.type,
-        index: props.noteDetail?.index,
-        content: value,
-        status: props.noteDetail?.status || '未发布',
-        // loading: '.editor',
-    })
-    .then(res => {
-        // let data = res.data;
-        saveVal.value = '已保存';
-        // state._id = data._id;
-        props.handleSave!('change_noteDetail', {
-            content: state.content
-        })
-    })
-    .catch(res => {
-        saveVal.value = '保存失败';
-    })
-}
-// onBeforeUpdate(()=>{
-//     state.content = state.content ? state.content : props.content;
-//     return true;
-// })
 
 const handler = () => {
   centerDialogVisible.value = true;

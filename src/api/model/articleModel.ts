@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-12-07 17:22:21
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-03-01 15:41:53
+ * @LastEditTime: 2023-03-16 17:24:14
  */
 export interface GetListParams {
     username?: string,
@@ -25,6 +25,7 @@ export interface ArticleListResItem {
     readNum: number,
     nickname: string,
     _id: string,
+    hot: number,
 }
 
 export type ArticleListRes = {

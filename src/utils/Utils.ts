@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-10-29 14:04:02
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-28 17:30:48
+ * @LastEditTime: 2023-03-16 17:20:59
  */
 import { StaticKey, DynamicKey, RSAPublicKey } from './Const';
 import  { JSEncrypt }  from 'jsencrypt';
@@ -193,6 +193,23 @@ class Utils{
                 return type ? moment().format(type) : moment().format('YYYY-MM-DD');
             }
         }
+    }
+    // 过滤 Markdown 特殊字符
+    filterMarkdown = (markdown: string) => {
+        if(!markdown) return '';
+        // 先过滤 []() 链接
+        const regExp_link = /\[.*?\]\((.*?)\)/g; // 匹配链接中括号和括号之间的内容
+        let result = markdown;
+        let match;
+        while ((match = regExp_link.exec(markdown))) { // 遍历所有匹配到的链接
+            const link: any = match[0]; // 获取当前匹配到的链接
+            const name = link.match(/\[(.*?)\]/)[1]; // 提取链接名称
+            result = result.replace(link, name); // 替换链接为名称
+        }
+        // 再过滤 特殊字符
+        const regExp_special = /[#>*\-+`~_]/g; // 匹配 # > * - + ` ~ _ 
+        let fina = result.replace(regExp_special, '');
+        return fina;
     }
 }
 

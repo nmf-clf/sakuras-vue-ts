@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2023-01-29 14:21:32
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-03-10 15:08:52
+ * @LastEditTime: 2023-03-16 17:16:29
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -25,17 +25,16 @@
 <body>
 </body>
 <script>
-let arr = [
-    {
-        name:'nmf',
-        id: 1
-    },{
-        name: 'ee',
-        id: 2
-    }
-]
-let res = arr.some((item)=> item.name == 'nmf' && item.id == 1);
-
-console.log(res);
+// const str = "哈哈[地址1]('https:baidu.com') 测试[地址2]('12332')";
+const str = "## 概述\n网站基于 [vue-cli](https://cli.vuejs.org/) 脚手架创建，主要用于个人学习展示；\n文章渲染使用客户端渲染，考虑后期重构为服务端渲染。\n\n## 功能\n- 注册、登录\n- 文章编辑、预览、评论\n- 后台管理模板\n\n## 主要技术\n- 客户端\n  - Typescript\n  - Javascript\n  - Vue3\n  - Canvas\n  - Css3动画\n  - [Markdown编辑器](https://imzbf.github.io/md-editor-v3/index)\n- 服务端\n  - Nodejs\n  - MongoDB\n\n## 主要问题\n### [Element-Puls]组件库图标使用问题\n```js\nplusIcons.map(component => app.component(component.name, component) ) //注册element-plus图标\n// 问题：通过此方式可以全局通过标签使用 而不可以通过表达式使用，\n// 且如果使用表达式方式需要再组件内 import 同时还需要再入口处增加 icon 的图标库样式。\n```\n\n\n### [布局]首页顶部的页签切换应该如何保持选中状态？\n  - 由于顶部 Header 公共组件只有在页面初次挂载时会渲染一次，在页面切换时 Header 组件都不会更新，因此在 Header 内部无法监听到路由跳转信息。\n  - 解决：通过全局后置路由守卫，将当前路由信息存储到 store 里，然后在 Header 组件里通过 getter 监听属性的变化。\n\n### [Vue]切换文章时 markdown 编辑器内容非最新\n  - 由于将编辑器布局封装为子组件，因此 props.content 默认值为空，因此 srcipt 代码块初始化仅执行一次；\n    因而 state.content 即便是在 onMount 里去 赋值，也只是在页面挂载后去赋值，在加 setTimeout 的情况下，很大概率仍然是空值；\n    然而由于 props.content 会通过接口更新，此异步操作会导致 state.content 仍然是上次的空值。\n  - 解决：可以使用 watch 监视 props的值，但是使用 watch 会导致 再很短的时间内触发 md-editor 内部防抖函数，因而导致页面卡顿，因此临时将 md-editor 源码中 >>> md-editor-vs.es.js: 5814 防抖的函数的时间设置为 10 秒\n  > 相关问题：[父组件更新是否会默认引起子组件更新](http://localhost:9001/#/article/64006442c26fdf4f65d93487)"
+const regExp = /\[.*?\]\((.*?)\)/g; // 匹配链接中括号和括号之间的内容
+let result = str;
+let match;
+while ((match = regExp.exec(str))) { // 遍历所有匹配到的链接
+  const link = match[0]; // 获取当前匹配到的链接
+  const name = link.match(/\[(.*?)\]/)[1]; // 提取链接名称
+  result = result.replace(link, name); // 替换链接为名称
+}
+console.log(result); // '哈哈地址1 测试地址2'
 </script>
 </html>

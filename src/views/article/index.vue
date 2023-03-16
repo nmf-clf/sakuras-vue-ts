@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-04-06 23:49:03
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-03-02 15:22:02
+ * @LastEditTime: 2023-03-16 17:48:44
 -->
 <template>
     <div class="article">
@@ -18,13 +18,14 @@
                     <span>{{ formData.mdData.nickname || formData.mdData.username }}</span> ·
                     <span>发布于 {{ formData.mdData.createDate }}</span> ·
                     <span>最后编辑于 {{ formData.mdData.updateDate }}</span> ·
-                    <span>{{ formData.mdData.readNum || 24 }}次阅读</span>
+                    <span>{{ formData.mdData.hot + 1 || 0 }}次阅读</span>
                 </div>
             </div>
         </div>
-        <el-skeleton  v-if="isLoading" :rows="5" animated class="detail-loading"/>
         <div class="content">
+            <el-skeleton  v-if="isLoading" :rows="5" animated class="detail-loading"/>
             <MdPreview 
+                v-else
                 :content="formData.mdData.content || ''"
             />
         </div>
@@ -120,8 +121,8 @@ onMounted(() => {
         }
     }
     .detail-loading{
-        width: 50%;
-        margin: 50px auto;
+        width: 100%;
+        margin-top: 50px;
     }
     .content{
         margin-left: 27%;

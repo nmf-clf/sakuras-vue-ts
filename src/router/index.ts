@@ -2,30 +2,29 @@
  * @Author: niumengfei
  * @Date: 2022-11-07 15:18:04
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-03-08 11:38:14
+ * @LastEditTime: 2023-03-16 18:17:05
  */
 /* 引入路由模块，和vue2.0方式不同 */
-import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'; //导入
+import { createRouter, createWebHashHistory, RouteRecordRaw, RouteLocationNormalized } from 'vue-router'; //导入
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 import { Utils } from "@/utils";
-
 // 简单配置  进度条,可以不配置：在axios中我们不再做配置，以用来区分。
 // NProgress.inc(0.2)
 NProgress.configure({ easing: 'ease', speed: 500, showSpinner: false, minimum: 0 });
-
+import store from "@/store";
 // 2. 定义一些路由：每个路由都需要映射到一个组件。 我们后面再讨论嵌套路由。
 const routes: Array<RouteRecordRaw> = [
     { 
         path: '/', 
-        redirect: '/home',
+        // redirect: '/home',
         component: () => import('@/views/layout/index.vue'),
         children: [
             {
-              path: 'home',
+              path: '',
               component: () => import('@/views/home/index.vue'),
               name: 'FrontHome',
-              meta: { title: '主页', keepAlive: true }
+              meta: { title: '首页', keepAlive: true }
             },{
                 path: 'article/:_id', // 由于可能查看文章会开启新窗口，所以这里采用 params 参数传递文章唯一id，通过 id 查询文章数据
                 component: () => import('@/views/article/index.vue'),
@@ -33,16 +32,47 @@ const routes: Array<RouteRecordRaw> = [
                 meta: { title: '文章', noNeedLogin: true }
             },{
                 path: 'category',
-                component: () => import('@/views/category/index.vue'),
-                name: 'FrontCategory',
-                meta: {  title: '分类', noNeedLogin: true }
+                children: [
+                    {
+                        path: '',
+                        component: () => import('@/views/category/index.vue'),
+                        name: 'FrontCategory',
+                        meta: {  title: '分类', noNeedLogin: true },
+                    },
+                    {
+                      path: ':_type:/:_value',
+                      component: () => import('@/views/category/List.vue'),
+                      name: 'FrontCategoryList',
+                      meta: { title: '列表', noNeedLogin: true, beLong: '分类' },
+                    }
+                ]
             },{
                 path: 'tag',
-                component: () => import('@/views/tag/index.vue'),
-                name: 'FrontTag',
-                meta: {  title: '标签', noNeedLogin: true }
+                children: [
+                    {
+                        path: '',
+                        component: () => import('@/views/category/index.vue'),
+                        name: 'FrontTag',
+                        meta: {  title: '标签', noNeedLogin: true },
+                    },
+                    {
+                      path: ':_type',
+                      component: () => import('@/views/category/List.vue'),
+                      name: 'FrontTagList',
+                      meta: { title: '列表', noNeedLogin: true, beLong: '标签' },
+                    }
+                ]
+            },{
+                path: 'file',
+                component: () => import('@/views/file/index.vue'),
+                name: 'FrontFile',
+                meta: {  title: '归档', noNeedLogin: true }
             }
         ]
+    },
+    {
+        path: '/home',
+        redirect: '/',
     },
     {
         path: '/login',
@@ -134,7 +164,7 @@ router.beforeEach((to, from, next) => {
 
 /* 路由后置守卫 */
 router.afterEach((to, from, next) => {
-    console.log('router.afterEach>>>', to, from);
+    // console.log('router.afterEach>>>', to, from);
     const title = to.meta.title as string;
     if(to.name){
         let _t =  title ? title + ' - 夜语清梦' : '夜语清梦' as string;
@@ -147,6 +177,8 @@ router.afterEach((to, from, next) => {
     }
     // NProgress.done()
     loadingProgress();
+    setRouteInfo(to); 
+    
 });
 
 // 统一处理阅读进度条
@@ -173,12 +205,18 @@ const loadingProgress = () => {
                 }
             }
         }, 100)
-        console.log('文档总高度>>', scrollHeight, hiddenHeight);
+        // console.log('文档总高度>>', scrollHeight, hiddenHeight);
         window.addEventListener('scroll', ()=>{0
             // 1. 原则上滚动条做出响应的等待时间间隔应较小才能表现丝滑，因此采用防抖处理顶部进度条也可以;
             // 2. 同时由于节流表现出问题是第一次滚动不会被记载需要特殊处理，况且即便是节流仍然需要指定实践触发的单位时间间隔.
             loadingProgress(); 
         })
     }, 500);
+}
+// 内存存储当前路由信息
+const setRouteInfo = (to: RouteLocationNormalized) =>{ 
+    store.dispatch('route/setRouteInfo', {
+        routeTitle: to.meta.beLong || to.meta.title, 
+    })
 }
 export default router;

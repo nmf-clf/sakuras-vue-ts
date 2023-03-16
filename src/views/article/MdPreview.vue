@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2023-01-31 14:31:26
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-03-01 16:21:25
+ * @LastEditTime: 2023-03-14 11:50:29
 -->
 <template>
     <md-editor
@@ -54,8 +54,16 @@ if(htmlSize){
 
 MdEditor.config({
     markedRenderer(renderer) {
-        renderer.link = (href, title, text) => { // 设置链接在新窗口打开
-            return `<a href="${href}" title="${title}" target="_blank">${text}</a>`;
+        renderer.link = (href: string, title, text) => { // 设置链接在新窗口打开
+            console.log(href, title, text);
+            let _href = href, localOrigin = 'http://localhost:9001', remoteOrigin =  'https://www.sakuras.group';
+            // 避免在远程页面打开了本地开发项目的页面
+            if(window.location.origin == remoteOrigin){
+                if(href?.indexOf(localOrigin) > -1){
+                    _href.replace(localOrigin, remoteOrigin)
+                }
+            }
+            return `<a href="${_href}" title="${title}" target="_blank">${text}</a>`;
         };
         return renderer;
     },
