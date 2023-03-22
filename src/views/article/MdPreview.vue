@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2023-01-31 14:31:26
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-03-14 11:50:29
+ * @LastEditTime: 2023-03-20 11:40:31
 -->
 <template>
     <md-editor
@@ -74,7 +74,8 @@ MdEditor.config({
 
 <style lang='less' scoped>
 .md-editor-previewOnly{
-    font-family: "My Custom Font";
+    // font-family: "My Custom Font";
+    font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
 }
 .sk-md-preview{
     position: absolute;

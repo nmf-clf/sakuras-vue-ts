@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-11-07 15:18:04
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-03-14 10:39:06
+ * @LastEditTime: 2023-03-20 11:44:09
 -->
 <template>
     <router-view />
@@ -26,14 +26,15 @@ import { Utils } from "@/utils";
 // NProgress.configure({ easing: 'ease', speed: 500, showSpinner: false, minimum: 0 });
 
 const store = useStore();
-const font_size = () => store.getters.userInfo.fontSize;
+const _fontSize = 17;
+store.dispatch('user/setFontSize', _fontSize); // 通过 getter 获取字体大小，如果不使用 dispatch 直接修改 store.state数据 是无效的
+
+const font_size = () => store.getters.userInfo.fontSize; 
 
 console.log(`设备类型: ${store.getters.deviceType} | 字号: ${store.getters.userInfo.fontSize}`);
 
 onMounted(()=>{
     document.documentElement.style.fontSize = font_size() + 'px'; // 设置文本默认字体
-    let default_wh = [document.documentElement.clientWidth, document.documentElement.clientHeight];
-    // store.dispatch('user/setWidthAndHeight', default_wh)
     /* 监听视图宽度和高度的变化 */
     window.addEventListener('resize', ()=>{
         let wh = [document.documentElement.clientWidth, document.documentElement.clientHeight]
@@ -68,7 +69,7 @@ onMounted(()=>{
             // loadingProgress(); // 防抖处理顶部进度条
             // 处理md预览 目录
             let SkMdPreviewDOM = document.documentElement.getElementsByClassName('sk-md-preview')[0];
-            if(document.documentElement.scrollTop >= 400){ // 400为图片高度
+            if(document.documentElement.scrollTop >= 19 * _fontSize){ // 19 * _fontSize 为图片高度  19 是图片 rem
                 SkMdPreviewDOM?.classList.add('sk-preview-fixed');
             }else{
                 SkMdPreviewDOM?.classList.remove('sk-preview-fixed');

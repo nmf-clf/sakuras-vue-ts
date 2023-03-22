@@ -6,7 +6,7 @@ import { User } from '@/utils';
  * @Author: niumengfei
  * @Date: 2022-12-12 12:55:25
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-03-13 16:58:22
+ * @LastEditTime: 2023-03-20 11:07:12
  */
 interface StateType {
     screenWidth: number;
@@ -17,17 +17,20 @@ const _u = localStorage.getItem('userInfo') || '';
 const userInfo = _u ? JSON.parse(_u) : {};
 
 export default {
-    state: (): StateType => {
+    state: (): StateType => { // 函数形式
         return {
             screenWidth: document.documentElement.clientWidth,
             screenHeight: document.documentElement.clientHeight,
-            fontSize: 18,
+            fontSize: 16, // 此处 fontSize 设置仅在初次访问本地无值下有效，因为系统的字体大小通过 getter 获取，因此若未 dispatch => action，则浏览器无法获取到最新的字体
             username: '',
             dictionary: {},
             ...userInfo,
         }
     },
     actions: {
+        setFontSize({ commit }: any, value: number){
+            commit('SET_FONT_SIZE', value)
+        },
         setWidthAndHeight({ commit }: any, value: number[]){
             commit('SET_WIDTH_AND_Height', value)
         },
@@ -54,9 +57,12 @@ export default {
         },
     },
     mutations: {
+        SET_FONT_SIZE(state: any, value: number){
+            state.fontSize = value;
+        },
         SET_WIDTH_AND_Height(state: any, value: number[]){
-            state.screenWidth = value[0]
-            state.screenHeight = value[1]
+            state.screenWidth = value[0];
+            state.screenHeight = value[1];
         },
         SAVE_USER_INFO(state: any, value: any){
             if(Utils.isEmptyObj(value)){ // 注销

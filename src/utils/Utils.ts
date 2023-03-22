@@ -1,8 +1,8 @@
 /*
  * @Author: niumengfei
  * @Date: 2022-10-29 14:04:02
- * @LastEditors: niumengfei
- * @LastEditTime: 2023-03-16 17:20:59
+ * @LastEditors: niumengfei 870424431@qq.com
+ * @LastEditTime: 2023-03-22 17:21:08
  */
 import { StaticKey, DynamicKey, RSAPublicKey } from './Const';
 import  { JSEncrypt }  from 'jsencrypt';
@@ -206,10 +206,12 @@ class Utils{
             const name = link.match(/\[(.*?)\]/)[1]; // 提取链接名称
             result = result.replace(link, name); // 替换链接为名称
         }
+        // 过滤标签
+        result = result.replace(/<[^>]*>/g, '');
         // 再过滤 特殊字符
         const regExp_special = /[#>*\-+`~_]/g; // 匹配 # > * - + ` ~ _ 
-        let fina = result.replace(regExp_special, '');
-        return fina;
+        result = result.replace(regExp_special, '');
+        return result;
     }
 }
 

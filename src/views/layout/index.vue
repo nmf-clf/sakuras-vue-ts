@@ -98,6 +98,7 @@ const scrollToTop = () => {
     // height: 100%;
     width: 100%;
     min-height: 100vh;
+    overflow-x: hidden;
     .sk-main{
         // width: 100%;
         // height: 100%;

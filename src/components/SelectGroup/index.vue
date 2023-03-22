@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-12-13 14:51:55
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-09 17:27:30
+ * @LastEditTime: 2023-03-17 10:58:12
 -->
 <template>
     <!-- 
@@ -35,7 +35,7 @@
                                 v-for="v in item.options"
                                 :key="v.value"
                                 :label="v.label"
-                                :value="v.value"
+                                :value="item.valTargetLabel ? v.label : v.value"
                             />
                         </el-select>
                     </el-form-item>
@@ -55,7 +55,7 @@
                                 v-for="v in item.options"
                                 :key="v.value"
                                 :label="v.label"
-                                :value="v.value"
+                                :value="item.valTargetLabel ? v.label : v.value"
                             />
                         </el-select>
                     </el-form-item>
@@ -123,6 +123,7 @@ interface DataType {
     options: OptionsType[],
     span?: number,
     size?: string,
+    valTargetLabel?: boolean,
 }
 
 const props = defineProps({

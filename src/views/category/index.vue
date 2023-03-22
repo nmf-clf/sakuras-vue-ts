@@ -2,12 +2,12 @@
  * @Author: niumengfei
  * @Date: 2022-04-06 23:49:03
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-03-16 18:16:49
+ * @LastEditTime: 2023-03-20 11:22:08
 -->
 <template>
    <div class="category">
         <div class="top-bg">
-            <h2 class="catename">分类<sup class="catenum">8</sup></h2>
+            <p class="catename">{{ routeMeta?.title }}<sup class="catenum">8</sup></p>
         </div>
         <div class="content">
             <div class="cates">
@@ -30,6 +30,8 @@ const route = useRoute();
 const router = useRouter();
 const { cateNumInfo = [], tagNumInfo = [] } = User.get();
 const showNumInfo = <any>ref([]);
+const routeMeta = <any>ref({});
+
 console.log('route::', route);
 const bgcolors = [
     'rgb(255, 203, 108)',
@@ -45,13 +47,15 @@ const URLEnum = {
     '标签': 'FrontTagList',
 }
 onMounted(() => {
-    createNumInfo(route);
+    getNumInfo(route);
 })
 onBeforeUpdate(() => {
-    createNumInfo(route);
+    getNumInfo(route);
 })
-const createNumInfo = (route: any) => {
+// 获取数量信息
+const getNumInfo = (route: any) => {
     const { title } = route.meta;
+    routeMeta.value = route.meta;
     if(title == '分类'){
         showNumInfo.value = cateNumInfo;
     }
@@ -94,8 +98,10 @@ const handleClick = (v: any) => {
         align-items: center;
         justify-content: center;
         .catename{
-            font-size: 2rem;
+            font-size: 2.2rem;
             color: #fff;
+            letter-spacing: 5px;
+            font-weight: bold;
             .catenum{
                 margin-left: 5px;
             }

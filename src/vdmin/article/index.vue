@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-12-13 14:51:55
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-03-01 15:37:19
+ * @LastEditTime: 2023-03-17 10:59:04
 -->
 <template>
     <div class="container">
@@ -12,7 +12,7 @@
             :data="[
                 { title: '文章标题', key: 'title', type: 'input' },
                 { title: '文章类型', key: 'type', type: 'select', options: dictionary.articleType },
-                { title: '文章标签', key: 'tag', type: 'mul-select', options: dictionary.articleTag },
+                { title: '文章标签', key: 'tag', type: 'mul-select', options: dictionary.articleTag, valTargetLabel: true },
                 { title: '文章状态', key: 'status', type: 'select', options: dictionary.articleStatus },
                 { title: '发布日期', key: 'createDate', type: 'mul-date' },
                 { title: '更新日期', key: 'updateDate', type: 'mul-date' },

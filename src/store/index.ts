@@ -1,8 +1,8 @@
 /*
  * @Author: niumengfei
- * @Date: 2022-11-07 15:18:04
+ * @Date: 2022-11-07 15::04
  * @LastEditors: niumengfei
- * @LastEditTime: 2023-03-14 10:43:06
+ * @LastEditTime: 2023-03-20 11:03:04
  */
 import { createStore } from 'vuex';
 import createPersistedState from "vuex-persistedstate"; //vuex状态持久化
@@ -30,7 +30,9 @@ export default createStore({
             key: "userInfo",
             reducer(state) { //render错误修改
                 // 要存储的数据：本项目采用es6扩展运算符的方式存储了state中所有的数据
-                return { ...state.user }
+                return { 
+                    ...state.user // 此插件会持久化存储 vuex 数据到本地，userInfo: { ...state.user } 但是同时数据也会被同步到 store.state 最外层  
+                }
             }
         })
     ]
