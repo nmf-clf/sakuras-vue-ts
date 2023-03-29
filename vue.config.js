@@ -1,8 +1,8 @@
 /*
  * @Author: niumengfei
  * @Date: 2022-11-07 15:18:04
- * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-13 10:56:11
+ * @LastEditors: niumengfei 870424431@qq.com
+ * @LastEditTime: 2023-03-28 18:37:26
  */
 const { defineConfig } = require('@vue/cli-service')
 const webpack = require('webpack')
@@ -10,6 +10,9 @@ const webpack = require('webpack')
 const AutoImport = require('unplugin-auto-import/webpack')
 const Components = require('unplugin-vue-components/webpack')
 const { ElementPlusResolver } = require('unplugin-vue-components/resolvers')
+// const DefineOptions = require('unplugin-vue-define-options/webpack');
+// const VueMacros = require('unplugin-vue-macros/webpack');
+// console.log('xxxxxxxxxxx', DefineOptions);
 // const  ElementPlus  = require('unplugin-element-plus')
 /* 配置@路径 */
 const path = require('path')
@@ -33,9 +36,10 @@ module.exports = defineConfig({
         // },
         },
         plugins: [ 
+            // require('unplugin-vue-define-options/webpack')(),
             AutoImport({  resolvers: [ElementPlusResolver()] }), //配置组件库按需引入(官方) 从13MB减少到7MB
             Components({ resolvers: [ElementPlusResolver()] }), //配置组件库按需引入(官方)clear
-            new webpack.DefinePlugin({ ProcessEnv: JSON.stringify({ ...process.env, ...pk }) })
+            new webpack.DefinePlugin({ ProcessEnv: JSON.stringify({ ...process.env, ...pk }) }),
             // ElementPlus(),
         ],
     },

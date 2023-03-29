@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-04-06 23:49:03
  * @LastEditors: niumengfei 870424431@qq.com
- * @LastEditTime: 2023-03-20 18:25:05
+ * @LastEditTime: 2023-03-29 18:29:08
 -->
 <template>
     <!-- 背景图片 -->
@@ -28,7 +28,7 @@
                     发现
                 </h1>
                 <el-card 
-                    v-for="(item, index) in articles"
+                    v-for="(item, index) in state.data"
                     :key="index"
                     shadow="always" class="item articleItem"
                     @click="viewDetails(item, index)"
@@ -70,161 +70,162 @@
                         <img class="limg" v-show="!item.loaded" src="@/assets/imgs/img_loading.svg" />
                     </div>
                 </el-card>
-                <el-skeleton  v-if="isLoading" :rows="5" animated />
+                <el-skeleton  v-if="state.loading" :rows="5" animated />
             </div>
-            <p  v-if="hasMoreArticle" class="article-bt load-more" @click="getArticleList"><div>加载更多</div></p>
+            <p  v-if="state.hasMore" class="article-bt load-more" @click="getArticleList({ pageSize: 5 })"><div>加载更多</div></p>
             <p  v-else class="article-bt un-article">没有更多数据啦</p>
         </div>
     </el-main>
 </template>
 
-<script lang="ts" setup>
-import { onMounted, ref, reactive } from 'vue';
+<script lang="ts">
+import { onMounted, ref, reactive, onActivated, defineComponent } from 'vue';
 import { useStore } from "vuex";
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { ElMain, ElCard } from 'element-plus';
 import { GetNewArticleListAjax } from "@/api/article";
 import { DataItemType } from "@/vdmin/article/type";
 import { DictionaryApi } from '@/api';
 import { User, Utils } from '@/utils';
+import { useArticleList } from '@/hooks';
 
-const store = useStore();
-const router = useRouter();
+const { state, getArticleList, imgLoaded } = useArticleList();
 
-const username = User.get().username || 'niumengfei';
+const _u = User.get().username; // 存储之前的用户名
 
-const styleObject = reactive({ height: document.body.clientHeight + 'px' });
-const articles: DataItemType[] = reactive([]);
-const hasMoreArticle = ref(true);
-const isLoading = ref(false);
-const copyTextArr = ['欢迎来到我的个人网站', '静夜听雨声，飞花入清梦'];
-const homeMiddleText = ref('');
-let textIndex = 0;
-let page = 1;
-let pageSize = 5;
-const imgUrls = [
-    'https://view.lixingyong.com/images/2022/07/11/501.jpg?image_process=resize,w_640',
-    'https://view.lixingyong.com/images/2021/11/19/GGR9ZZOHUFPUZ0.png?image_process=resize,w_640',
-    'https://view.lixingyong.com/images/2021/04/09/74542813_p0.png?image_process=resize,w_640',
-    'https://view.lixingyong.com/images/2021/04/09/80570514_p0.jpg?image_process=resize,w_640',
-    'https://view.lixingyong.com/images/2022/05/10/C2923B1E-7F81-4274-A8F6-97A6AB81C71D.png?image_process=resize,w_640',
-    'https://halo-ivan.oss-cn-hangzhou.aliyuncs.com/attachments/upload/103449051_p0.jpg',
-]
+// defineOptions({
+//     name: 'FrontHome',
+// })
 
-onMounted(() => {
-    getArticleList(); // 获取文章列表
-    getDictionaryList(); // 获取字典列表
-    setTimeout(() => { createTypewriter() }, 1000); // 创建打字机效果
-    // 判断是否是第一次访问此网站
-    if(!localStorage.getItem('IS_VISIT')){
-        document.documentElement.scrollTop = document.body.clientHeight;
-    }
-    let clientHeight = document.body.clientHeight; // 可视区域高度
-    let articleItemDOMs = document.getElementsByClassName('articleItem'); // 文章列表DOM集合
-    // 监听滚动事件，实现顶部过渡
-    window.addEventListener('scroll', function () {
-        // 监听元素距离顶部的距离，当文章将要显示时，使文章往上过渡
-        for(let i = 0; i < articleItemDOMs.length; i++){
-            let currentDOM = articleItemDOMs[i];
-            if((currentDOM.getBoundingClientRect().top - 50) <= clientHeight){
-                currentDOM.classList.add('to-move');
+export default defineComponent({
+    name: 'FrontHome',
+    /* beforeRouteEnter(to, from, next) {
+        next((vm: any) => {
+            // 尽管此时接口已经重新发起请求，但是用户名等相关信息仍然被缓存了
+            // 因此通过路由判断不免太麻烦些
+            if(from.meta.title == '分类'){
+                const { username } = User.get();
+                if(username != _u){ // 如果用户名与之前缓存的不一样了，就代表需要重新获取数据
+                    vm.getArticleList(1);
+                }
             }
-        }
-    })
-});
-// 获取数据列表 
-const getDictionaryList = () => {
-    store.dispatch('user/saveDictionary');
-}
-// 点击 ↓ 滚动 1个 vh 高度
-const scrollTopToBottom = () => {
-    let speed = 1;
-    let timetop = setInterval(function(){
-        speed < 20 ? (speed+=1) : null; // 匀加速
-        document.documentElement.scrollTop = document.documentElement.scrollTop + speed;
-        if(document.documentElement.scrollTop >= document.body.clientHeight){ // 当滚动距离 大于等于 视图窗口高度时，停止滚动
-            clearInterval(timetop)
-        }
-    }, 10)
-}
-// 创建打字机效果
-const createTypewriter = () => {
-    let index = 0;
-    const copyText = copyTextArr[textIndex];
-    let timer = setInterval(()=>{
-        homeMiddleText.value = homeMiddleText.value + copyText[index];
-        index += 1;
-        if(index >= copyText.length){
-            clearInterval(timer);
-            setTimeout(() => {
-                let clearTimer = setInterval(()=>{
-                    index -= 1;
-                    homeMiddleText.value = homeMiddleText.value.slice(0, index);
-                    if(index === 0){
-                        clearInterval(clearTimer);
-                        textIndex = textIndex ? 0 : 1;
-                        setTimeout(() => {
-                            createTypewriter();
-                        }, 1000);
+        })
+    }, */
+    setup(props) {
+        const store = useStore();
+        const route = useRoute();
+        const router = useRouter();
+        const styleObject = reactive({ height: document.body.clientHeight + 'px' });
+        const copyTextArr = ['欢迎来到我的个人网站', '静夜听雨声，飞花入清梦'];
+        const homeMiddleText = ref('');
+        let textIndex = 0;
+        const imgUrls = [
+            'https://view.lixingyong.com/images/2022/07/11/501.jpg?image_process=resize,w_640',
+            'https://view.lixingyong.com/images/2021/11/19/GGR9ZZOHUFPUZ0.png?image_process=resize,w_640',
+            'https://view.lixingyong.com/images/2021/04/09/74542813_p0.png?image_process=resize,w_640',
+            'https://view.lixingyong.com/images/2021/04/09/80570514_p0.jpg?image_process=resize,w_640',
+            'https://view.lixingyong.com/images/2022/05/10/C2923B1E-7F81-4274-A8F6-97A6AB81C71D.png?image_process=resize,w_640',
+            'https://halo-ivan.oss-cn-hangzhou.aliyuncs.com/attachments/upload/103449051_p0.jpg',
+        ]
+       
+        onMounted(() => {
+            getArticleList({ pageSize: 5 }); // 获取文章列表
+            getDictionaryList(); // 获取字典列表
+            setTimeout(() => { createTypewriter() }, 1000); // 创建打字机效果
+            // 判断是否是第一次访问此网站
+            if(!localStorage.getItem('IS_VISIT')){
+                document.documentElement.scrollTop = document.body.clientHeight;
+            }
+            let clientHeight = document.body.clientHeight; // 可视区域高度
+            let articleItemDOMs = document.getElementsByClassName('articleItem'); // 文章列表DOM集合
+            // 监听滚动事件，实现顶部过渡
+            window.addEventListener('scroll', function () {
+                // 监听元素距离顶部的距离，当文章将要显示时，使文章往上过渡
+                for(let i = 0; i < articleItemDOMs.length; i++){
+                    let currentDOM = articleItemDOMs[i];
+                    if((currentDOM.getBoundingClientRect().top - 50) <= clientHeight){
+                        currentDOM.classList.add('to-move');
                     }
-                }, 70)
-            }, 1000);
+                }
+            })
+            // 缓存首页
+            store.dispatch('route/changeRouteTag', {
+                type: 1,
+                routeName: 'FrontHome'
+            });
+        });
+        // 获取数据列表 
+        const getDictionaryList = () => {
+            store.dispatch('user/saveDictionary');
         }
-    }, 200)
-}
-// 图片异常捕获
-const onErrorImg = (e: any) =>{ // 本地图片不会发生异常
-}
-// 主页大图加载完毕后，返回到图片主页
-const onLoadImg = (e: any) => {
-    if(localStorage.getItem('IS_VISIT')) return;
-    localStorage.setItem('IS_VISIT', String(new Date().getTime()));
-    setTimeout(() => {
-        document.documentElement.scrollTop = 0;
-    }, 2000); // 第一次加载页面，2s后再返回到图片主页
-}
-
-const imgLoaded = (index: number) => {
-    articles[index]['loaded'] = true;
-}
-
-const viewDetails = (item: any, index: number) => {
-    articles[index].hot += 1;
-    const newWindow = window.open(`${window.location.origin}/#/article/${item._id}`) as any;
-    newWindow.onload = () => { 
-        let _t = item.title + ' - 夜语清梦';
-        localStorage.setItem('DOCUMENT_TITLE', _t); // 这里使用 SessionStorage 出现问题：每次获取的值都是上一次的值
-        newWindow.document.title = _t;
+        // 点击 ↓ 滚动 1个 vh 高度
+        const scrollTopToBottom = () => {
+            let speed = 1;
+            let timetop = setInterval(function(){
+                speed < 20 ? (speed+=1) : null; // 匀加速
+                document.documentElement.scrollTop = document.documentElement.scrollTop + speed;
+                if(document.documentElement.scrollTop >= document.body.clientHeight){ // 当滚动距离 大于等于 视图窗口高度时，停止滚动
+                    clearInterval(timetop)
+                }
+            }, 10)
+        }
+        // 创建打字机效果
+        const createTypewriter = () => {
+            let index = 0;
+            const copyText = copyTextArr[textIndex];
+            let timer = setInterval(()=>{
+                homeMiddleText.value = homeMiddleText.value + copyText[index];
+                index += 1;
+                if(index >= copyText.length){
+                    clearInterval(timer);
+                    setTimeout(() => {
+                        let clearTimer = setInterval(()=>{
+                            index -= 1;
+                            homeMiddleText.value = homeMiddleText.value.slice(0, index);
+                            if(index === 0){
+                                clearInterval(clearTimer);
+                                textIndex = textIndex ? 0 : 1;
+                                setTimeout(() => {
+                                    createTypewriter();
+                                }, 1000);
+                            }
+                        }, 70)
+                    }, 1000);
+                }
+            }, 200)
+        }
+        // 图片异常捕获
+        const onErrorImg = (e: any) =>{ // 本地图片不会发生异常
+        }
+        // 主页大图加载完毕后，返回到图片主页
+        const onLoadImg = (e: any) => {
+            if(localStorage.getItem('IS_VISIT')) return;
+            localStorage.setItem('IS_VISIT', String(new Date().getTime()));
+            setTimeout(() => {
+                document.documentElement.scrollTop = 0;
+            }, 2000); // 第一次加载页面，2s后再返回到图片主页
+        }
+       
+        const viewDetails = (item: any, index: number) => {
+            state.data[index].hot += 1;
+            window.open(`${window.location.origin}/#/article/${item._id}`) as any;
+        }
+        return {
+            onErrorImg,
+            onLoadImg,
+            styleObject,
+            getArticleList,
+            homeMiddleText,
+            scrollTopToBottom,
+            viewDetails,
+            Utils,
+            imgUrls,
+            imgLoaded,
+            state,
+        }
     }
-    // router.push({ path: `/article/${item._id}` });
-}
+})
 
-// 查询最新文章
-const getArticleList = () => {
-    isLoading.value = true;
-    GetNewArticleListAjax({ 
-        username,
-        page: page,
-        pageSize,
-    })
-    .then(res =>{
-        isLoading.value = false;
-        let { list } = res.data;
-        if(list.length < 1){
-            hasMoreArticle.value = false; 
-            return;
-        }
-        if(list.length < pageSize){ // 没有下一页
-            hasMoreArticle.value = false; 
-        }else{
-            page++;
-        }
-        articles.push(...list);
-    })
-    .catch(err =>{
-        isLoading.value = false;
-    })
-}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

@@ -1,8 +1,8 @@
 <!--
  * @Author: niumengfei
  * @Date: 2022-04-27 17:25:41
- * @LastEditors: niumengfei
- * @LastEditTime: 2023-03-14 17:26:39
+ * @LastEditors: niumengfei 870424431@qq.com
+ * @LastEditTime: 2023-03-29 15:21:33
 -->
 <template>
 	<div :class="'rg-options' + (' rg-options-' + deviceType())" class="animate__animated animate__fadeInRight">
@@ -51,7 +51,7 @@ const menuList = reactive([
 		url: '/',
 	},{
 		label: '归档',
-		url: '/file',
+		url: '/archive',
 	},{
 		label: '分类',
 		url: '/category',
@@ -64,7 +64,7 @@ const menuList = reactive([
 		outPage: true,
 	},{
 		label: '发布',
-		disabled: !userInfo.username,
+		disabled: false, // !userInfo.username,
 		url: `${window.location.origin}/#/writter`,
 		outPage: true,
 	},{
@@ -97,10 +97,24 @@ const turnPage = (path: string) =>{
 
 const loginOrOut = (e: string) =>{
     if(userInfo.username){ //退出登录
-		menuList[5].disabled = true;
+		// menuList[5].disabled = true;
         store.dispatch('user/saveUserInfo', {});
+        store.dispatch('user/saveDictionary');
+        store.dispatch('route/changeRouteTag', {
+			type: 0,
+			routeName: 'FrontHome',
+			callback: () => {
+				router.push({
+					path: '/',
+					name: 'FrontHome',
+				});
+			}
+		});
         ElMessage.success('注销成功');
-		
+		// router.push({
+		// 	path: '/',
+		// 	name: 'FrontHome',
+		// });
     }else{
         turnPage(e);
     }

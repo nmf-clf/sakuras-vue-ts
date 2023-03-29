@@ -40,6 +40,7 @@
     "@babel/eslint-parser": "^7.12.16",
     "@typescript-eslint/eslint-plugin": "^5.4.0",
     "@typescript-eslint/parser": "^5.4.0",
+    "@vue-macros/volar": "^0.9.4",
     "@vue/cli-plugin-babel": "~5.0.0",
     "@vue/cli-plugin-eslint": "~5.0.0",
     "@vue/cli-plugin-router": "~5.0.0",
@@ -59,7 +60,8 @@
     "typescript": "~4.5.5",
     "unplugin-auto-import": "^0.12.0",
     "unplugin-element-plus": "^0.4.1",
-    "unplugin-vue-components": "^0.22.11"
+    "unplugin-vue-components": "^0.22.11",
+    "unplugin-vue-define-options": "^0.12.2"
   },
   "runDependencies": {
     "dev": "http://localhost:9001/sakuras-api/",

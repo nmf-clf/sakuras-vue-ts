@@ -1,8 +1,8 @@
 <!--
  * @Author: niumengfei
  * @Date: 2022-12-13 14:51:55
- * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-06 15:54:16
+ * @LastEditors: niumengfei 870424431@qq.com
+ * @LastEditTime: 2023-03-28 11:10:00
 -->
 <template>
     <div class="admin-layout">
@@ -17,12 +17,12 @@
             <div class="content">
                 <router-view v-slot="{ Component }">
                     <!-- <transition name="move" mode="out-in"> -->
-                         <!-- 在这里可以通过tags去控制 打开的页面进行缓存数据 -->
+                        <!-- 在这里可以通过tags去控制 打开的页面进行缓存数据 -->
                         <!-- <keep-alive :include=[tagsNameList()]> 遗留问题 include 不生效 -->
                         <!-- <keep-alive>
                             <component :is="Component"></component>
                         </keep-alive> -->
-                        <keep-alive include="FrontHome">
+                        <keep-alive :include="['AdminArticle']">
                             <component :is="Component"></component>
                         </keep-alive>
                     <!-- </transition> -->

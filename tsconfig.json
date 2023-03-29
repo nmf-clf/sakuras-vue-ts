@@ -27,6 +27,7 @@
         
         "baseUrl": ".",
         "types": [
+            "unplugin-vue-define-options/macros-global",
             "webpack-env",
             // "node"
         ],
@@ -49,5 +50,13 @@
         "tests/**/*.ts",
         "tests/**/*.tsx", 
     ],
-    "exclude": ["node_modules"]
+    "exclude": ["node_modules"],
+    "vueCompilerOptions": {
+        "target": 3, // 或 2.7 用于 Vue 2
+        "plugins": [
+          "@vue-macros/volar/define-options"
+          // ...更多功能
+        ]
+        // ...
+    }
 }

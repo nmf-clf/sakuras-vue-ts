@@ -1,8 +1,8 @@
 <!--
  * @Author: niumengfei
  * @Date: 2023-01-31 14:31:26
- * @LastEditors: niumengfei
- * @LastEditTime: 2023-03-20 11:40:31
+ * @LastEditors: niumengfei 870424431@qq.com
+ * @LastEditTime: 2023-03-27 18:38:35
 -->
 <template>
     <md-editor
@@ -25,9 +25,12 @@
 <script lang="ts" setup>
 import { reactive, Prop, toRefs, onMounted } from 'vue';
 import MdEditor from 'md-editor-v3';
+import type { } from 'md-editor-v3';
 import 'md-editor-v3/lib/style.css';
 
 const MdCatalog = MdEditor.MdCatalog;
+// :markedHeadingId="markedHeadingId"
+const markedHeadingId = (text: string, level: any, index: number) => `heading-${index}`;
 
 const props = defineProps({ //子组件接收父组件传递过来的值
     content: { type: String, required: true },
@@ -36,12 +39,7 @@ const props = defineProps({ //子组件接收父组件传递过来的值
 const { content } = toRefs(props);
 
 const state = reactive({
-    // text: content,
     id: 'my-editor'
-});
-
-onMounted(() => {
-    // state.text = content
 });
 
 const scrollElement = document.documentElement;
@@ -54,6 +52,11 @@ if(htmlSize){
 
 MdEditor.config({
     markedRenderer(renderer) {
+        // renderer.heading = (text, level, raw, s, index, headingId?: any) => { // 这里的'headingId'是通过你提供的'markedHeadingId'方法生成的。
+        //     // 这种方式通常用与处理使用配置了 'renderer.heading'，
+        //     // 同时又设置的具体编辑器的'markedHeadingId'属性带来的优先级问题。
+        //     return `<h${level} id="${headingId}"><a>${text}</a></h${level}>`; // 重写以阻止 h 标签的绑定事件行为
+        // },
         renderer.link = (href: string, title, text) => { // 设置链接在新窗口打开
             console.log(href, title, text);
             let _href = href, localOrigin = 'http://localhost:9001', remoteOrigin =  'https://www.sakuras.group';
@@ -67,15 +70,15 @@ MdEditor.config({
         };
         return renderer;
     },
-    editorExtensions: {
-    }
+    // editorExtensions: {
+    // }
 });
 </script>
 
 <style lang='less' scoped>
 .md-editor-previewOnly{
-    // font-family: "My Custom Font";
-    font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
+    font-family: "My Custom Font";
+    // font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
 }
 .sk-md-preview{
     position: absolute;

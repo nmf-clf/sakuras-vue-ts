@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2023-01-29 14:21:32
  * @LastEditors: niumengfei 870424431@qq.com
- * @LastEditTime: 2023-03-22 11:14:23
+ * @LastEditTime: 2023-03-27 17:29:33
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -23,15 +23,66 @@
     </style>
 </head>
 <body>
+    <!-- <a href="https://www.95505.com.cn/tacapp/tiananapp/epolicy/eCarPolicyDownloadChannel?type=1&policyNo=6603005088120220000010&identifyNumber=341103199303021816&channelCode=PD-YXX001&signature=0Njic8R0LYhr%2BgUzqEaNgdH%2FGwdfUQ%2FyW6od%2BvXVMkNFOJxbzVoHvNomzQBoBxXu" download="new-filename.pdf">测试下载PDF</a> -->
+    <div onclick="downloadPDF()">自定义</div>
+
+    <a>阻止默认行为1</a>
 </body>
 <script>
-    const before = /^\S+/;
-    const end = /\S+$/;
-const str = 'L123333 ';
-const isValid = before.test(str) && end.test(str);
-console.log(isValid); // false
+    console.log('xxxxxsss');
+    const _url = 'https://www.95505.com.cn/tacapp/tiananapp/epolicy/eCarPolicyDownloadChannel?type=1&policyNo=6603005088120220000010&identifyNumber=341103199303021816&channelCode=PD-YXX001&signature=0Njic8R0LYhr%2BgUzqEaNgdH%2FGwdfUQ%2FyW6od%2BvXVMkNFOJxbzVoHvNomzQBoBxXu'
+const link = document.querySelector('a');
+link.addEventListener('click', function(event) {
+    document.title = '自定义标题';
+  event.preventDefault(); // 阻止默认行为
+  const xhr = new XMLHttpRequest();
+  xhr.open('GET', _url);
+  xhr.responseType = 'blob';
+  xhr.onload = function() {
+    if (xhr.status === 200) {
+      const blob = xhr.response;
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'new-filename.pdf';
+      a.style.display = 'none';
+      document.body.appendChild(a);
+      let initName = 'new-filename';
+      const filename = prompt('请输入文件名', 'new-filename.pdf');
+      console.log('xxx', filename);
+      if(filename && filename != initName){
+            a.download = filename;
+            a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+      }
+  
+    }
+  };
+  xhr.send();
+});
 
-const res = '   1   '.trim()
-console.log(res, res.length)
+function downloadPDF() {
+    console.log(111);
+    event.preventDefault(); // 阻止默认行为
+    fetch('https://www.95505.com.cn/tacapp/tiananapp/epolicy/eCarPolicyDownloadChannel?type=1&policyNo=6603005088120220000010&identifyNumber=341103199303021816&channelCode=PD-YXX001&signature=0Njic8R0LYhr%2BgUzqEaNgdH%2FGwdfUQ%2FyW6od%2BvXVMkNFOJxbzVoHvNomzQBoBxXu')
+    .then(response => response.blob())
+    .then(blob => {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'new-filename.pdf'; // 设置默认下载文件名
+      a.style.display = 'none';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      const filename = prompt('请输入文件名', 'new-filename.pdf');
+      if (filename) {
+        a.download = filename;
+        a.click();
+      }
+    });
+}
 </script>
 </html>

@@ -6,7 +6,7 @@
  */
 const getters = {
     userInfo: (state: any) => state.user,
-    deviceType: (state: any) => state.user.screenWidth > 700 ? 'pc' : 'mobile',
+    deviceType: (state: any) => state.user.screenWidth ? state.user.screenWidth > 700 ? 'pc' : 'mobile' : 'pc', // 默认 PC 端
     isCollapse: (state: any) => state.admin.isCollapse,
     tagsNameList: (state: any) => state.admin?.tags?.list.map((item: any) => item.name).filter((item: any) => item),
     routeInfo: (state: any) => state.route,

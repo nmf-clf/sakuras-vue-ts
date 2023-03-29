@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-12-07 17:22:21
  * @LastEditors: niumengfei 870424431@qq.com
- * @LastEditTime: 2023-03-20 18:37:53
+ * @LastEditTime: 2023-03-24 15:33:49
  */
 export interface GetListParams {
     username?: string,
@@ -10,6 +10,7 @@ export interface GetListParams {
     pageSize?: number,
     _id?: string | string[], 
     loading?: string, 
+    notlogin?: boolean,
 }
 
 export interface ArticleListResItem {

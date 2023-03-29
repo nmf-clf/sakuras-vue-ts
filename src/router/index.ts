@@ -1,8 +1,8 @@
 /*
  * @Author: niumengfei
  * @Date: 2022-11-07 15:4
- * @LastEditors: niumengfei
- * @LastEditTime: 2023-03-20 10:30:51
+ * @LastEditors: niumengfei 870424431@qq.com
+ * @LastEditTime: 2023-03-29 18:19:03
  */
 /* 引入路由模块，和vue2.0方式不同 */
 import { createRouter, createWebHashHistory, RouteRecordRaw, RouteLocationNormalized } from 'vue-router'; //导入
@@ -21,10 +21,10 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('@/views/layout/index.vue'),
         children: [
             {
-              path: '',
-              component: () => import('@/views/home/index.vue'),
-              name: 'FrontHome',
-              meta: { title: '首页', keepAlive: true }
+                path: '',
+                component: () => import('@/views/home/index.vue'),
+                name: 'FrontHome',
+                meta: { title: '首页', keepAlive: true, allowApiCall: true }
             },{
                 path: 'article/:_id', // 由于可能查看文章会开启新窗口，所以这里采用 params 参数传递文章唯一id，通过 id 查询文章数据
                 component: () => import('@/views/article/index.vue'),
@@ -35,13 +35,13 @@ const routes: Array<RouteRecordRaw> = [
                 children: [
                     {
                         path: '',
-                        component: () => import('@/views/category/index.vue'),
+                        component: () => import('@/views/classify/index.vue'),
                         name: 'FrontCategory',
                         meta: {  title: '分类', noNeedLogin: true },
                     },
                     {
                       path: ':_type:/:_value',
-                      component: () => import('@/views/category/List.vue'),
+                      component: () => import('@/views/classify/List.vue'),
                       name: 'FrontCategoryList',
                       meta: { title: '列表', noNeedLogin: true, beLong: '分类' },
                     }
@@ -51,21 +51,21 @@ const routes: Array<RouteRecordRaw> = [
                 children: [
                     {
                         path: '',
-                        component: () => import('@/views/category/index.vue'),
+                        component: () => import('@/views/classify/index.vue'),
                         name: 'FrontTag',
                         meta: {  title: '标签', noNeedLogin: true },
                     },
                     {
                       path: ':_type',
-                      component: () => import('@/views/category/List.vue'),
+                      component: () => import('@/views/classify/List.vue'),
                       name: 'FrontTagList',
                       meta: { title: '列表', noNeedLogin: true, beLong: '标签' },
                     }
                 ]
             },{
-                path: 'file',
-                component: () => import('@/views/file/index.vue'),
-                name: 'FrontFile',
+                path: 'archive',
+                component: () => import('@/views/archive/index.vue'),
+                name: 'FrontArchive',
                 meta: {  title: '归档', noNeedLogin: true }
             }
         ]
@@ -169,10 +169,11 @@ router.afterEach((to, from, next) => {
     if(to.name){
         let _t =  title ? title + ' - 夜语清梦' : '夜语清梦' as string;
         if(to.name === 'FrontArticle'){
-            document.title = localStorage.getItem('DOCUMENT_TITLE') || '夜语清梦';
+            // document.title = localStorage.getItem('DOCUMENT_TITLE') || '夜语清梦';
         }else{
-            localStorage.setItem('DOCUMENT_TITLE', _t);
-            document.title = localStorage.getItem('DOCUMENT_TITLE') || '夜语清梦';
+            // localStorage.setItem('DOCUMENT_TITLE', _t);
+            // document.title = localStorage.getItem('DOCUMENT_TITLE') || '夜语清梦';
+            document.title = _t;
         }
     }
     // NProgress.done()
@@ -200,13 +201,13 @@ const loadingProgress = () => {
                 if(_p > 0.99){
                     NProgress.set(0.999); console.log('scroll:end');
                 }else{
-                    console.log('滑动百分比>>>', Number(percent.toFixed(2)))
+                    // console.log('滑动百分比>>>', Number(percent.toFixed(2)))
                     NProgress.set(Number(percent.toFixed(2)));  console.log('scroll:ing');
                 }
             }
         }, 100)
         // console.log('文档总高度>>', scrollHeight, hiddenHeight);
-        window.addEventListener('scroll', ()=>{0
+        window.addEventListener('scroll', ()=>{
             // 1. 原则上滚动条做出响应的等待时间间隔应较小才能表现丝滑，因此采用防抖处理顶部进度条也可以;
             // 2. 同时由于节流表现出问题是第一次滚动不会被记载需要特殊处理，况且即便是节流仍然需要指定实践触发的单位时间间隔.
             loadingProgress(); 

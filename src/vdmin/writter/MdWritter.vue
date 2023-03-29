@@ -1,8 +1,8 @@
 <!--
  * @Author: niumengfei
  * @Date: 2023-01-31 14:31:26
- * @LastEditors: niumengfei
- * @LastEditTime: 2023-03-16 18:02:17
+ * @LastEditors: niumengfei 870424431@qq.com
+ * @LastEditTime: 2023-03-27 18:28:53
 -->
 <template>
     <div class="md-writter-view">
@@ -116,6 +116,7 @@ const state = reactive({
 */
 
 watch(content, (newValue, oldValue) => {
+    console.log('xxxxxxxxxxxxxx');
     state.content = newValue;
 },{ immediate:true })
 
@@ -142,6 +143,7 @@ const handler = () => {
     flex: 1;
     display: flex;
     flex-direction: column;
+    overflow: auto;
     .sk-md-writter{
         flex: 1;
         :deep(.md-editor-toolbar-wrapper){

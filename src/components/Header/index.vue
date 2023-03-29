@@ -1,8 +1,8 @@
 <!--
  * @Author: niumengfei
  * @Date: 2022-04-12 15:56:02
- * @LastEditors: niumengfei
- * @LastEditTime: 2023-02-07 10:57:02
+ * @LastEditors: niumengfei 870424431@qq.com
+ * @LastEditTime: 2023-03-29 11:05:30
 -->
 <template>
     <el-header class="myHeader" :class="['myHeader-' + deviceType(), (props.headerClass || isMouseEnter) ? 'hover-class' : '' ]" 

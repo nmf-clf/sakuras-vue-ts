@@ -1,24 +1,40 @@
 <!--
  * @Author: niumengfei
  * @Date: 2022-04-06 23:49:03
- * @LastEditors: niumengfei
- * @LastEditTime: 2023-03-14 10:49:19
+ * @LastEditors: niumengfei 870424431@qq.com
+ * @LastEditTime: 2023-03-29 13:50:11
 -->
 <template>
-    <el-container :class="'frontHome-' + deviceType()" class="frontHome">
+    <!-- <transition name="move" mode="out-in"> -->
+    <!-- </transition> -->
+    <el-container class="frontHome" :class="'frontHome-' + store.getters.deviceType">
         <!-- 公共头部 -->
         <MyHeader :headerClass="headerClass" />
         <!-- 侧边菜单 -->
         <img class="sk-sroll" :class="headerClass ? 'sk-sroll-active' : null" @click="scrollToTop" src="@/assets/imgs/scroll.png" />
         <div class="sk-main">
-            <router-view v-slot="{ Component }">
-                <!-- <transition name="move" mode="out-in"> -->
-                    <keep-alive>
-                            <component v-if="Route.meta.keepAlive" :is="Component"></component>
-                    </keep-alive>
-                    <component v-if="!Route.meta.keepAlive" :is="Component"></component>
-                <!-- </transition> -->
-            </router-view>
+            <!-- <router-view v-slot="{ Component }">
+                <keep-alive>
+                        <component v-if="Route.meta.keepAlive" :is="Component"></component>
+                </keep-alive>
+                <component v-if="!Route.meta.keepAlive" :is="Component"></component>
+            </router-view> -->
+            <Suspense>
+                <template #default>
+                    <router-view v-slot="{ Component }">
+                        <keep-alive :include="routeInfo.keepAliveList">
+                            <component :is="Component"></component>
+                        </keep-alive>
+                    </router-view>
+                </template>
+                <template #fallback>
+                    <!-- 加载中的占位内容 -->
+                    <div>
+                        <h1>加载失败</h1>
+                        <p>很抱歉，页面加载失败，请检查网络连接或稍后重试。</p>
+                    </div>
+                </template>
+            </Suspense>
         </div>
         <div class="sk-footer">
             <p class="ft-logo"></p>
@@ -31,7 +47,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, onActivated } from 'vue';
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
 import { MyHeader } from '@/components'
@@ -39,7 +55,11 @@ import { ElContainer } from 'element-plus';
 
 const store = useStore();
 const Route = useRoute();
-const deviceType = () => store.getters.deviceType;
+
+// const deviceType = store.getters.deviceType; // 这样写是无效的，因为是把 store.getters.deviceType 赋值给了常量 deviceType
+// const deviceType = store.getters.deviceType; // 这样写是有效的，因为是个函数，模板中调用函数返回值是个 getter 响应式数据
+// const { keepAliveList } = store.getters.routeInfo; // 这里只是从 store.getters.routeInfo 中取出了 keepAliveList 属性，并将其赋值给一个常量 keepAliveList。由于这个常量没有被声明为响应式变量，所以即使 store.getters.routeInfo.keepAliveList 发生了变化，keepAliveList 本身并没有变化，所以模板无法监听到变化
+const routeInfo = store.getters.routeInfo;
 
 let headerClass = ref(false);
 let sign = false; // 标识，如果顶部未曾展示过，监听滚动事件时理应不改变 headerClass 的值，但即使改变也可以

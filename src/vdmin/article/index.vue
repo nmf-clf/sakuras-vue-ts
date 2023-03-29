@@ -1,8 +1,8 @@
 <!--
  * @Author: niumengfei
  * @Date: 2022-12-13 14:51:55
- * @LastEditors: niumengfei
- * @LastEditTime: 2023-03-17 10:59:04
+ * @LastEditors: niumengfei 870424431@qq.com
+ * @LastEditTime: 2023-03-28 18:05:42
 -->
 <template>
     <div class="container">
@@ -73,9 +73,13 @@
     </div>
     
 </template>
-
-<script lang="ts" setup>
-import { ref, reactive, onMounted } from 'vue';
+<!-- <script lang="ts">
+export default {
+    name: "AdminArticle",
+};
+</script> -->
+<script setup lang="ts" >
+import { ref, reactive, onMounted, useSlots } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from "vuex";
 import { ElMessageBox, ElMessage } from 'element-plus';
@@ -86,6 +90,7 @@ import { Edit, Delete, Warning } from '@element-plus/icons-vue';
 import { GetArticleListAjax, GetArticleDetailAjax, deleteArticleAjax } from "@/api/article";
 import Static, { DataItemType } from "./type";
 
+const slots = useSlots()
 const router = useRouter();
 const store = useStore();
 

@@ -1,8 +1,8 @@
 <!--
  * @Author: niumengfei
  * @Date: 2022-04-06 23:49:03
- * @LastEditors: niumengfei
- * @LastEditTime: 2023-03-16 17:48:44
+ * @LastEditors: niumengfei 870424431@qq.com
+ * @LastEditTime: 2023-03-24 17:49:37
 -->
 <template>
     <div class="article">
@@ -65,7 +65,7 @@ onMounted(() => {
         isLoading.value = false;
         const { data } = res;
         formData.mdData = data;
-        
+        document.title = data.title;
     })
     .catch(err => {
         isLoading.value = false;
