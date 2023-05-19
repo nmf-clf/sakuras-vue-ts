@@ -12,8 +12,10 @@
   },
   "dependencies": {
     "@element-plus/icons-vue": "^1.1.4",
+    "@qiun/ucharts": "^2.5.0-20230101",
     "@types/marked": "^4.0.8",
     "@vavt/md-editor-extension": "^1.4.0",
+    "@vuepic/vue-datepicker": "^4.5.1",
     "@wangeditor/editor": "^5.1.23",
     "@wangeditor/editor-for-vue": "^5.1.12",
     "animate.css": "^4.1.1",

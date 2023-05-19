@@ -2,7 +2,7 @@
  * @Author: niumengfei
  * @Date: 2022-11-07 15:18:04
  * @LastEditors: niumengfei 870424431@qq.com
- * @LastEditTime: 2023-03-28 18:37:26
+ * @LastEditTime: 2023-04-04 15:01:39
  */
 const { defineConfig } = require('@vue/cli-service')
 const webpack = require('webpack')
@@ -63,7 +63,8 @@ module.exports = defineConfig({
     },
     devServer: {
         // open: true, //自动打开浏览器
-        host: 'localhost', //主机名
+        // host: 'localhost', //主机名
+        host: '0.0.0.0', //局域网访问
         port: '9001', //端口号
         // autoOpenBrowser: true, 
         proxy:{

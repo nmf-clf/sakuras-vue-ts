@@ -1,13 +1,13 @@
 <!--
  * @Author: niumengfei
  * @Date: 2022-04-06 23:49:03
- * @LastEditors: niumengfei 870424431@qq.com
- * @LastEditTime: 2023-03-29 17:48:43
+ * @LastEditors: niumengfei
+ * @LastEditTime: 2023-04-26 10:52:45
 -->
 <template>
    <div class="archive">
         <div class="top-bg">
-            <h2 class="catename">归档</h2>
+            <h2 class="catename">文章归档</h2>
         </div>
         <div class="content">
             <el-timeline>
@@ -23,6 +23,7 @@
                 </el-timeline-item>
             </el-timeline>
         </div>
+        <!-- <VueDatePicker v-model="date" inline auto-apply month-picker></VueDatePicker> -->
    </div>
 </template>
 
@@ -32,10 +33,14 @@ import { onMounted, ref, reactive, toRefs } from 'vue';
 import { useRoute } from 'vue-router';
 import { useStore } from "vuex";
 import { useArticleList } from '@/hooks';
+import VueDatePicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css';
 
 const { state, getArticleList } = useArticleList();
-
+const date = ref(null)
+const num = ref<any>('');
 onMounted(() => {
+    num.value = 1
     getArticleList({}, ()=>{
         state.data.map(v => {
             // v._color = '#FE9600';
